@@ -1,0 +1,15 @@
+#messages{
+	width: 100%;
+	height: 5vh;
+	border: 2px solid grey;
+}
+
+#moving{
+	position: relative;
+	top: 0px;
+	left: 0px;
+	height: 50px;
+	width: 50px;
+	background-color: cyan;
+	border: 2px solid blue;
+}
