@@ -2,8 +2,7 @@
 All of X9's core software for the 2016-2017 Purdue ROV team. 
 
 
-This branch, as of the "FIrst Draft" commit, works if you're holding the left joystick down and/or 'b' (xbox1) button down on the gamepad while refreshing the page.
-The commented out while loop, when un-commented, breaks it. Listeners seem to be the better choice.
+This branch, as of "Second Draft (working)", the program should work for a gamepad (xbox1 tested). If trying for the first time or disconnecting&reconnecting a controller, it may take a moment for it to sync, and then one/a few button presses to get recognized.
 
 
 
