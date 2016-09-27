@@ -22,7 +22,7 @@ def monotonic_time():
         raise OSError(errno_, os.strerror(errno_))
     return t.tv_sec + t.tv_nsec * 1e-9
 
-
+message= "(HEY GO, YOU GOT TO CHANGE THIS CODE SO ALL IT DOES IS MAKE IT SO YOU CAN EASILY ACCES THE TIME. WE DONT NEED ALL OF THIS INFINATE LOOOP JUNK. OR THE TURNING ON OF THE GPIO, JUST MAKE IT SO WE CAN RUN A QUICK THING) ALSO DELETE THIS, I CANT COMMENT WITH THIS KEYBOARD"
 if __name__ == "__main__":
 	GPIO.setmode(GPIO.BCM)
 	GPIO.setwarnings(False)
