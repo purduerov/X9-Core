@@ -12,4 +12,4 @@ var getButtonLayout = function() {
       $("#messages").text(err2);
     }
   });
-});
+};

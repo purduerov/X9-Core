@@ -17,7 +17,16 @@
       "up":     12,
       "down":   13,
       "left":   14,
-      "right":  15
+      "right":  15,
+      "length": 16
+    }
+    "axes": {
+      "xleft":  0,
+      "yleft":  1,
+      "xright": 2,
+      "yright": 3,
+      "length": 4
     }
   }
+  "length": 1
 }
