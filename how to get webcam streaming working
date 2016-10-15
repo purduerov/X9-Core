@@ -1,0 +1,12 @@
+1) install Cmake 
+sudo apt-get install cmake libjpeg8-dev
+
+2) make build mjpeg streamer
+
+cd mjpg-streamer-experimental
+make
+sudo make install
+
+3) output(video) to localhost (http://localhost:8080/?action=stream)
+
+./mjpg_streamer -i "input_uvc.so -d /dev/video1" -o "output_http.so"
