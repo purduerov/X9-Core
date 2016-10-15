@@ -26,11 +26,11 @@
   
   To use the statuses of a button or a joystick, after using controller.get_current();,
   type reference it like so:
-    A: gp.buttons.a.pressed           <- a true/false value for whether it's pressed or not
-       gp.buttons.a.value           <- a 1/0 value for whether it's pressed or not (1 = true, 0 = false)
+    A: gp.buttons.a.press            <- a true/false value for whether it's pressed or not
+       gp.buttons.a.val              <- a 1/0 value for whether it's pressed or not (1 = true, 0 = false)
     
     left stick: gp.axes.xleft.pos    <- the position of the left joystick, x axis
-                 gp.axes.yleft.pos    <- the position of the left joystick, y axis
+                gp.axes.yleft.pos    <- the position of the left joystick, y axis
     
     --to see what button lables are available, you can either look at gp_layouts.js, or 'inspect' your
       webpage and just type 'gp' in the command prompt there--it should show you the gp object, which you
@@ -65,10 +65,10 @@ var controller = {
         if(chk[i] != undefined) {
           if(chk[i].buttons != undefined) {
             for(var j = 0; j < chk[i].buttons.length; j++) {
-              if(chk[i].buttons[i].pressed) {
+              if(chk[i].buttons[j].pressed) {
                 window.clearInterval(monitor);
                 if(controller.i_use == undefined) {
-                  controller.i_use = j;
+                  controller.i_use = i;
                 }
                 if(message) {
                   message.html("Gamepad connected!</br>ID: "+chk[controller.i_use].id);
@@ -88,7 +88,7 @@ var controller = {
       if(id == layouts[key].id) {
         Object.keys(layouts[key].buttons).forEach(function(key_b, i) {
           if(key_b != "length") {
-            gp.buttons[key_b] = {index: layouts[key].buttons[key_b], pressed: false};
+            gp.buttons[key_b] = {index: layouts[key].buttons[key_b], press: false};
           } else {
             gp.buttons[key_b] = layouts[key].buttons[key_b];
           }
@@ -105,21 +105,45 @@ var controller = {
     });
   },
 
-  get_current: function() {
+  get_current: function(message) {
     read = navigator.getGamepads()[controller.i_use];
-    Object.keys(gp.buttons).forEach(function(key_b, i) {
-      if(key_b != "length"){
-        gp.buttons[key_b].pressed = read.buttons[gp.buttons[key_b].index].pressed;
-        gp.buttons[key_b].value = read.buttons[gp.buttons[key_b].index].value;
-        //console.log("Buttons: "+gp.buttons[key_b].pressed+" "+key_b);
+    if(read != undefined && controller.i_use != undefined) {
+      Object.keys(gp.buttons) .forEach(function(key_b, i) {
+        if(key_b != "length"){
+          gp.buttons[key_b].press = read.buttons[gp.buttons[key_b].index].pressed;
+          gp.buttons[key_b].val = read.buttons[gp.buttons[key_b].index].value;
+          //console.log("Buttons: "+gp.buttons[key_b].press+" "+key_b);
+        }
+      });
+      Object.keys(gp.axes).forEach(function(key_a, i) {
+        if(key_a != "length"){
+          gp.axes[key_a].pos = read.axes[gp.axes[key_a].index];
+          //console.log("Axes: "+gp.axes[key_a].pos+" "+key_a);
+        }
+      });
+      
+    } else {
+/*      Object.keys(gp.buttons) .forEach(function(key_b, i) {
+        if(key_b != "length"){
+          gp.buttons[key_b].press = false;
+          gp.buttons[key_b].val = 0;
+          //console.log("Buttons: "+gp.buttons[key_b].press+" "+key_b);
+        }
+      }); */
+  //Depending on how we design button presses to communicate with the tools... we can either keep 
+  //  the last button press status, or reset them all.
+      Object.keys(gp.axes).forEach(function(key_a, i) {
+        if(key_a != "length"){
+          gp.axes[key_a].pos = 0;               //don't want to run the ROV into a wall if the gamepad disconnects
+          //console.log("Axes: "+gp.axes[key_a].pos+" "+key_a);
+        }
+      });
+      gp.ready = false;                       //gp is no longer ready **can be used in outer loop for a marker**
+      gp.i_use = undefined;                   //to reconnect, we'll have to re-assign where the valid gamepad is
+      if(message != undefined) {
+        message.text("Gamepad disconnected");
       }
-    });
-    Object.keys(gp.axes).forEach(function(key_a, i) {
-      if(key_a != "length"){
-        gp.axes[key_a].pos = read.axes[gp.axes[key_a].index];
-        //console.log("Axes: "+gp.axes[key_a]+" "+key_a);
-      }
-    });
+    }
   }
 }
 
