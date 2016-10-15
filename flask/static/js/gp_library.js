@@ -35,15 +35,11 @@
     --to see what button lables are available, you can either look at gp_layouts.js, or 'inspect' your
       webpage and just type 'gp' in the command prompt there--it should show you the gp object, which you
       can click through to see its structure.
-  
-  
-  All buttons and axis will have index values, which will be the same as in the gp_layouts.js file for the
-  respective controller. This is mostly for reference within the functions in this file. Please don't edit them, you
-  will need to call controller.map() again to reset any changes to the correct respective values.
 */
 
 function Gamepad() {
   this.id = String;
+  this.layout = String;
   this.buttons = new Object;
   this.axes = new Object;
   this.ready = false;
@@ -86,16 +82,17 @@ var controller = {
     gp.id = id;
     Object.keys(layouts).forEach(function(key, i) {
       if(id == layouts[key].id) {
+        gp.layout = key;
         Object.keys(layouts[key].buttons).forEach(function(key_b, i) {
           if(key_b != "length") {
-            gp.buttons[key_b] = {index: layouts[key].buttons[key_b], press: false};
+            gp.buttons[key_b] = {press: false, val: 0};
           } else {
             gp.buttons[key_b] = layouts[key].buttons[key_b];
           }
         });
         Object.keys(layouts[key].axes).forEach(function(key_a, i) {
           if(key_a != "length") {
-            gp.axes[key_a] = {index: layouts[key].axes[key_a], pos: Number};
+            gp.axes[key_a] = {pos: Number};
           } else {
             gp.axes[key_a] = layouts[key].axes[key_a];
           }
@@ -110,26 +107,26 @@ var controller = {
     if(read != undefined && controller.i_use != undefined) {
       Object.keys(gp.buttons) .forEach(function(key_b, i) {
         if(key_b != "length"){
-          gp.buttons[key_b].press = read.buttons[gp.buttons[key_b].index].pressed;
-          gp.buttons[key_b].val = read.buttons[gp.buttons[key_b].index].value;
+          gp.buttons[key_b].press = read.buttons[layouts[gp.layout].buttons[key_b]].pressed;
+          gp.buttons[key_b].val = read.buttons[layouts[gp.layout].buttons[key_b]].value;
           //console.log("Buttons: "+gp.buttons[key_b].press+" "+key_b);
         }
       });
       Object.keys(gp.axes).forEach(function(key_a, i) {
         if(key_a != "length"){
-          gp.axes[key_a].pos = read.axes[gp.axes[key_a].index];
+          gp.axes[key_a].pos = read.axes[layouts[gp.layout].axes[key_a]];
           //console.log("Axes: "+gp.axes[key_a].pos+" "+key_a);
         }
       });
       
     } else {
-/*      Object.keys(gp.buttons) .forEach(function(key_b, i) {
+      Object.keys(gp.buttons) .forEach(function(key_b, i) {
         if(key_b != "length"){
           gp.buttons[key_b].press = false;
           gp.buttons[key_b].val = 0;
           //console.log("Buttons: "+gp.buttons[key_b].press+" "+key_b);
         }
-      }); */
+      });
   //Depending on how we design button presses to communicate with the tools... we can either keep 
   //  the last button press status, or reset them all.
       Object.keys(gp.axes).forEach(function(key_a, i) {
