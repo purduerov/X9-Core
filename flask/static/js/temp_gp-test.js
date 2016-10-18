@@ -58,7 +58,7 @@ var run = function(abt) {
     var ab
     go1 = -1;
     go2 = window.setInterval(function() {
-      controller.get_current(abt);
+      gp.get_current(abt);
       if(gp.ready) {
         active_div();
       } else {
@@ -70,7 +70,7 @@ var run = function(abt) {
 
 $(document).ready(function() {
   var abt = $("#titles");
-  controller.set(abt);
+  gp.set(abt);
   
   go1 = window.setInterval(function() { run(abt); }, 50);
   
@@ -80,7 +80,7 @@ $(document).ready(function() {
       window.clearInterval(go2);
     } else {console.log("go2: "+go2+" go1: "+go1);}
     $("#info").empty();
-    controller.set(abt);
+    gp.set(abt);
     go1 = window.setInterval(function() { run(abt); }, 50);
   });
 });
