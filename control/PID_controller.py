@@ -8,10 +8,10 @@ class PID_Controller:
 		self.integral = 0 # integral value
 		self.out = 0 # output of controller
 		self.setpoint  = 0 # the desired point
-		INT_MAX = 1000 # max value for integrator
+		self.INT_MAX = 1000 # max value for integrator
 
 	# update the output, based on curr_val (position/angle based on sensors)
-	def update(curr_val):
+	def update(self, curr_val):
 		# calculate error
 		err = self.setpoint - curr_val;
 		# calculate new error derivitive
@@ -19,21 +19,21 @@ class PID_Controller:
 		# calculate new error integral
 		self.integral = self.integral + err
 		# limit the integral
-		if self.integral > INT_MAX:
-			self.integral = INT_MAX
-		elif self.integral < -INT_MAX
-			self.integral = -INT_MAX
+		if self.integral > self.INT_MAX:
+			self.integral = self.INT_MAX
+		elif self.integral < -self.INT_MAX:
+			self.integral = -self.INT_MAX
 		# calculate the new output value
-		self.out = err * Kp+ derivitive * Kd + self.integral * Ki
+		self.out = err * self.Kp+ derivitive * self.Kd + self.integral * self.Ki
 		# update the previous error
 		self.prev_err = err   
 
 	# set a new target point, clears the integral and prev_err values
-	def set_setpoint(sp):
+	def set_setpoint(self, sp):
 		self.setpoint = sp
 		self.integral = 0
 		self.prev_err = 0
 
 	# get the current output of the PID controller 
-	def getOutput():
+	def getOutput(self):
 		return self.out
