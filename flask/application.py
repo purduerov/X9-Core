@@ -15,7 +15,7 @@ from flask_socketio import SocketIO, send, emit
 
 # GLOBALS:
 async_mode = None
-app = Flask(__name__)
+app = Flask(__name__, static_folder="static")
 socketio = SocketIO(app, async_mode=async_mode)
 
 
@@ -29,7 +29,7 @@ send_count = 0 # keeps count of how many json objects flask has sent.
 
 @app.route('/')
 def index():
-    return render_template(url_for('static', filename='index.html', async_mode=socketio.async_mode))
+    return render_template('index.html')
 
 
 
@@ -44,7 +44,7 @@ def recieve_controls(json):
 
 @socketio.on('dearclient')
 def send_packet():
-    json = "{ empty }"
+    json = "{ Hello World }"
     print("sent: " + str(json))
     socketio.send(json, json=True)
     global send_count
