@@ -1,4 +1,5 @@
 from flask import Flask, render_template
+from flask import url_for
 from flask_socketio import SocketIO, send, emit
 #import json parser
 
@@ -38,6 +39,7 @@ def index():
 def recieve_controls(json):
     # parse json controls object into onside object.
     print("controls: " + str(json))
+    global recieve_count
     recieve_count += 1
 
 @socketio.on('dearclient')
@@ -45,6 +47,7 @@ def send_packet():
     json = "{ empty }"
     print("sent: " + str(json))
     socketio.send(json, json=True)
+    global send_count
     send_count += 1
 
 @socketio.on('connect')
