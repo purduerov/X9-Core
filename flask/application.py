@@ -41,6 +41,7 @@ def recieve_controls(json):
     print("controls: " + str(json))
     global recieve_count
     recieve_count += 1
+    print(recieve_count)
 
 @socketio.on('dearclient')
 def send_packet():
@@ -53,6 +54,7 @@ def send_packet():
 @socketio.on('connect')
 def on_connect():
     print("CLIENT CONNECTED!")
+    print(recieve_count)
 
 @socketio.on('disconnect')
 def on_disconnect():
