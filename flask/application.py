@@ -34,13 +34,15 @@ def index():
 
 # SOCKET-IO:
 
-@socketio.on('json')
+@socketio.on('dearflask')
 def recieve_controls(json):
     # parse json controls object into onside object.
     print("controls: " + str(json))
     recieve_count += 1
 
-def send_packet(json):
+@socketio.on('dearclient')
+def send_packet():
+    json = "{ empty }"
     print("sent: " + str(json))
     socketio.send(json, json=True)
     send_count += 1
