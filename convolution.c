@@ -82,8 +82,9 @@ int main(void)
   printSignal("result3", result3, ELEMENT_COUNT(result3));
   printSignal("result4", result4, ELEMENT_COUNT(result4));
 
+//Define time:
   double t1 = 0.0;
-  double t2 = 0.04;
+  double t2 = 0.12;
   double t3 = 0.083;
   double t4 = 0.02;
 
