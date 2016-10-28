@@ -17,7 +17,8 @@ bno = BNO055.BNO055(serial_port='/dev/ttyAMA0', rst=18)
 #   raise RuntimeError('Failed to initialize BNO055! Check the Sensor DUMBASS')
 
 class IMU(object):
-    bno.begin()
+    def __init__(self):
+        bno.begin()
 
     def imu_get_data(self):
 
@@ -43,3 +44,24 @@ class IMU(object):
     def set_calibration(self, data):
         bno.set_calibration(data)
         return
+
+    def sitrep (self):
+        sys, gyro, accel, mag = bno.get_calibration_status()
+        sys_stat, sys_test, sys_err = bno.get_system_status(True)
+        good_status = [3,3,3,3,1,0x0F,0]
+        test_array = [sys,gyro,accel,mag,sys_stat, sys_test, sys_err]
+
+        for x in range(0, 4):
+            if test_array[x] != 3:
+                return False
+
+        if test_array[4] == 1:
+            return False
+
+        if test_array[5] != 0x0F:
+            return False
+
+        if test_array[6] != 0:
+            return False
+
+        return True
