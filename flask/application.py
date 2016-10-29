@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 from flask import url_for
 from flask_socketio import SocketIO, send, emit
-#import json parser
+# import json parser
 
 #
 # PRIMARY FLASK APPLICATION:
@@ -21,8 +21,7 @@ socketio = SocketIO(app, async_mode=async_mode)
 
 # Statistics:
 recieve_count = 0  # keeps count of how many json objects flask has recieved.
-send_count = 0 # keeps count of how many json objects flask has sent.
-
+send_count = 0  # keeps count of how many json objects flask has sent.
 
 
 # ROUTING:
@@ -31,9 +30,8 @@ send_count = 0 # keeps count of how many json objects flask has sent.
 def index():
     return render_template('index.html')
 
-
-
 # SOCKET-IO:
+
 
 @socketio.on('dearflask')
 def recieve_controls(json):
@@ -43,6 +41,7 @@ def recieve_controls(json):
     recieve_count += 1
     print(recieve_count)
     print('received message: ' + str(json))
+
 
 @socketio.on('dearclient')
 def send_packet():
@@ -61,20 +60,17 @@ def on_connect():
     print("CLIENT CONNECTED!")
 
 
+
 @socketio.on('disconnect')
 def on_disconnect():
     print("CLIENT DISCONNECTED!")
 
-
-
 # Error Handling
+
 
 @socketio.on_error()
 def error_handler(e):
     print("ERROR CAUGHT BY HANDLER!\n")
-
-
-
 
 # INIT:
 if __name__ == '__main__':
