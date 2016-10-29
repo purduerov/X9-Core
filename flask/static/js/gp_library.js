@@ -103,14 +103,21 @@ function Gamepad() {
       y = -(y - axes_off[key].y) / (1 + axes_off[key].y);
     }
     
-    theta = Math.atan2(x,-y) * 180 / Math.PI;
+    theta = Math.atan2(x,y) * 180 / Math.PI;
     if(Math.abs(x) < .1 && Math.abs(y) < .1) {
       x = 0;
       y = 0;
       theta = 0;
     }
     
-    r = x / Math.cos(theta) * 180 / Math.PI;
+    /*r = y / Math.cos(theta) * 180 / Math.PI;*/
+    //this gave an 'r' value that ranged from 0 to values up to 2500. Obviously incorrect....
+    
+    r = Math.sqrt(x*x + y*y);
+    
+    if(r > 1) {
+      r = 1;
+    }
     
     return {"x": x, "y": y, "theta": theta, "r": r};
   }
@@ -137,6 +144,7 @@ function Gamepad() {
                   message.html("Gamepad connected!</br>ID: "+chk[gp.i_use].id);
                 }
                 gp.map(chk[gp.i_use].id, message);
+                //console.log("found a button press...");
               }
             }
           }
@@ -144,6 +152,7 @@ function Gamepad() {
       
         if(gp.ready) {                      //if gamepad matches a known layout, accept the chosen gamepad
           window.clearInterval(monitor);
+          //console.log("gamepad accepted");
         }
       }
     }, 100);
