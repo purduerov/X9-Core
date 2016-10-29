@@ -1,40 +1,47 @@
 /*
+**************************************************************************************************
   This file creates a gp object -- the 'gamepad' -- and provides
   the library necessrily to fill it.
   
   Please include gp_layouts.js before gp_library.js in the html script tags.
   
+--------------------------------------------------------------------------------------------------
   To set the gamepad/gp, use:
     gp.set();
-    --note, you can pass an html element into this function to write
+    --note, you can pass an html 'message' element into this function to write
       its instructional messages to.
   
+--------------------------------------------------------------------------------------------------
   To map the identified gp, use:
-    gp.map()
+    gp.map();
     
     --The gp.map() function is called by gp.set(), although
       you are able to call it if you want to re-map gp.
-  
+      
+--------------------------------------------------------------------------------------------------
   To get the status of the gp, once identified and mapped, use:
-    gp.get_current():
+    gp.get_current();
   
-    --I was going to separate out the processes for getting the button and
-      axes statuses from each other, but we're going to be calling the status
-      so quickly, I don't think it would be useful. Easy enough to make should
-      we decide it is, however.
+    --for best performance, I recommend this should be used inside of the master loop so
+      there are no issues with asynchronous behavior.
 
-  
+--------------------------------------------------------------------------------------------------
   To use the statuses of a button or a joystick, after using gp.get_current();,
-  type reference it like so:
-    A: gp.buttons.a.press            <- a true/false value for whether it's pressed or not
-       gp.buttons.a.val              <- a 1/0 value for whether it's pressed or not (1 = true, 0 = false)
+  type references to the gamepad like so:
+    A: gp.buttons.a.val            <- a 1/0 value for whether it's pressed or not
+       gp.buttons.a.pressed        <- a 1/0 value for if the button was just pressed or not
+       gp.buttons.a.released       <- a 1/0 value for if the button was just released or not 
     
-    left stick: gp.axes.xleft.pos    <- the position of the left joystick, x axis
-                gp.axes.yleft.pos    <- the position of the left joystick, y axis
-    
+    left stick: gp.axes.left.x     <- the position of the left joystick, x axis
+                gp.axes.left.y     <- the position of the left joystick, y axis
+                gp.axes.left.r     <- the radius, or hypotenus of the triangle x and y make.
+                gp.axes.left.theta <- the angle of the hypotenus from the y-axis (NOT x-axis)
+                    --this functions the same as if you'd flipped the unit circle around the line y=x on the xy-plane
+                
     --to see what button lables are available, you can either look at gp_layouts.js, or 'inspect' your
       webpage and just type 'gp' in the command prompt there--it should show you the gp object, which you
       can click through to see its structure.
+**************************************************************************************************
 */
 
 function Gamepad() {
@@ -56,15 +63,15 @@ function Gamepad() {
     }
   };
   
-  this.getButtonLastPress = function(key) {
+  this.getButtonLastPress = function(key) { //allows for user to see/operate off of last press, if desired
     return buttons_last[key].pressed;
   };
   
-  this.setStatusChange = function(key) {
-    if(this.buttons[key].val && !(this.getButtonLastPress(key))) {
+  this.setStatusChange = function(key) { //this sets the pressed and released characteristics for each button
+    if(this.buttons[key].val && !buttons_last[key].pressed) {
       this.buttons[key].pressed = 1;
       this.buttons[key].released = 0;
-    } else if(!this.buttons[key].val && this.getButtonLastPress(key)) {
+    } else if(!this.buttons[key].val && buttons_last[key].pressed) {
       this.buttons[key].pressed = 0;
       this.buttons[key].released = 1;
     } else {
@@ -73,17 +80,17 @@ function Gamepad() {
     }
   };
   
-  this.setDisplace = function(key, x, y) {
+  this.setDisplace = function(key, x, y) { //the initial value of the joysticks are considered their 'error'
     axes_off[key] = {"x": x, "y": y};
   };
   
-  this.getDisplace = function() {
+  this.getDisplace = function() { //allows user to see what the displacement values are, if desired
     return axes_off;
   }
   
-  this.axesAdjust = function(key, x, y) {
-    var theta = 0;
-    var r = 0;
+  this.axesAdjust = function(key, x, y) { //calculates the polar coordinates, and scales the axes based off of displacement
+    var theta = 0;                        //because of the range of the joystick's possible error, the first 10% of movement
+    var r = 0;                            //has been canceled out for now.
     if(x > 0) {
       x = (x - axes_off[key].x) / (1 - axes_off[key].x);
     } else {
@@ -112,7 +119,7 @@ function Gamepad() {
   
   
   //these are for selecting the gamepad, mapping it from the library, and then updating the current status
-  this.set = function(message) {
+  this.set = function(message) { //waits until it sees a gamepad with a button pressed, and sets it as the desired controller
     if(message) {
       message.text("Press any button on the desired gamepad");
     }
@@ -123,7 +130,6 @@ function Gamepad() {
           if(chk[i].buttons != undefined) {
             for(var j = 0; j < chk[i].buttons.length; j++) {
               if(chk[i].buttons[j].pressed) {
-                window.clearInterval(monitor);
                 if(gp.i_use == undefined) {
                   gp.i_use = i;
                 }
@@ -135,11 +141,15 @@ function Gamepad() {
             }
           }
         }
+      
+        if(gp.ready) {                      //if gamepad matches a known layout, accept the chosen gamepad
+          window.clearInterval(monitor);
+        }
       }
     }, 100);
   };
 
-  this.map = function(id, message) {
+  this.map = function(id, message) { //
     gp.id = id;
     Object.keys(layouts).forEach(function(key, i) {
       if(id == layouts[key].id) {
