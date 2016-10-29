@@ -43,8 +43,75 @@ function Gamepad() {
   this.buttons = new Object;
   this.axes = new Object;
   this.ready = false;
-  this.i_use = undefined,
-
+  this.i_use = undefined;
+  var buttons_last = new Object;
+  var axes_off = new Object;
+  
+  //these are for identifying if a button has just been pressed or released
+  this.setButtonLast = function(key, init) { //is called right before updating buttons
+    if(init) {
+      buttons_last[key] = init;
+    } else {
+      buttons_last[key].pressed = this.buttons[key].val;
+    }
+  };
+  
+  this.getButtonLastPress = function(key) {
+    return buttons_last[key].pressed;
+  };
+  
+  this.setStatusChange = function(key) {
+    if(this.buttons[key].val && !(this.getButtonLastPress(key))) {
+      this.buttons[key].pressed = 1;
+      this.buttons[key].released = 0;
+    } else if(!this.buttons[key].val && this.getButtonLastPress(key)) {
+      this.buttons[key].pressed = 0;
+      this.buttons[key].released = 1;
+    } else {
+      this.buttons[key].pressed = 0;
+      this.buttons[key].released = 0;
+    }
+  };
+  
+  this.setDisplace = function(key, x, y) {
+    axes_off[key] = {"x": x, "y": y};
+  };
+  
+  this.getDisplace = function() {
+    return axes_off;
+  }
+  
+  this.axesAdjust = function(key, x, y) {
+    var theta = 0;
+    var r = 0;
+    if(x > 0) {
+      x = (x - axes_off[key].x) / (1 - axes_off[key].x);
+    } else {
+      x = (x - axes_off[key].x) / (1 + axes_off[key].x);
+    }
+    
+    if(y > 0) {
+      y = -(y - axes_off[key].y) / (1 - axes_off[key].y);
+    } else {
+      y = -(y - axes_off[key].y) / (1 + axes_off[key].y);
+    }
+    
+    theta = Math.atan2(x,-y) * 180 / Math.PI;
+    if(Math.abs(x) < .1 && Math.abs(y) < .1) {
+      x = 0;
+      y = 0;
+      theta = 0;
+    }
+    
+    r = x / Math.cos(theta) * 180 / Math.PI;
+    
+    return {"x": x, "y": y, "theta": theta, "r": r};
+  }
+  
+  
+  
+  
+  //these are for selecting the gamepad, mapping it from the library, and then updating the current status
   this.set = function(message) {
     if(message) {
       message.text("Press any button on the desired gamepad");
@@ -63,30 +130,33 @@ function Gamepad() {
                 if(message) {
                   message.html("Gamepad connected!</br>ID: "+chk[gp.i_use].id);
                 }
-                gp.map(chk[gp.i_use].id);
+                gp.map(chk[gp.i_use].id, message);
               }
             }
           }
         }
       }
     }, 100);
-  },
+  };
 
-  this.map = function(id) {
+  this.map = function(id, message) {
     gp.id = id;
     Object.keys(layouts).forEach(function(key, i) {
       if(id == layouts[key].id) {
         gp.layout = key;
         Object.keys(layouts[key].buttons).forEach(function(key_b, i) {
           if(key_b != "length") {
-            gp.buttons[key_b] = {press: false, val: 0};
+            gp.setButtonLast(key_b, {pressed: 0, released: 0});
+            gp.buttons[key_b] = {val: 0, pressed: 0, released: 0};
           } else {
             gp.buttons[key_b] = layouts[key].buttons[key_b];
           }
         });
+        var arrays = navigator.getGamepads()[gp.i_use].axes;
         Object.keys(layouts[key].axes).forEach(function(key_a, i) {
           if(key_a != "length") {
-            gp.axes[key_a] = {pos: Number};
+            gp.setDisplace(key_a, arrays[layouts[gp.layout].axes[key_a].x], arrays[layouts[gp.layout].axes[key_a].y]);
+            gp.axes[key_a] = {x: 0, y: 0, theta: 0, r: 0};
           } else {
             gp.axes[key_a] = layouts[key].axes[key_a];
           }
@@ -94,21 +164,26 @@ function Gamepad() {
         gp.ready = true;
       }
     });
-  },
+    // if(!gp.ready && message) {
+      // message.html("The chosen gamepad did not match the library.");
+    // }
+  };
 
   this.get_current = function(message) {
     read = navigator.getGamepads()[gp.i_use];
     if(read != undefined && gp.i_use != undefined) {
       Object.keys(gp.buttons) .forEach(function(key_b, i) {
         if(key_b != "length"){
-          gp.buttons[key_b].press = read.buttons[layouts[gp.layout].buttons[key_b]].pressed;
+          gp.setButtonLast(key_b);
           gp.buttons[key_b].val = read.buttons[layouts[gp.layout].buttons[key_b]].value;
+          gp.setStatusChange(key_b);
           //console.log("Buttons: "+gp.buttons[key_b].press+" "+key_b);
         }
       });
+//console.log(gp.buttons.down.val+" "+gp.buttons.down.released);
       Object.keys(gp.axes).forEach(function(key_a, i) {
         if(key_a != "length"){
-          gp.axes[key_a].pos = read.axes[layouts[gp.layout].axes[key_a]];
+          gp.axes[key_a] = gp.axesAdjust(key_a, read.axes[layouts[gp.layout].axes[key_a].x], read.axes[layouts[gp.layout].axes[key_a].y]);
           //console.log("Axes: "+gp.axes[key_a].pos+" "+key_a);
         }
       });
@@ -116,13 +191,10 @@ function Gamepad() {
     } else {
       Object.keys(gp.buttons) .forEach(function(key_b, i) {
         if(key_b != "length"){
-          gp.buttons[key_b].press = false;
-          gp.buttons[key_b].val = 0;
+          gp.buttons[key_b].val = 0;            //let go of all buttons
           //console.log("Buttons: "+gp.buttons[key_b].press+" "+key_b);
         }
       });
-  //Depending on how we design button presses to communicate with the tools... we can either keep 
-  //  the last button press status, or reset them all.
       Object.keys(gp.axes).forEach(function(key_a, i) {
         if(key_a != "length"){
           gp.axes[key_a].pos = 0;               //don't want to run the ROV into a wall if the gamepad disconnects
@@ -135,7 +207,7 @@ function Gamepad() {
         message.text("Gamepad disconnected");
       }
     }
-  }
+  };
 }
 
 var gp = new Gamepad();

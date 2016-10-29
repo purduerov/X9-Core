@@ -2,46 +2,61 @@ var active_div = function() {
   var div = $("#moving");
   var info = $("#info");
   var txt = "";
-  if(gp.buttons.a.press && !gp.buttons.b.press) {
+  if(gp.buttons.a.val && !gp.buttons.b.val) {
       div.css("background-color", "cyan");
-  } else if(gp.buttons.b.press && !gp.buttons.a.press) {
+  } else if(gp.buttons.b.val && !gp.buttons.a.val) {
       div.css("background-color", "red");
   }
 
-  if(gp.buttons.y.press && !gp.buttons.x.press) {
+  if(gp.buttons.y.val && !gp.buttons.x.val) {
       div.height("+=2");
       div.width("+=2");
-      div.css({top: "-=1px"});
-      div.css({left: "-=1px"});
-  } else if(gp.buttons.x.press && !gp.buttons.y.press) {
+      div.css({top: "-=1"});
+      div.css({left: "-=1"});
+  } else if(gp.buttons.x.val && !gp.buttons.y.val) {
       div.height("-=2");
       div.width("-=2");
-      if(div.width() != 0) {
-          div.css({top: "+=1px"});
-          div.css({left: "+=1px"});
+      if(parseInt(div.width()) != 0) {
+          div.css({top: "+=1"});
+          div.css({left: "+=1"});
       }
   }
+  
+  if(gp.buttons.up.pressed) {
+    div.css({top: "0"});
+  }
+  if(gp.buttons.down.released) {
+    div.css({top: "100%"});
+    div.css({top: "-="+(div.height()+3)});
+  }
+  if(gp.buttons.left.pressed) {
+    div.css({left: "0"});
+  }
+  if(gp.buttons.right.released) {
+    div.css({left: "100%"});
+    div.css({left: "-="+(div.width()+3)});
+  }
+  
+  
 
-  div.css({top: "+="+parseInt(10*gp.axes.yleft.pos)+"px"});
-  div.css({left: "+="+parseInt(10*gp.axes.xleft.pos)+"px"});
+  div.css({top: "+="+parseInt(-10*gp.axes.left.y)+"px"});
+  div.css({left: "+="+parseInt(10*gp.axes.left.x)+"px"});
   
   
   Object.keys(gp.buttons) .forEach(function(key_b, i) {
     if(key_b != "length"){
-      txt = txt+"</br>"+key_b+": "+gp.buttons[key_b].press;
-      //console.log("Buttons: "+gp.buttons[key_b].pressed+" "+key_b);
+      txt = txt+"</br>"+key_b+": "+(!!+gp.buttons[key_b].val);
+      //console.log("Buttons: "+gp.buttons[key_b].val+" "+key_b);
     }
   });
   Object.keys(gp.axes).forEach(function(key_a, i) {
     if(key_a != "length"){
-        if(key_a.substring(0,1) == "y") {
-        //txt = txt+"</br>"+key_a+": "+parseInt(-10*gp.axes[key_a].pos);
-        txt = txt+"</br>"+key_a+": "+(-gp.axes[key_a].pos);
+        txt = txt+"</br>"+key_a+"</br><p>  x: "+(gp.axes[key_a].x)+"</br>  y: "+(gp.axes[key_a].y)
+                 +"</br>  &theta;: "+gp.axes[key_a].theta+"</br>  r: "+gp.axes[key_a].r+"</p>";
         //console.log("Axes: "+gp.axes[key_a]+" "+key_a);
-        } else {
-        //txt = txt+"</br>"+key_a+": "+parseInt(10*gp.axes[key_a].pos);
-        txt = txt+"</br>"+key_a+": "+gp.axes[key_a].pos;
-        //console.log("Axes: "+gp.axes[key_a]+" "+key_a);
+        if(key_a == "right") {
+          txt = txt + "</br></br> x - x-off: " + (navigator.getGamepads()[gp.i_use].axes[layouts[gp.layout].axes[key_a].x])
+                    + "</br> 1 - x-off: " + (1 - gp.getDisplace().right.x);
         }
       }
   });

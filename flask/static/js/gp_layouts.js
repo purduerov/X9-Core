@@ -34,10 +34,14 @@ var layouts = {
       length: 16
     },
     axes: {
-      xleft:  0,
-      yleft:  1,
-      xright: 2,
-      yright: 3,
+      left: {
+        x:    0,
+        y:    1
+      },
+      right: {
+        x:    2,
+        y:    3
+      },
       length: 4
     }
   },
