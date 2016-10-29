@@ -9,36 +9,37 @@ class MS5837(oject):
     #possibly have an address parameter to replace 0x76
     def __init__(self):
 	self.bus = smbus.SMBus(1)
-        self.bus.write_byte(0x76, 0x1E)
+	self.address = 0x76
+        self.bus.write_byte(self.address, 0x1E)
         #time.sleep(0.5)
 
     def read_pressure_sensitivity(self):
-        data = self.bus.read_i2c_block_data(0x76, 0xA2, 2)
+        data = self.bus.read_i2c_block_data(self.address, 0xA2, 2)
         return (data[0] * 256 + data[1])
 
     def read_pressure_offset(self):
-        data = self.bus.read_i2c_block_data(0x76, 0xA4, 2)
+        data = self.bus.read_i2c_block_data(self.address, 0xA4, 2)
         return (data[0] * 256 + data[1])
 
     def read_temp_coefficient_ofPressure(self):
-        data = self.bus.read_i2c_block_data(0x76, 0xA6, 2)
+        data = self.bus.read_i2c_block_data(self.address, 0xA6, 2)
         return (data[0] * 256 + data[1])
 
     def read_temp_reference(self):
-        data = self.bus.read_i2c_block_data(0x76, 0xA8, 2)
+        data = self.bus.read_i2c_block_data(self.address, 0xA8, 2)
         return (data[0] * 256 + data[1])
 
     def read_temp_coefficient_ofTemp(self):
-        data = self.bus.read_i2c_block_data(0x76, 0xAC, 2)
+        data = self.bus.read_i2c_block_data(self.address, 0xAC, 2)
         return (data[0] * 256 + data[1])
 
     def read_digital_pressure(self):
         # MS5837_30BA01 address, 0x76(118)
         #		0x40(64)	Pressure conversion(OSR = 256) command
 
-        self.bus.write_byte(0x76, 0x40)
+        self.bus.write_byte(self.address, 0x40)
         #time.sleep(0.5)
-        value = self.bus.read_i2c_block_data(0x76, 0x00, 3)
+        value = self.bus.read_i2c_block_data(self.address, 0x00, 3)
         return (value[0] * 65536 + value[1] * 256 + value[2])
 
         #QUESTION: Do I need to write_byte multiple times (I think so)
@@ -46,9 +47,9 @@ class MS5837(oject):
     def read_digital_temp(self):
         # MS5837_30BA01 address, 0x76(118)
         #		0x50(64)	Temperature conversion(OSR = 256) command
-        self.bus.write_byte(0x76, 0x50)
+        self.bus.write_byte(self.address, 0x50)
         #time.sleep(0.5)
-        value = self.bus.read_i2c_block_data(0x76, 0x00, 3)
+        value = self.bus.read_i2c_block_data(self.address, 0x00, 3)
         return (value[0] * 65536 + value[1] * 256 + value[2])
 
 
