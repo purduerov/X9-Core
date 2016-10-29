@@ -38,23 +38,28 @@ def index():
 @socketio.on('dearflask')
 def recieve_controls(json):
     # parse json controls object into onside object.
-    print("controls: " + str(json))
+    #print("controls: " + str(json))
     global recieve_count
     recieve_count += 1
     print(recieve_count)
+    print('received message: ' + str(json))
 
 @socketio.on('dearclient')
 def send_packet():
-    json = "{ Hello World }"
+    json = {"text": "Hello World"}
+
     print("sent: " + str(json))
-    socketio.send(json, json=True)
+
+    socketio.emit("response", json, json=True)
+
     global send_count
     send_count += 1
+
 
 @socketio.on('connect')
 def on_connect():
     print("CLIENT CONNECTED!")
-    print(recieve_count)
+
 
 @socketio.on('disconnect')
 def on_disconnect():
