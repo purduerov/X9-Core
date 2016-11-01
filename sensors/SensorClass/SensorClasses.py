@@ -6,7 +6,7 @@ import time
 # Create and configure the BNO sensor connection.  Make sure only ONE of the
 # below 'bno = ...' lines is uncommented:
 # Raspberry Pi configuration with serial UART and RST connected to GPIO 18:
-bno = BNO055.BNO055(serial_port='/dev/ttyAMA0', rst=18)
+
 
 
 # BeagleBone Black configuration with default I2C connection (SCL=P9_19, SDA=P9_20),
@@ -19,6 +19,7 @@ bno = BNO055.BNO055(serial_port='/dev/ttyAMA0', rst=18)
 class IMU(object):
     def __init__(self):
         bno.begin()
+        bno = BNO055.BNO055(rst=18)
 
     def imu_get_data(self):
 
