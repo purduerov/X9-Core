@@ -87,3 +87,9 @@ class MS5837(oject):
 
         return pressure
 }
+
+if __name__ == "__main__":
+        test = MS5837()
+        while True :
+                print(test.getPressure())
+                time.sleep(1)
