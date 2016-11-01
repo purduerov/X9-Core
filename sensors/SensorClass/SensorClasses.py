@@ -65,3 +65,11 @@ class IMU(object):
             return False
 
         return True
+    
+if __name__ == "__main__":
+        test = IMU()
+        while True :
+                testdict = test.imu_get_data()
+                print( testdict['Heading'] )
+                print(testdict['Roll'])
+                time.sleep(1)
