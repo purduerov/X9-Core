@@ -9,17 +9,16 @@ import time
 
 
 
-# BeagleBone Black configuration with default I2C connection (SCL=P9_19, SDA=P9_20),
-# and RST connected to pin P9_12:
-# bno = BNO055.BNO055(rst='P9_12')
+
 
 # if not bno.begin():
 #   raise RuntimeError('Failed to initialize BNO055! Check the Sensor DUMBASS')
 
 class IMU(object):
     def __init__(self):
-        bno.begin()
         bno = BNO055.BNO055(rst=18)
+        bno.begin()
+        
 
     def imu_get_data(self):
 
