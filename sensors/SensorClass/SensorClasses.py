@@ -6,19 +6,19 @@ import time
 # Create and configure the BNO sensor connection.  Make sure only ONE of the
 # below 'bno = ...' lines is uncommented:
 # Raspberry Pi configuration with serial UART and RST connected to GPIO 18:
-bno = BNO055.BNO055(serial_port='/dev/ttyAMA0', rst=18)
 
 
-# BeagleBone Black configuration with default I2C connection (SCL=P9_19, SDA=P9_20),
-# and RST connected to pin P9_12:
-# bno = BNO055.BNO055(rst='P9_12')
+
+
 
 # if not bno.begin():
 #   raise RuntimeError('Failed to initialize BNO055! Check the Sensor DUMBASS')
 
 class IMU(object):
     def __init__(self):
+        bno = BNO055.BNO055(rst=18)
         bno.begin()
+        
 
     def imu_get_data(self):
 
@@ -65,3 +65,11 @@ class IMU(object):
             return False
 
         return True
+    
+if __name__ == "__main__":
+        test = IMU()
+        while True :
+                testdict = test.imu_get_data()
+                print( testdict['Heading'] )
+                print(testdict['Roll'])
+                time.sleep(1)

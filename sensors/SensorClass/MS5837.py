@@ -5,12 +5,11 @@ import time
 
 
 class MS5837(oject):
-{
     #possibly have an address parameter to replace 0x76
     def __init__(self):
 	self.bus = smbus.SMBus(1)
 	self.address = 0x76
-        self.bus.write_byte(self.address, 0x1E)
+        #self.bus.write_byte(self.address, 0x1E)
         #time.sleep(0.5)
 
     def read_pressure_sensitivity(self):
@@ -86,4 +85,9 @@ class MS5837(oject):
         pressure = ((((D1 * SENS2) / 2097152) - OFF2) / 8192) / 10.0
 
         return pressure
-}
+
+if __name__ == "__main__":
+        test = MS5837()
+        while True :
+                print(test.getPressure())
+                time.sleep(1)
