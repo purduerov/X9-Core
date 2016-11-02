@@ -17,38 +17,38 @@ import smbus
 
 class IMU(object):
     def __init__(self):
-        bno = BNO055.BNO055(rst=18)
-        bno.begin()
+        self.bno = BNO055.BNO055(rst=18)
+        self.bno.begin()
         
 
     def imu_get_data(self):
 
-        heading, roll, pitch = bno.read_euler()
-        gyro_x, gyro_y, gyro_z = bno.read_gyroscope()
-        accel_x, accel_y, accel_z = bno.read_accelerometer()
-        LinAccel_x, LinAccel_y, LinAccel_z = bno.read_linear_accelerometer()
-        temp = bno.read_temp()
+        heading, roll, pitch = self.bno.read_euler()
+        gyro_x, gyro_y, gyro_z = self.bno.read_gyroscope()
+        accel_x, accel_y, accel_z = self.bno.read_accelerometer()
+        LinAccel_x, LinAccel_y, LinAccel_z = self.bno.read_linear_acceleration()
+        temp = self.bno.read_temp()
         return {'Heading': heading, 'Roll': roll, 'Pitch': pitch, 'Gyro-X': gyro_x, 'Gyro-Y': gyro_y, 'Gyro-Z': gyro_z,
                 'Acceleration-X': accel_x, 'Acceleration-Y': accel_y, 'Acceleration-Z': accel_z,
                 'Linear Acceleration-X': LinAccel_x, 'Linear Acceleration-Y': LinAccel_y, 'Linear Acceleration-Z': LinAccel_z,
                 'Temp' : temp}
 
     def get_calibration(self):
-        cal_array = bno.get_calibration()
+        cal_array = self.bno.get_calibration()
         return cal_array
 
     def reset_calibration(self):
         cal_array_original = self.get_calibration()
-        bno.set_calibration(bno.get_calibration())
+        self.bno.set_calibration(self.bno.get_calibration())
         return cal_array_original
 
     def set_calibration(self, data):
-        bno.set_calibration(data)
+        self.bno.set_calibration(data)
         return
 
     def sitrep (self):
-        sys, gyro, accel, mag = bno.get_calibration_status()
-        sys_stat, sys_test, sys_err = bno.get_system_status(True)
+        sys, gyro, accel, mag = self.bno.get_calibration_status()
+        sys_stat, sys_test, sys_err = self.bno.get_system_status(True)
         good_status = [3,3,3,3,1,0x0F,0]
         test_array = [sys,gyro,accel,mag,sys_stat, sys_test, sys_err]
 
@@ -158,12 +158,12 @@ class Pressure(object):
     
     
 if __name__ == "__main__":
-        #test = IMU()
+        test = IMU()
         test2 = Pressure()
         while True :
-               # testdict = test.imu_get_data()
+                testdict = test.imu_get_data()
                 testarray = test2.get_pressure()
-                #print( testdict['Heading'] )
-                #print(testdict['Roll'])
+                print( testdict['Heading'] )
+                print(testdict['Roll'])
                 print(testarray[0])
                 time.sleep(1)

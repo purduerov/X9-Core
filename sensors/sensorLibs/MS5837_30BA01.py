@@ -93,6 +93,6 @@ cTemp = TEMP / 100.0
 fTemp = cTemp * 1.8 + 32
 
 # Output data to screen
-	print "Pressure : %.2f mbar" %pressure
-	print "Temperature in Celsius : %.2f C" %cTemp
-	print "Temperature in Fahrenheit : %.2f F" %fTemp
+print "Pressure : %.2f mbar" %pressure
+print "Temperature in Celsius : %.2f C" %cTemp
+print "Temperature in Fahrenheit : %.2f F" %fTemp

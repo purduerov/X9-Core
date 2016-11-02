@@ -4,7 +4,7 @@ import time
 #Get I2C bus
 
 
-class MS5837(oject):
+class MS5837(object):
     #possibly have an address parameter to replace 0x76
     def __init__(self):
 	self.bus = smbus.SMBus(1)
