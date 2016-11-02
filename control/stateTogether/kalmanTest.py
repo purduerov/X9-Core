@@ -12,14 +12,17 @@ craft.stateX[0]=1
 
 xPos_act_plot =[]
 vel_act = 0
-while (t < 200):
+while (t < 1000):
     xPos_act_plot.append(xPos_act)
     if t < 100:
         craft.update(1,1,1,1,1,1)
         vel_act = vel_act+1*dT
-    else:
+    elif(t <300):
         craft.update(-1,-1,-1,-1,-1,-1)
         vel_act = vel_act-1*dT
+    elif(t <500):
+        craft.update(1,1,1,1,1,1)
+        vel_act = vel_act+1*dT
     xPos_act = xPos_act+vel_act*dT
     t = t + 1;
     xPos.append(craft.stateX[0])

@@ -102,3 +102,40 @@ class kalman(object):
         self.stateX =self.stateX +Kx.dot(measX-C.dot(self.stateX))
         self.xVar=self.xVar.dot(np.identity(2)-Kx.dot(C))
             
+
+        """kalman for Y""" 
+        self.stateY = self.A.dot(self.stateY)+self.B*accelY
+        self.yVar = self.A.dot(self.yVar.dot(self.A.T))+pow(self.aYnoise,2)*np.array([(pow(self.dT,4)/4,pow(self.dT,3)/2),(pow(self.dT,3)/2,pow(self.dT,2))])
+        Ky = self.yVar.dot(C.T)/(C.dot(self.yVar.dot(C.T))+pow(self.noiseY,2))
+        self.stateY =self.stateY +Ky.dot(measY-C.dot(self.stateY))
+        self.yVar=self.yVar.dot(np.identity(2)-Ky.dot(C))
+        
+        
+        """kalman for Z""" 
+        self.stateZ = self.A.dot(self.stateZ)+self.B*accelZ
+        self.zVar = self.A.dot(self.zVar.dot(self.A.T))+pow(self.aZnoise,2)*np.array([(pow(self.dT,4)/4,pow(self.dT,3)/2),(pow(self.dT,3)/2,pow(self.dT,2))])
+        Kz = self.zVar.dot(C.T)/(C.dot(self.zVar.dot(C.T))+pow(self.noiseZ,2))
+        self.stateZ =self.stateZ +Kz.dot(measZ-C.dot(self.stateZ))
+        self.zVar=self.zVar.dot(np.identity(2)-Kz.dot(C))
+        
+
+        """kalman for t""" 
+        self.stateT = self.A.dot(self.stateT)+self.B*accelT
+        self.tVar = self.A.dot(self.tVar.dot(self.A.T))+pow(self.aTnoise,2)*np.array([(pow(self.dT,4)/4,pow(self.dT,3)/2),(pow(self.dT,3)/2,pow(self.dT,2))])
+        Kt = self.tVar.dot(C.T)/(C.dot(self.tVar.dot(C.T))+pow(self.noiseT,2))
+        self.stateT =self.stateT +Kt.dot(measT-C.dot(self.stateT))
+        self.tVar=self.tVar.dot(np.identity(2)-Kt.dot(C))
+
+        """kalman for r""" 
+        self.stateR = self.A.dot(self.stateR)+self.B*accelR
+        self.rVar = self.A.dot(self.rVar.dot(self.A.T))+pow(self.aRnoise,2)*np.array([(pow(self.dT,4)/4,pow(self.dT,3)/2),(pow(self.dT,3)/2,pow(self.dT,2))])
+        Kr = self.rVar.dot(C.T)/(C.dot(self.rVar.dot(C.T))+pow(self.noiseR,2))
+        self.stateR =self.stateR +Kr.dot(measR-C.dot(self.stateR))
+        self.rVar=self.rVar.dot(np.identity(2)-Kr.dot(C))
+
+        """kalman for s""" 
+        self.stateS = self.A.dot(self.stateS)+self.B*accelS
+        self.sVar = self.A.dot(self.sVar.dot(self.A.T))+pow(self.aSnoise,2)*np.array([(pow(self.dT,4)/4,pow(self.dT,3)/2),(pow(self.dT,3)/2,pow(self.dT,2))])
+        Ks = self.sVar.dot(C.T)/(C.dot(self.sVar.dot(C.T))+pow(self.noiseS,2))
+        self.stateS =self.stateS +Ks.dot(measS-C.dot(self.stateS))
+        self.sVar=self.sVar.dot(np.identity(2)-Ks.dot(C))
