@@ -159,8 +159,11 @@ class Pressure(object):
     
 if __name__ == "__main__":
         test = IMU()
+        test2 = Pressure()
         while True :
                 testdict = test.imu_get_data()
+                testarray = test2.get_pressure()
                 print( testdict['Heading'] )
                 print(testdict['Roll'])
+                print(testarray[0])
                 time.sleep(1)
