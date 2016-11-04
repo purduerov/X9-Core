@@ -6,9 +6,9 @@
 //Signal is the real signal you will get
 //Kernel is the ideal signal
 
-void convolve(const double Signal[/* SignalLen */], size_t SignalLen, 
-              const double Kernel[/* KernelLen */], size_t KernelLen,
-              double Result[/* SignalLen + KernelLen - 1 */])
+void convolve(const float Signal[/* SignalLen */], size_t SignalLen, 
+              const float Kernel[/* KernelLen */], size_t KernelLen,
+              float Result[/* SignalLen + KernelLen - 1 */])
 {
   size_t n;
 
@@ -29,7 +29,7 @@ void convolve(const double Signal[/* SignalLen */], size_t SignalLen,
 }
 
 void printSignal(const char* Name,
-                 double Signal[/* SignalLen */], size_t SignalLen)
+                 float Signal[/* SignalLen */], size_t SignalLen)
 {
   size_t i;
 
@@ -40,8 +40,8 @@ void printSignal(const char* Name,
   printf("\n");
 }
 
-double angle(double time1, double time2, double d, double v) {
-	double angle;
+float angle(float time1, float time2, float d, float v) {
+	float angle;
 	angle = acos(((time1 + time2)*(time2 - time1) * v + pow(d, 2))/ (2 * time2 * d)) * 180 * 7 / 22;
 	return angle;
 }
@@ -52,19 +52,19 @@ double angle(double time1, double time2, double d, double v) {
 
 int main(void)
 {
-  double signal1[] = { 1, 1, 1, 1, 1 };
-  double signal2[] = { 0, 1, 1, 1, 0 };
-  double signal3[] = { 1, 1, 1, 1, 1 };
-  double signal4[] = { 1, 1, 1, 1, 1 };
-  double kernel[] = { 1, 1, 1, 1, 1 };
+  float signal1[] = { 1, 1, 1, 1, 1 };
+  float signal2[] = { 0, 1, 1, 1, 0 };
+  float signal3[] = { 1, 1, 1, 1, 1 };
+  float signal4[] = { 1, 1, 1, 1, 1 };
+  float kernel[] = { 1, 1, 1, 1, 1 };
   bool SignalReceive = true;
-  double t = 0;
+  float t = 0;
   while (t >= 0 && t <= 2) {
   if (SignalReceive) {
-  	double result1[ELEMENT_COUNT(signal1) + ELEMENT_COUNT(kernel) - 1];
-  	double result2[ELEMENT_COUNT(signal2) + ELEMENT_COUNT(kernel) - 1];
-  	double result3[ELEMENT_COUNT(signal3) + ELEMENT_COUNT(kernel) - 1];
-  	double result4[ELEMENT_COUNT(signal4) + ELEMENT_COUNT(kernel) - 1];
+  	float result1[ELEMENT_COUNT(signal1) + ELEMENT_COUNT(kernel) - 1];
+  	float result2[ELEMENT_COUNT(signal2) + ELEMENT_COUNT(kernel) - 1];
+  	float result3[ELEMENT_COUNT(signal3) + ELEMENT_COUNT(kernel) - 1];
+  	float result4[ELEMENT_COUNT(signal4) + ELEMENT_COUNT(kernel) - 1];
 
 	  convolve(signal1, ELEMENT_COUNT(signal1),
 		   kernel, ELEMENT_COUNT(kernel),
@@ -88,17 +88,17 @@ int main(void)
 	  printSignal("result4", result4, ELEMENT_COUNT(result4));
 
 	//Define time:
-	  double t1 = 0.0;
-	  double t2 = 0.12;
-	  double t3 = 0.083;
-	  double t4 = 0.02;
+	  float t1 = 0.0;
+	  float t2 = 0.12;
+	  float t3 = 0.083;
+	  float t4 = 0.02;
 
-	  double delta_t2 = t2 - t1;
-	  double delta_t3 = t3 - t1;
-	  double delta_t4 = t4 - t1;
+	  float delta_t2 = t2 - t1;
+	  float delta_t3 = t3 - t1;
+	  float delta_t4 = t4 - t1;
 
-	  double angleY = angle(delta_t3, delta_t4, DISTANCE, VELOCITY);
-	  double angleX = angle(delta_t2, delta_t3, DISTANCE, VELOCITY);
+	  float angleY = angle(delta_t3, delta_t4, DISTANCE, VELOCITY);
+	  float angleX = angle(delta_t2, delta_t3, DISTANCE, VELOCITY);
 	  printf ("%f\n", angleX);
 	  printf ("%f\n", angleY);
 	}
