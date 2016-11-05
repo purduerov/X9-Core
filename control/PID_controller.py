@@ -1,6 +1,10 @@
-class PID_Controller:
-	#constructor sets PID coeffs, initialize vars
+class PID_Controller(object):
+	""" PID Controller Class
+	"""
 	def __init__(self,P=0.1,I=0.01,D=0.0):
+		"""
+		Initialize the PID controller with the given P, I, D values
+		"""
 		self.Kp = P
 		self.Ki = I
 		self.Kd = D
@@ -10,8 +14,10 @@ class PID_Controller:
 		self.setpoint  = 0 # the desired point
 		self.INT_MAX = 1000 # max value for integrator
 
-	# update the output, based on curr_val (position/angle based on sensors)
 	def update(self, curr_val):
+		"""
+	    update the output, based on curr_val (position/angle based on sensors)
+		"""
 		# calculate error
 		err = self.setpoint - curr_val;
 		# calculate new error derivitive
@@ -28,12 +34,16 @@ class PID_Controller:
 		# update the previous error
 		self.prev_err = err   
 
-	# set a new target point, clears the integral and prev_err values
 	def set_setpoint(self, sp):
+		"""
+		set a new target point, clears the integral and prev_err values
+		"""
 		self.setpoint = sp
 		self.integral = 0
 		self.prev_err = 0
 
-	# get the current output of the PID controller 
 	def getOutput(self):
+		"""
+		# get the current output of the PID controller 
+		"""
 		return self.out
