@@ -1,0 +1,16 @@
+../smbus/__about__.py
+../smbus/util.py
+../smbus/smbus.py
+../smbus/__init__.py
+../smbus/__about__.pyc
+../smbus/util.pyc
+../smbus/smbus.pyc
+../smbus/__init__.pyc
+../smbus/_smbus_cffi.so
+./
+PKG-INFO
+not-zip-safe
+SOURCES.txt
+requires.txt
+top_level.txt
+dependency_links.txt
