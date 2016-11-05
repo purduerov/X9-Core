@@ -75,8 +75,7 @@ class Pressure(object):
         
     def get_pressure(self):
         self.bus.write_byte(0x76, 0x1E)
-        time.sleep(0.5)
-
+#time.sleep(.5)
         # Read 12 bytes of calibration data
         # Read pressure sensitivity
         data = self.bus.read_i2c_block_data(0x76, 0xA2, 2)
