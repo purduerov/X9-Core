@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdbool.h>
+
 //Assumption: Lengths and pointers won't be 0. SignalLen + KernelLen - 1 <= size_t -1
 //Signal is the real signal you will get
 //Kernel is the ideal signal
@@ -47,8 +48,8 @@ double angle(double time1, double time2, double d, double v) {
 }
 
 #define ELEMENT_COUNT(X) (sizeof(X) / sizeof((X)[0]))
-#define DISTANCE 0.5
-#define VELOCITY 50.45
+#define DISTANCE 0.5 //The distance between two piezos
+#define VELOCITY 50.45 //The velocity of sound in the water
 
 int main(void)
 {
