@@ -12,7 +12,7 @@ class State(object):
     def get_state(self, state_value):
         # gets the data from the corresponding classes and appends it to the main dictionary
         main_dict = self.imu.imu_get_data()
-	if state_value == ('Pressure' or 'cTemp' or 'fTemp'):
+	if state_value == ('Pressure' or 'cTemp' or 'fTemp' or 'all'):
 		temp_array = self.pressure.get_pressure()
 		main_dict['ctemp'] = temp_array[1]
         	main_dict['fTemp'] = temp_array[2]
