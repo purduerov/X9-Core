@@ -1,12 +1,17 @@
-dataset = open("output.txt",'r')
+import numpy as np
+import matplotlib.pyplot as plt
 
-class testSensor(object):
-    def __init__(self):
-        self.data1 = ""
-        self.data2 = ""
 
-    def getData(self):
-        data1 = dataset.readline()
-imu = testSensor ()
-while(1):
-    print  dataset.readline()
+plt.axis([0,100,0,7])
+plt.ion()
+i = 0
+while (1):
+    y = 1
+    x = 7
+    plt.scatter(i, y)
+    plt.scatter(i, x)
+    i= 1+ i 
+    plt.pause(0.05)
+while True:
+    plt.pause(0.05)
+

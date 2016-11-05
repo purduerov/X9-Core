@@ -15,7 +15,7 @@ class kalman(object):
             bTnoise,
             bRnoise,
             bSnoise):
-
+        self.increase = 0
         """X X'"""
         self.stateX = np.array([(0),(0)])
         self.stateY = np.array([(0),(0)])
@@ -54,10 +54,15 @@ class kalman(object):
                 [(pow(self.dT,4)/4,pow(self.dT,3)/2),
                     (pow(self.dT,3)/2,pow(self.dT,2))])
 
+        self.xCov = self.xVar
+        self.yCov = self.yVar
+        self.zCov = self.zVar
+
         self.tVar = np.array([(pow(self.noiseT,2),0),(0,pow(self.bTnoise,2))])*self.dT
         self.rVar = np.array([(pow(self.noiseR,2),0),(0,pow(self.bRnoise,2))])*self.dT
         self.sVar = np.array([(pow(self.noiseS,2),0),(0,pow(self.bSnoise,2))])*self.dT
 
+        """ lA.dot(self.yVar.dot(lA.T))+pow(self.aYnoise,2)*np.array([(pow(self.dT,4)/4,pow(self.dT,3)/2),(pow(self.dT,3)/2,pow(self.dT,2))])"""
         
     def est_vel(self):
         return [self.stateX[1],
@@ -76,20 +81,19 @@ class kalman(object):
                 self.stateS[0]]    
 
 
-    """accellerations from motors are to be input. if we can call them from classed I think we don't need to do this"""
     def update(self):
 
         def calcState(A,prevState,B,u):
             return A.dot(prevState)+B*u
 
-        def calcVar(A,prevVar,noise1,noise2):
-            return A.dot(prevVar.dot(A.T))+np.array([(pow(noise1,2),noise1*noise2),(noise2*noise1,pow(noise2,2))])*self.dT
-
+        def calcVar(A,prevVar,covM):
+            return A.dot(prevVar.dot(A.T))+covM
+        """ lA.dot(self.yVar.dot(lA.T))+pow(self.aYnoise,2)*np.array([(pow(self.dT,4)/4,pow(self.dT,3)/2),(pow(self.dT,3)/2,pow(self.dT,2))])"""
         def calcEst(meas,observation,state):
             return meas - observation.dot(state)
 
         def calcTrust(observation,errvar,measvar):
-            return observation.dot(errvar*(observation.T))+measvar
+            return observation.dot(errvar*(observation.T))+pow(measvar,2)
 
         def calcK(variance,observation,trust):
             return variance.dot(observation.T)/trust
@@ -101,13 +105,16 @@ class kalman(object):
             return var.dot(np.identity(2)-kGain.dot(observation))
         C = np.array([(1),(0)])
         """to be replace by sensor calls once the stateClass is wrutten"""
-        measX =1
-        measX2 =1
-        measY =1
-        measY2 = 1
-        measZ = 1
-        measZ2 =1
-        measT = 1
+        measX =self.increase+self.noiseX*np.random.random()
+        measY =self.increase+self.noiseY*np.random.random()
+        measZ = self.increase+self.noiseZ*np.random.random()
+        measT = self.increase+self.noiseT*np.random.random()
+
+        self.increase = self.increase+self.dT
+
+        measX2 =0
+        measY2 = 0
+        measZ2 =0
         measT1 = 1
         measR = 1
         measR1 = 1
@@ -122,9 +129,11 @@ class kalman(object):
         lB = np.array ([(pow(self.dT,2)/2),( self.dT)])
         aA = np.array ([(1,-self.dT),(0,1)])
         aB = np.array ([(self.dT),(0)])
+
         """kalman for X""" 
         self.stateX = calcState(lA,self.stateX,lB,measX2) 
-        self.xVar = calcVar(lA,self.xVar,self.noiseX,self.aXnoise) 
+        self.xCov = pow(self.aXnoise,2)*np.array([(pow(self.dT,4)/4,pow(self.dT,3)/2),(pow(self.dT,3)/2,pow(self.dT,2))]);
+        self.xVar = calcVar(lA,self.xVar,self.xCov) 
         xEst = calcEst(measX,C,self.stateX)
         xTrust = calcTrust(C,self.noiseX,self.aXnoise)
         Kx = calcK(self.xVar,C,xTrust)
@@ -132,11 +141,34 @@ class kalman(object):
         self.xVar=calcNVar(Kx,C,self.xVar)            
 
         """kalman for Y""" 
-        """
-        self.stateY = self.A.dot(self.stateY)+self.B*accelY
+        self.stateY = calcState(lA,self.stateY,lB,measY2)
+        self.yCov = pow(self.aYnoise,2)*np.array([(pow(self.dT,4)/4,pow(self.dT,3)/2),(pow(self.dT,3)/2,pow(self.dT,2))]);
+        self.yVar = calcVar(lA,self.yVar,self.yCov)
+        yEst = calcEst(measY,C,self.stateY)
+        yTrust = calcTrust(C,self.noiseY,self.aYnoise)
+        Ky = calcK(self.yVar,C,yTrust)
+        self.stateY = newState(self.stateY,Ky,yEst)
+        self.yVar = calcNVar(Ky,C,self.yVar)
 
-        self.yVar = self.A.dot(self.yVar.dot(self.A.T))+pow(self.aYnoise,2)*np.array([(pow(self.dT,4)/4,pow(self.dT,3)/2),(pow(self.dT,3)/2,pow(self.dT,2))])
-        Ky = self.yVar.dot(C.T)/(C.dot(self.yVar.dot(C.T))+pow(self.noiseY,2))
-        self.stateY =self.stateY +Ky.dot(measY-C.dot(self.stateY))
-        self.yVar=self.yVar.dot(np.identity(2)-Ky.dot(C))
-       """ 
+
+
+        """kalman for Z""" 
+        self.stateZ = calcState(lA,self.stateZ,lB,measZ2)
+        self.zCov = pow(self.aZnoise,2)*np.array([(pow(self.dT,4)/4,pow(self.dT,3)/2),(pow(self.dT,3)/2,pow(self.dT,2))]);
+        self.zVar = calcVar(lA,self.zVar,self.zCov)
+        zEst = calcEst(measZ,C,self.stateZ)
+        zTrust = calcTrust(C,self.noiseZ,self.aZnoise)
+        Kz = calcK(self.zVar,C,zTrust)
+        self.stateZ = newState(self.stateZ,Kz,zEst)
+        self.zVar = calcNVar(Kz,C,self.zVar)
+
+        """kalman for T""" 
+        self.stateT = calcState(aA,self.stateT,aB,measT1)
+        self.tCov = self.dT*np.array([(pow(self.noiseT,2),0),(0,pow(self.bTnoise,2))]);
+        self.tVar = calcVar(aA,self.tVar,self.tCov)
+        tEst = calcEst(measT,C,self.stateT)
+        tTrust = calcTrust(C,self.noiseT,self.bTnoise)
+        Kt = calcK(self.tVar,C,tTrust)
+        self.stateT = newState(self.stateT,Kt,tEst)
+        """self.stateY +Ky.dot(measY-C.dot(self.stateY))"""
+        self.tVar = calcNVar(Kt,C,self.tVar)
