@@ -55,8 +55,9 @@ var active_div = function() {
                  +"</br>  &theta;: "+gp.axes[key_a].theta+"</br>  r: "+gp.axes[key_a].r+"</p>";
         //console.log("Axes: "+gp.axes[key_a]+" "+key_a);
         if(key_a == "right") {
-          txt = txt + "</br></br> x - x-off: " + (navigator.getGamepads()[gp.i_use].axes[layouts[gp.layout].axes[key_a].x])
+/*          txt = txt + "</br></br> x - x-off: " + (navigator.getGamepads()[gp.i_use].axes[layouts[gp.layout].axes[key_a].x])
                     + "</br> 1 - x-off: " + (1 - gp.getDisplace().right.x);
+*/
         }
       }
   });
@@ -70,7 +71,6 @@ var go2 = -1;
 var run = function(abt) {
   if(gp.ready) {
     window.clearInterval(go1);
-    var ab
     go1 = -1;
     go2 = window.setInterval(function() {
       gp.get_current(abt);
@@ -97,5 +97,10 @@ $(document).ready(function() {
     $("#info").empty();
     gp.set(abt);
     go1 = window.setInterval(function() { run(abt); }, 50);
+  });
+  
+  $("#bind").click(function() {
+    gp.bind("a", "press", function(arg) { arg.message.html("Re-link, </br>\'"+arg.btn+"\' says hi "+arg.count+" times!"); arg.count += 1; },
+            {message: $("#reset"), btn: "a", count: 0});
   });
 });

@@ -53,25 +53,30 @@ function Gamepad() {
   this.i_use = undefined;
   var buttons_last = new Object;
   var axes_off = new Object;
+  var but_func = new Object;
+  
+  this.butfuncreturn = function() {
+    return but_func;
+  }
   
   //these are for identifying if a button has just been pressed or released
-  this.setButtonLast = function(key, init) { //is called right before updating buttons
-    if(init) {
-      buttons_last[key] = init;
+  this.setButtonLast = function(key, init = false) { //is called right before updating buttons
+    if(init) {                                       //init = true when gamepad is being mapped out; user shouldn't worry about it
+      buttons_last[key] = {val: 0};
     } else {
-      buttons_last[key].pressed = this.buttons[key].val;
+      buttons_last[key].val = this.buttons[key].val;
     }
   };
   
   this.getButtonLastPress = function(key) { //allows for user to see/operate off of last press, if desired
-    return buttons_last[key].pressed;
+    return buttons_last[key].val;
   };
   
   this.setStatusChange = function(key) { //this sets the pressed and released characteristics for each button
-    if(this.buttons[key].val && !buttons_last[key].pressed) {
+    if(this.buttons[key].val && !buttons_last[key].val) {
       this.buttons[key].pressed = 1;
       this.buttons[key].released = 0;
-    } else if(!this.buttons[key].val && buttons_last[key].pressed) {
+    } else if(!this.buttons[key].val && buttons_last[key].val) {
       this.buttons[key].pressed = 0;
       this.buttons[key].released = 1;
     } else {
@@ -110,9 +115,6 @@ function Gamepad() {
       theta = 0;
     }
     
-    /*r = y / Math.cos(theta) * 180 / Math.PI;*/
-    //this gave an 'r' value that ranged from 0 to values up to 2500. Obviously incorrect....
-    
     r = Math.sqrt(x*x + y*y);
     
     if(r > 1) {
@@ -122,7 +124,39 @@ function Gamepad() {
     return {"x": x, "y": y, "theta": theta, "r": r};
   }
   
-  
+  //string for btn and trigger, and function for func; i.e. this.bind("a", "change", function() {kill_all_humans} );
+  //btn is the button key property of buttons, trigger can be 'change', 'press', or 'release'
+  //arg is an object that holds the parameter 
+  this.bind = function(btn, trigger, func, arg) {
+    var func_key;
+    var f_full;
+    if(trigger == "change") {
+      func_key = "change_func";
+      f_full = function() {
+        if(gp.buttons[btn].val != buttons_last[btn].val) {
+          arg.message.text("hi");
+          func(arg);
+        }
+      };
+    } else if(trigger == "press") {
+      func_key = "press_func";
+      f_full = function() {
+        if(gp.buttons[btn].pressed) {
+          func(arg);
+        }
+      };
+    } else if(trigger == "release") {
+      func_key = "release_func";
+      f_full = function() {
+        if(gp.buttons[btn].released) {
+          func(arg);
+        }
+      };
+    }
+    
+    but_func[btn][func_key] = f_full;
+    console.log(but_func[btn][func_key])
+  }
   
   
   //these are for selecting the gamepad, mapping it from the library, and then updating the current status
@@ -165,8 +199,9 @@ function Gamepad() {
         gp.layout = key;
         Object.keys(layouts[key].buttons).forEach(function(key_b, i) {
           if(key_b != "length") {
-            gp.setButtonLast(key_b, {pressed: 0, released: 0});
+            gp.setButtonLast(key_b, true);
             gp.buttons[key_b] = {val: 0, pressed: 0, released: 0};
+            but_func[key_b] = {change_func: null, press_func: null, release_func: null};
           } else {
             gp.buttons[key_b] = layouts[key].buttons[key_b];
           }
@@ -183,9 +218,9 @@ function Gamepad() {
         gp.ready = true;
       }
     });
-    // if(!gp.ready && message) {
-      // message.html("The chosen gamepad did not match the library.");
-    // }
+    if(!gp.ready && message) {
+      message.html("The chosen gamepad did not match the library.");
+    }
   };
 
   this.get_current = function(message) {
@@ -196,6 +231,18 @@ function Gamepad() {
           gp.setButtonLast(key_b);
           gp.buttons[key_b].val = read.buttons[layouts[gp.layout].buttons[key_b]].value;
           gp.setStatusChange(key_b);
+          
+          if(but_func[key_b].change_func != null) {
+            but_func[key_b].change_func();
+          }
+          
+          if(but_func[key_b].press_func != null) {
+            but_func[key_b].press_func();
+          }
+          
+          if(but_func[key_b].release_func != null) {
+            but_func[key_b].release_func();
+          }
           //console.log("Buttons: "+gp.buttons[key_b].press+" "+key_b);
         }
       });
