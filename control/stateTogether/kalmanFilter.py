@@ -1,4 +1,10 @@
-from timeS import absTime
+import platform
+
+if platform.system() == "Darwin":
+    from timeS_OSX import absTime
+else:
+    from timeS import absTime
+
 import numpy as np
 class kalman(object):
     """The init noise values need to be found """
