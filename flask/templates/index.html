@@ -2,10 +2,54 @@
 
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
 <script type="text/javascript" charset="utf-8">
+
+
+    var packet = {
+        "controls": {
+            "thrusters": [true, true, true, true, true, true, true, true],
+
+            "absolutecontrols" : {
+                "x" : "1",
+                "y" : "1",
+                "z" : "1",
+                "roll" : "1",
+                "pitch" : "1",
+                "yaw" : "1"
+            },
+
+            "controls" : {
+
+            }
+
+        }
+    }
+
+
+
     var socket = io.connect('http://' + document.domain + ':' + location.port);
-    socket.on('connect', function() {
-        socket.emit('dearflask', {data: 'I\'m connected!'});
+
+    socket.on('connect', function () {
+        socket.emit('dearflask', packet);
     });
+
+    socket.on("response", function(data) {
+        console.log(data);
+        setTimeout(function() {
+            socket.emit("dearclient")
+        }, 500);
+    })
+
+
+
+
+    socket.emit('dearclient');
+
+
+    console.log();
+
+
+
+
 
 </script>
 
