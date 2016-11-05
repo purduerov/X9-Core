@@ -55,9 +55,13 @@ function Gamepad() {
   var axes_off = new Object;
   var but_func = new Object;
   
+  this.butfuncexist = function(key) {
+    return but_func[key] != undefined;
+  };
+  
   this.butfuncreturn = function() {
     return but_func;
-  }
+  };
   
   //these are for identifying if a button has just been pressed or released
   this.setButtonLast = function(key, init = false) { //is called right before updating buttons
@@ -192,7 +196,7 @@ function Gamepad() {
     }, 100);
   };
 
-  this.map = function(id, message) { //
+  this.map = function(id, message) { //maps the gamepad, and the related functions unless they've been defined for the button before
     gp.id = id;
     Object.keys(layouts).forEach(function(key, i) {
       if(id == layouts[key].id) {
@@ -201,7 +205,9 @@ function Gamepad() {
           if(key_b != "length") {
             gp.setButtonLast(key_b, true);
             gp.buttons[key_b] = {val: 0, pressed: 0, released: 0};
-            but_func[key_b] = {change_func: null, press_func: null, release_func: null};
+            if(but_func[key_b] == undefined) {
+              but_func[key_b] = {change_func: null, press_func: null, release_func: null};
+            }
           } else {
             gp.buttons[key_b] = layouts[key].buttons[key_b];
           }
