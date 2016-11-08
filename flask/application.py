@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 from flask import url_for
 from flask_socketio import SocketIO, send, emit
+from json import JSONEncoder
 # import json parser
 
 #
@@ -44,7 +45,7 @@ def recieve_controls(json):
 
 @socketio.on('dearclient')
 def send_packet():
-    json = "{ Hello World }"
+    json = build_dearclient()
     print("sent: " + str(json))
     socketio.send(json, json=True)
     global send_count
@@ -71,3 +72,8 @@ def error_handler(e):
 # INIT:
 if __name__ == '__main__':
     socketio.run(app, debug=True)
+
+# HELPER METHODS:
+
+def build_dearclient():
+    json = JSONEncoder.encode({ "Sensors" : { "Accelerometer" : {}}})
