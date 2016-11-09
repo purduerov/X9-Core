@@ -75,6 +75,7 @@ def on_disconnect():
 
 @socketio.on_error()
 def error_handler(e):
+    print(e);
     print("ERROR CAUGHT BY HANDLER!\n")
 
 # INIT:
