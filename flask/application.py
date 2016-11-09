@@ -3,6 +3,7 @@ from flask import url_for
 from flask_socketio import SocketIO, send, emit
 from json import JSONEncoder
 
+from python.pressure import Pressure
 from python.imu import IMU
 from python.thrusters import Thrusters
 
@@ -23,6 +24,7 @@ socketio = SocketIO(app, async_mode=async_mode)
 thrusters = Thrusters()
 imu = IMU()
 thrusters = Thrusters()
+pressure = Pressure()
 
 
 # Statistics:
@@ -79,11 +81,6 @@ def error_handler(e):
     print(e);
     print("ERROR CAUGHT BY HANDLER!\n")
 
-# INIT:
-if __name__ == '__main__':
-    socketio.run(app, debug=True)
-
-# HELPER METHODS:
 
 
 def build_dearclient():
@@ -154,3 +151,12 @@ def build_dearclient():
         })
 
     return json
+
+
+
+# INIT:
+if __name__ == '__main__':
+    socketio.run(app, debug=True)
+
+# HELPER METHODS:
+
