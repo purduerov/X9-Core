@@ -3,6 +3,9 @@ from flask import url_for
 from flask_socketio import SocketIO, send, emit
 from json import JSONEncoder
 
+from python.imu import IMU
+from python.thrusters import Thrusters
+
 #
 # PRIMARY FLASK APPLICATION:
 #
@@ -17,6 +20,8 @@ from json import JSONEncoder
 async_mode = None
 app = Flask(__name__, static_folder="static")
 socketio = SocketIO(app, async_mode=async_mode)
+imu = IMU()
+thrusters = Thrusters()
 
 
 # Statistics:
@@ -36,7 +41,7 @@ def index():
 @socketio.on('dearflask')
 def recieve_controls(json):
     # parse json controls object into onside object.
-    #print("controls: " + str(json))
+    # print("controls: " + str(json))
     global recieve_count
     recieve_count += 1
     print(recieve_count)
@@ -45,17 +50,12 @@ def recieve_controls(json):
 
 @socketio.on('dearclient')
 def send_packet():
-    packet = { "controls" : {
 
-           "telemetry" : {"Test"}
-        }
-    }
+    packet = build_dearclient()
 
+    print("sent: " + json.dumps(packet))
 
-
-    #print("sent: " + str(json))
-
-    socketio.emit("response", packet, json=True)
+    socketio.emit("dearflask", packet, json=True)
 
     global send_count
     send_count += 1
@@ -64,7 +64,6 @@ def send_packet():
 @socketio.on('connect')
 def on_connect():
     print("CLIENT CONNECTED!")
-
 
 
 @socketio.on('disconnect')
@@ -84,5 +83,72 @@ if __name__ == '__main__':
 
 # HELPER METHODS:
 
+
 def build_dearclient():
-    json = JSONEncoder.encode({ "Sensors" : { "Accelerometer" : {}}})
+
+    # TODO:
+    # Once this has been certified to work, the dictionary will be
+    # created only once and then updated with new values in this method.
+
+    json = JSONEncoder.encode(
+        {   "Sensors" : {
+
+                """
+                IMU:
+                +x is front of bot
+                +y is right of bot
+                +z is above bot
+                +pitch is rotating up
+                +roll is barrel roll right
+                +yaw is turning right
+                """
+
+                "IMU" : {
+                    "x" : imu.x,
+                    "y" : imu.y,
+                    "z" : imu.z,
+                    "pitch" : imu.pitch,
+                    "roll" : imu.roll,
+                    "yaw" : imu.yaw
+                },
+
+                """
+                Pressure:
+                pressure is in bars
+                temperature is in Celcius
+                """
+
+                "PRESSURE" : {
+                    "pressure" : pressure.pressure,
+                    "temperature" : pressure.temperature
+                }
+            },
+
+            "Thrusters" : {
+                """
+                THRUSTERS:
+                Each thruster's data is specified here
+                Mapping:
+                    t0
+                    t1
+                    t2
+                    t3
+                    t4
+                    t5
+                    t6
+                    t7
+                Power is -100 to 100
+                """
+
+                "t0" : { "power" : thrusters.t1.power },
+                "t1" : { "power" : thrusters.t1.power },
+                "t2" : { "power" : thrusters.t1.power },
+                "t3" : { "power" : thrusters.t1.power },
+                "t4" : { "power" : thrusters.t1.power },
+                "t5" : { "power" : thrusters.t1.power },
+                "t6" : { "power" : thrusters.t1.power },
+                "t7" : { "power" : thrusters.t1.power }
+            }
+        })
+
+    return json
