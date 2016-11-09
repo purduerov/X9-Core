@@ -47,7 +47,7 @@ def recieve_controls(json):
 def send_packet():
     packet = { "controls" : {
 
-           "telemetry" : {"Test"}
+           "telemetry" : "Test"
         }
     }
 
@@ -76,6 +76,7 @@ def on_disconnect():
 
 @socketio.on_error()
 def error_handler(e):
+    print(e);
     print("ERROR CAUGHT BY HANDLER!\n")
 
 # INIT:
