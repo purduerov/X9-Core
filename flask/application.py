@@ -20,6 +20,7 @@ from python.thrusters import Thrusters
 async_mode = None
 app = Flask(__name__, static_folder="static")
 socketio = SocketIO(app, async_mode=async_mode)
+thrusters = Thrusters()
 imu = IMU()
 thrusters = Thrusters()
 
