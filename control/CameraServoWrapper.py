@@ -8,7 +8,7 @@ import smbus
 
 class CameraServoWrapper(object):
   def __init__(self):
-    self.servo = ##ADD THE SERVO here
+    self.servo = 
     self.servo.begin()
     #The angle is the raw angle from servo.
     self.servo.angle = 0;
