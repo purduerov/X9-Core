@@ -13,7 +13,7 @@ class CameraServoWrapper(object):
     #The angle is the raw angle from servo.
     self.angle = 0
     #The reference angle is the angle we SET zero
-    self.servo.referenceAngleZero = 0;
+    self.HomeAngle = 0
     
   def setRawAngle(self, angle):
     #sets the raw angle of the servo appropriately
@@ -22,4 +22,19 @@ class CameraServoWrapper(object):
   
   def upAngle(self, angle):
     #sets the angle up a certain number of degrees above the current angle
-    if (self.angle + angle >= 180)
+    self.angle = self.angle + angle
+    if self.angle > 180:
+      self.angle = 180
+    setRawAngle(self, set.angle)
+
+  def downAngle(self, angle):
+    #sets the angle DOWN a certain number of degrees above the current angle
+    self.angle = self.angle - angle
+    if self.angle < 0:
+      self.angle = 0
+    setRawAngle(self, set.angle)
+
+  def setToZero(self):
+    setRawAngle(self, 0)
+
+  def setHomeToCurrentAngle(self):
