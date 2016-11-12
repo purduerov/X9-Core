@@ -50,15 +50,25 @@ class kalman(object):
         self.stateTime = absTime()
         self.dT = 0
 
-        self.xVar = pow(aXnoise,2)*np.array(
+        self.xVar = pow(aXnoise,2/5)*np.array(
                 [(pow(self.dT,4)/4,pow(self.dT,3)/2),
                     (pow(self.dT,3)/2,pow(self.dT,2))])
-        self.yVar = pow(aYnoise,2)*np.array(
+        self.yVar = pow(aYnoise,2/5)*np.array(
                 [(pow(self.dT,4)/4,pow(self.dT,3)/2),
                     (pow(self.dT,3)/2,pow(self.dT,2))])
         self.zVar = pow(aZnoise,2)*np.array(
                 [(pow(self.dT,4)/4,pow(self.dT,3)/2),
                     (pow(self.dT,3)/2,pow(self.dT,2))])
+
+       #self.xVar = pow(aXnoise,0.5)*np.array(
+        #        [(pow(self.dT,4)/4,pow(self.dT,3)/2),
+        #            (pow(self.dT,3)/2,pow(self.dT,2))])
+        #self.yVar = pow(aYnoise,0.5)*np.array(
+        #       [(pow(self.dT,4)/4,pow(self.dT,3)/2),
+        #           (pow(self.dT,3)/2,pow(self.dT,2))])
+        #self.zVar = pow(aZnoise,0.5)*np.array(
+        #        [(pow(self.dT,4)/4,pow(self.dT,3)/2),
+        #            (pow(self.dT,3)/2,pow(self.dT,2))]) '''
 
         self.xCov = self.xVar
         self.yCov = self.yVar
@@ -68,7 +78,7 @@ class kalman(object):
         self.rVar = np.array([(pow(self.noiseR,2),0),(0,pow(self.bRnoise,2))])*self.dT
         self.sVar = np.array([(pow(self.noiseS,2),0),(0,pow(self.bSnoise,2))])*self.dT
 
-        """ lA.dot(self.yVar.dot(lA.T))+pow(self.aYnoise,2)*np.array([(pow(self.dT,4)/4,pow(self.dT,3)/2),(pow(self.dT,3)/2,pow(self.dT,2))])"""
+       #lA.dot(self.yVar.dot(lA.T))+pow(self.aYnoise,2)*np.array([(pow(self.dT,4)/4,pow(self.dT,3)/2),(pow(self.dT,3)/2,pow(self.dT,2))])"""
         
     def est_vel(self):
         return [self.stateX[1],
@@ -111,10 +121,10 @@ class kalman(object):
             return var.dot(np.identity(2)-kGain.dot(observation))
         C = np.array([(1),(0)])
         """to be replace by sensor calls once the stateClass is wrutten"""
-        measX =self.increase+self.noiseX*np.random.random()
-        measY =self.increase+self.noiseY*np.random.random()
+        measX =self.increase+self.noiseX*pow(np.random.random(),5)
+        measY =self.increase+self.noiseY*pow(np.random.random(),5)
         measZ = self.increase+self.noiseZ*np.random.random()
-        measT = self.increase+self.noiseT*np.random.random()
+        measT = self.increase+self.noiseT*pow(np.random.random(),5)
 
         self.increase = self.increase+self.dT
 
