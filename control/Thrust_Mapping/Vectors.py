@@ -1,23 +1,23 @@
-class vect6(object):
+class Vector6(object):
     """
     A 6 Dimensional Vector
 
-    L (vect3):
-    R (vect3):
+    L (Vector3)
+    R (Vector3)
     """
 
     def __init__(self, x, y, z, rho, theta, phi):
-        self.L = vect3(x,y,z)
-        self.R = vect3(rho, theta, phi)
+        self.L = Vector3(x, y, z)
+        self.R = Vector3(rho, theta, phi)
 
 
-class vect3(object):
+class Vector3(object):
     """
     A 3 Dimensional Vector
 
-    x (double):
-    y (double):
-    z (double):
+    x (double)
+    y (double)
+    z (double)
     """
     def __init__(self, x, y, z):
         self.x = x
@@ -25,29 +25,29 @@ class vect3(object):
         self.z = z
 
 
-class vect2(object):
+class Vector2(object):
     """
     A 2 Dimensional Vector
 
-    a (double):
-    b (double):
+    a (double)
+    b (double)
     """
     def __init__(self, a, b):
         self.a = a
         self.b = b
 
 
-class vect8(object):
+class Vector8(object):
     """A 8 Dimensional Vector
 
-    a (double):
-    b (double):
-    c (double):
-    d (double):
-    e (double):
-    f (double):
-    g (double):
-    h (double):
+    a (double)
+    b (double)
+    c (double)
+    d (double)
+    e (double)
+    f (double)
+    g (double)
+    h (double)
     """
     def __init__(self, a, b, c, d, e, f, g, h):
         self.a = a
@@ -60,42 +60,18 @@ class vect8(object):
         self.h = h
 
 
-class matrix8_6(object):
+class Matrix8x6(object):
     """
-    An 8x6 Matrix made from 8 vect6 objects
+    An 8x6 Matrix made from 8 Vector6 objects
 
-    t1 (vect6):
-    t2 (vect6):
-    t3 (vect6):
-    t4 (vect6):
-    t5 (vect6):
-    t6 (vect6):
-    t7 (vect6):
-    t8 (vect6):
-    """
-    def __init__(self, t1, t2, t3, t4, t5, t6, t7, t8):
-        self.t1 = t1
-        self.t2 = t2
-        self.t3 = t3
-        self.t4 = t4
-        self.t5 = t5
-        self.t6 = t6
-        self.t7 = t7
-        self.t8 = t8
-
-
-class matrix8_3(object):
-    """
-    An 8x3 Matrix made from 8 vect3 objects
-
-    t1 (vect3):
-    t2 (vect3):
-    t3 (vect3):
-    t4 (vect3):
-    t5 (vect3):
-    t6 (vect3):
-    t7 (vect3):
-    t8 (vect3):
+    t1 (Vector6)
+    t2 (Vector6)
+    t3 (Vector6)
+    t4 (Vector6)
+    t5 (Vector6)
+    t6 (Vector6)
+    t7 (Vector6)
+    t8 (Vector6)
     """
     def __init__(self, t1, t2, t3, t4, t5, t6, t7, t8):
         self.t1 = t1
@@ -108,13 +84,37 @@ class matrix8_3(object):
         self.t8 = t8
 
 
-class matrix3_3(object):
+class Matrix8x3(object):
     """
-    A 3x3 Matrix made from 3 vect3 objects
+    An 8x3 Matrix made from 8 Vector3 objects
 
-    a (vect3):
-    b (vect3):
-    c (vect3):
+    t1 (Vector3)
+    t2 (Vector3)
+    t3 (Vector3)
+    t4 (Vector3)
+    t5 (Vector3)
+    t6 (Vector3)
+    t7 (Vector3)
+    t8 (Vector3)
+    """
+    def __init__(self, t1, t2, t3, t4, t5, t6, t7, t8):
+        self.t1 = t1
+        self.t2 = t2
+        self.t3 = t3
+        self.t4 = t4
+        self.t5 = t5
+        self.t6 = t6
+        self.t7 = t7
+        self.t8 = t8
+
+
+class Matrix3x3(object):
+    """
+    A 3x3 Matrix made from 3 Vector3 objects
+
+    a (Vector3)
+    b (Vector3)
+    c (Vector3)
     """
     def __init__(self, a, b, c):
         self.a = a
@@ -122,12 +122,12 @@ class matrix3_3(object):
         self.c = c
 
 
-class matrix2_2(object):
+class Matrix2x2(object):
     """
-    A 2x2 Matrix made from 2 vect2 objects
+    A 2x2 Matrix made from 2 Vector2 objects
 
-    one (vect2):
-    two (vect2):
+    one (Vector2)
+    two (Vector2)
     """
     def __init__(self, one, two):
         self.one = one
