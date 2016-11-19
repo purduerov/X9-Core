@@ -81,6 +81,7 @@ def error_handler(e):
     print(e);
     print("ERROR CAUGHT BY HANDLER!\n")
 
+# HELPER METHODS:
 
 
 def build_dearclient():
@@ -88,9 +89,6 @@ def build_dearclient():
     # TODO:
     # Once this has been certified to work, the dictionary will be
     # created only once and then updated with new values in this method.
-
-    json = JSONEncoder.encode(
-        {   "Sensors" : {
 
                 """
                 IMU:
@@ -102,28 +100,12 @@ def build_dearclient():
                 +yaw is turning right
                 """
 
-                "IMU" : {
-                    "x" : imu.x,
-                    "y" : imu.y,
-                    "z" : imu.z,
-                    "pitch" : imu.pitch,
-                    "roll" : imu.roll,
-                    "yaw" : imu.yaw
-                },
-
                 """
                 Pressure:
                 pressure is in bars
                 temperature is in Celcius
                 """
 
-                "PRESSURE" : {
-                    "pressure" : pressure.pressure,
-                    "temperature" : pressure.temperature
-                }
-            },
-
-            "Thrusters" : {
                 """
                 THRUSTERS:
                 Each thruster's data is specified here
@@ -139,24 +121,42 @@ def build_dearclient():
                 Power is -100 to 100
                 """
 
-                "t0" : { "power" : thrusters.t1.power },
-                "t1" : { "power" : thrusters.t1.power },
-                "t2" : { "power" : thrusters.t1.power },
-                "t3" : { "power" : thrusters.t1.power },
-                "t4" : { "power" : thrusters.t1.power },
-                "t5" : { "power" : thrusters.t1.power },
-                "t6" : { "power" : thrusters.t1.power },
-                "t7" : { "power" : thrusters.t1.power }
+    json = JSONEncoder.encode("""
+        {   \"Sensors\" : {
+                \"IMU\" : {
+                    \"x\" : """ + imu.x + """,
+                    \"y\" : """ + imu.y + """,
+                    \"z\" : """ + imu.z + """,
+                    \"pitch\" : """ + imu.pitch + """,
+                    \"roll\" : """ + imu.roll + """,
+                    \"yaw\" : """ + imu.yaw + """
+                },
+
+                \"PRESSURE\" : {
+                    \"pressure\" : """ + pressure.pressure + """,
+                    \"temperature\" : """ + pressure.temperature + """
+                }
+            },
+
+            \"Thrusters\" : {
+                \"t0\" : { \"power\" : """ + thrusters.t1.power + """ },
+                \"t1\" : { \"power\" : """ + thrusters.t1.power + """ },
+                \"t2\" : { \"power\" : """ + thrusters.t1.power + """ },
+                \"t3\" : { \"power\" : """ + thrusters.t1.power + """ },
+                \"t4\" : { \"power\" : """ + thrusters.t1.power + """ },
+                \"t5\" : { \"power\" : """ + thrusters.t1.power + """ },
+                \"t6\" : { \"power\" : """ + thrusters.t1.power + """ },
+                \"t7\" : { \"power\" : """ + thrusters.t1.power + """ }
             }
-        })
+        }""")
 
     return json
 
 
 
 # INIT:
+
+
 if __name__ == '__main__':
     socketio.run(app, debug=True)
-
-# HELPER METHODS:
 
