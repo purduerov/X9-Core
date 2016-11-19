@@ -1,4 +1,4 @@
-arrayLength = 5000
+arrayLength = 1000
 def genArray(length):
 	x = 0;
 	toPrint = str(x)
@@ -16,7 +16,7 @@ with open('ROV_sonar.ino','r') as file:
 	data = file.readlines()
 
 array = array + genArray(arrayLength) + '\n'
-data[20] = array
+data[26] = array
 print array
 with open('ROV_sonar.ino','w') as file:
 	file.writelines(data)
