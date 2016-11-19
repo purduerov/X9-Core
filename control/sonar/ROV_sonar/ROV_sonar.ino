@@ -22,14 +22,14 @@ int StandardSignal[SignalSetupLength] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,1
 
 int SetupPin = 6; //a pin tells arduino to setup Standard Signal
 int StandardInputPin = 5;
-int SignalFlagPin = 4;//when it is high start reading signals from 4 channels
+int sigSent = 0;//when true, signal was sent from ROV
 //from the top right corner, piezos are labeled as 0, 1, 2, 3 clock-wisely
 int SignalInput0 = 0;
 int SignalInput1 = 1;
 int SignalInput2 = 2;
 int SignalInput3 = 3;
 
-
+int serialWen = 7;
 //need pins to get temperature data
 
 float getTemp();
@@ -38,7 +38,17 @@ void convolution(const int Signal[], int SignalLen,
 		int Result[]);
 float angle(float time1, float time2, float d, float v);
 void maxIndex(int array[], int LengthX, int* MaxValue, int* Index);
+int serialListen();
+bool serialSend(float angle1, float angle2);
 
+
+int serialListen(){
+//waits for line to send command, either pingHappened or return angles
+}
+
+bool serialSend(float angle1, float angle2){
+//sends the angle data down the RS485 line
+}
 
 float getTemp()
 {
@@ -97,7 +107,8 @@ void setup()
 	pinMode(SignalInput1, INPUT);
 	pinMode(SignalInput2, INPUT);
 	pinMode(SignalInput3, INPUT);
-	pinMode(SignalFlagPin, INPUT);
+
+	pinMode(serialWen,OUTPUT);
 
 }
 
@@ -110,14 +121,13 @@ void loop()
 	int Signal3[SignalReadLength];
 	float Volocity;
 
-
-	float Temp = getTemp();
-	Volocity=1.402385*1000 + 5.038813*Temp - 5.799136/100*Temp*Temp + 3.287156/10000*Temp*Temp*Temp; //sound speed in water under atm pressure
-
-
-
-	if (digitalRead(SignalFlagPin) == HIGH) //is the SetupPin 'HIGH' cover the whole signal or just mark the start point?
+	sigSent = serialListen();
+	
+	if (sigSent == 1) //is the SetupPin 'HIGH' cover the whole signal or just mark the start point?
 	{
+
+		float Temp = getTemp();
+		Volocity=1.402385*1000 + 5.038813*Temp - 5.799136/100*Temp*Temp + 3.287156/10000*Temp*Temp*Temp; //sound speed in water under atm pressure
 
 		for(int i=0; i<SignalReadLength; i++) //sampling rate need to be measured
 		{
@@ -163,9 +173,9 @@ void loop()
 		     Index3 = Index3 - SignalSetupLength;
 		 */   
 		Time0 = Index0 * TIMEGAP2;
-		Time1 = Index1 * TIMEGAP2 + TIMEGAP1;
-		Time2 = Index2 * TIMEGAP2 + 2 * TIMEGAP1;
-		Time3 = Index3 * TIMEGAP2 + 3 * TIMEGAP1;
+		Time1 = Index1 * TIMEGAP2;// + TIMEGAP1;
+		Time2 = Index2 * TIMEGAP2;//+ 2 * TIMEGAP1;
+		Time3 = Index3 * TIMEGAP2;// + 3 * TIMEGAP1;
 
 		//the original point is piezo2
 		float Angle2Y = angle(Time2, Time3, DPiezo, Volocity);
@@ -174,5 +184,10 @@ void loop()
 		//we also need angle base on piezo0
 		float Angle0Y = angle(Time1, Time0, DPiezo, Volocity);
 		float Angle0X = angle(Time0, Time3, DPiezo, Volocity);  
+	}
+
+
+	if(sigSent == 2){
+		serialSend(Angle0X,Angle0Y);
 	}
 }
