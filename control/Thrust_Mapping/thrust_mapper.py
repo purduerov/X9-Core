@@ -20,8 +20,8 @@ class ThrustMapper:
     Thruster 8 (-0.5, 0.5)
     """
     ANGLE = 0.3839724354  # the angle between the direction of thrust and a line x=n in radians (numpy uses rad)
-    xUnit = np.array([1, 0])
-    thrusterOffset = np.array([1, 1])
+    xUnit = np.array([1, 0])  # unit vector in the x direction to help find the perpendicular force in torque
+    thrusterOffset = np.array([1, 1])  # temp thruster location at (1, 1) can be used for all thrusters for now
     perpForce = np.sin(ANGLE + np.arccos(np.dot(xUnit, thrusterOffset)/np.linalg.norm(thrusterOffset)))  # returns the force perpendicular need to calculate torque
     rotComp = 0.25 / (perpForce * np.linalg.norm(thrusterOffset))
 
@@ -41,7 +41,7 @@ class ThrustMapper:
 
         desired (Vector6)
         """
-        # some maths to determine the thrustMap
+        # some math to determine the thrustMap
 
         self.thrustMap = np.cross(desired, self.mutationMatrix)
         return self.thrustMap
