@@ -1,6 +1,8 @@
 <template>
     <div id="app">
-        <Navbar title="Purdue ROV | BattleStation"></Navbar>
+        <div id="navbar">
+            <Navbar title="Purdue ROV | BattleStation"></Navbar>
+        </div>
         <div id="main-container">
             <div id="camera-view">
                 <CameraView></CameraView>
@@ -15,7 +17,7 @@ var Navbar = require("./Navbar.vue")
 var CameraView = require("./CameraView.vue")
 var IMU = require("./IMU.vue")
 
- 
+
 export default {
   components: {
     Navbar,
@@ -33,7 +35,7 @@ export default {
 }
 
 #navbar {
-    height: 100px;
+    height: 50px;
 }
 
 #main-container {
@@ -51,14 +53,14 @@ export default {
     left: 0;
     top: 0;
     bottom: 0;
-    width: 1200px;
+    width: 200px;
 }
 
 #IMU-orient {
   position: absolute;
   top: 0;
   right: 0;
-  height: 750px;
+  height: 400px;
   width: 150px;
 }
 </style>
