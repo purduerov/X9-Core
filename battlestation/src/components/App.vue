@@ -3,8 +3,9 @@
         <Navbar title="Purdue ROV | BattleStation"></Navbar>
         <div id="main-container">
             <div id="camera-view">
-                <CameraView><CameraView>
+                <CameraView></CameraView>
             </div>
+            <IMU imuhead="ROV inertia status: "></IMU>
         </div>
     </div>
 </template>
@@ -12,11 +13,14 @@
 <script>
 var Navbar = require("./Navbar.vue")
 var CameraView = require("./CameraView.vue")
+var IMU = require("./IMU.vue")
 
+ 
 export default {
   components: {
     Navbar,
-    CameraView
+    CameraView,
+    IMU
   }
 }
 </script>
@@ -28,7 +32,7 @@ export default {
     height: 100%;
 }
 
-navbar {
+#navbar {
     height: 100px;
 }
 
@@ -48,5 +52,13 @@ navbar {
     top: 0;
     bottom: 0;
     width: 1200px;
+}
+
+#IMU-orient {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 750px;
+  width: 150px;
 }
 </style>
