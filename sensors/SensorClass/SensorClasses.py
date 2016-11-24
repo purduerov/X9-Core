@@ -5,7 +5,7 @@ import BNO055
 import logging
 import sys
 import time
-import smbus
+from smbus import SMBus
 
 # Create and configure the BNO sensor connection.  Make sure only ONE of the
 # below 'bno = ...' lines is uncommented:

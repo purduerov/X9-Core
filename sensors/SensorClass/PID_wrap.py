@@ -5,7 +5,7 @@ import numpy as np
 
 class PID(object):
     def __init__(self):
-        self.data = Data_file.State(self)
+        self.data = Data_file.State()
         self.controller_x = PID_controller.PID_Controller(self,1,1,1)
         self.controller_y = PID_controller.PID_Controller(self,1,1,1)
         self.controller_z = PID_controller.PID_Controller(self,1,1,1)
