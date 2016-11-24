@@ -1,5 +1,6 @@
 import Data_file
 import PID_controller
+import numpy as np
 
 
 class PID(object):
@@ -11,6 +12,9 @@ class PID(object):
         self.controller_phi = PID_controller.PID_Controller(self)
         self.controller_mu = PID_controller.PID_Controller(self)
         self.controller_theta = PID_controller.PID_Controller(self)
+        # possible problems I forsee, it could be possible that since these are objects
+        # that any attempt to call them outside of this function would return different values
+        # thus it might be needed that the thrust mapping call this function to initialize zero values
 
     def engage(self):
         updated_x = self.update_x()
@@ -19,6 +23,7 @@ class PID(object):
         updated_phi = self.update_phi()
         updated_mu = self.update_mu()
         updated_theta = self.update_theta()
+        return np.array([updated_x, updated_y, updated_z, updated_phi, updated_mu, updated_theta])
 
     def update_x(self):
         self.controller_x.update(self.data.get_state())
@@ -43,3 +48,10 @@ class PID(object):
     def update_theta(self):
         self.controller_theta.update(self.data.get_state())
         return self.controller_theta.getOutput()
+
+
+if __name__ == '__main__':
+    test = PID()
+
+    while True:
+        print(test.engage())
