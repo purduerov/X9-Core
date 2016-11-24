@@ -6,12 +6,12 @@ import numpy as np
 class PID(object):
     def __init__(self):
         self.data = Data_file.State(self)
-        self.controller_x = PID_controller.PID_Controller(self)
-        self.controller_y = PID_controller.PID_Controller(self)
-        self.controller_z = PID_controller.PID_Controller(self)
-        self.controller_phi = PID_controller.PID_Controller(self)
-        self.controller_mu = PID_controller.PID_Controller(self)
-        self.controller_theta = PID_controller.PID_Controller(self)
+        self.controller_x = PID_controller.PID_Controller(self,1,1,1)
+        self.controller_y = PID_controller.PID_Controller(self,1,1,1)
+        self.controller_z = PID_controller.PID_Controller(self,1,1,1)
+        self.controller_phi = PID_controller.PID_Controller(self,1,1,1)
+        self.controller_mu = PID_controller.PID_Controller(self,1,1,1)
+        self.controller_theta = PID_controller.PID_Controller(self,1,1,1)
         # possible problems I forsee, it could be possible that since these are objects
         # that any attempt to call them outside of this function would return different values
         # thus it might be needed that the thrust mapping call this function to initialize zero values

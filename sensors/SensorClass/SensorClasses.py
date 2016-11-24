@@ -1,4 +1,7 @@
-from Adafruit_BNO055 import BNO055
+import sys
+sys.path.append('./sensors/sensorLibs/Adafruit_Python_BNO055-master/Adafruit_BNO055')
+import BNO055
+
 import logging
 import sys
 import time
