@@ -38,15 +38,15 @@ class PID(object):
         return self.controller_z.getOutput()
 
     def update_phi(self):
-        self.controller_phi.update(self.data.get_state())
+        self.controller_phi.update(self.data.get_state('Roll'))
         return self.controller_phi.getOutput()
 
     def update_mu(self):
-        self.controller_mu.update(self.data.get_state())
+        self.controller_mu.update(self.data.get_state('Pitch'))
         return self.controller_mu.getOutput()
 
     def update_theta(self):
-        self.controller_theta.update(self.data.get_state())
+        self.controller_theta.update(self.data.get_state('Heading'))
         return self.controller_theta.getOutput()
 
 
