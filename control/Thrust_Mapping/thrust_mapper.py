@@ -1,7 +1,7 @@
 import numpy as np
 
 
-class ThrustMapper:
+class ThrustMapper(object):
     """Class to be used to generate the desired thrust map based on the current and desired position"""
     xComp = 0.2696336857
     yComp = 0.6673667906
