@@ -35,20 +35,20 @@
           var titles = ["x", "y", "z", "pitch", "roll", "yaw"];
           var i = 0;
           for(i; i < 3; i++) {
-            orient.moving[i].val = info[titles[i]];
+            this.moving[i].val = info[titles[i]];
           }
           if(info[titles[i]] >= 0) {
-            orient.moving[i].val = "up: "+info[titles[i]];
+            this.moving[i].val = "up: "+info[titles[i]];
           } else {
-            orient.moving[i].val = "down: "+(-info[titles[i]]);
+            this.moving[i].val = "down: "+(-info[titles[i]]);
           }
           i++;
           
           for(i; i < 6; i++) {
             if(info[titles[i]] >= 0) {
-              orient.moving[i].val = "right: "+info[titles[i]];
+              this.moving[i].val = "right: "+info[titles[i]];
             } else {
-              orient.moving[i].val = "left: "+(-info[titles[i]]);
+              this.moving[i].val = "left: "+(-info[titles[i]]);
             }
           }
         }
