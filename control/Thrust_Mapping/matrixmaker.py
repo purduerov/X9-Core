@@ -57,12 +57,11 @@ class MatrixMaker(object):
             print "rot1_1 == rot2_1"
         else:
             print "rot1_1 != rot2_1"
-        print "%(left).9f\t%(right).9f\t%(upper).9f\t%(lower).9f\t%(rot1).9f\t%(rot2).9f" % {'left': left, 'right': right,
-                                                                                 'upper': upper, 'lower': lower,
-                                                                                 'rot1': rot1_1, 'rot2': rot2_1}
+        print "%(left).9f\t%(right).9f\t%(upper).9f\t%(lower).9f\t%(rot1).9f\t%(rot2).9f" % \
+              {'left': left, 'right': right, 'upper': upper, 'lower': lower, 'rot1': rot1_1, 'rot2': rot2_1}
 
 maker = MatrixMaker(3, -1.5, 3, 1, -2, -1.5, -2, 1)
-desired = [1, 1, 0, 0, 0, .5]
+desired = [.5, 1, 0, 0, 0, 1]
 relation1 = 1
 relation2 = 1
 try:
