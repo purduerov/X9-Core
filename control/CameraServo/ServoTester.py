@@ -1,7 +1,7 @@
 import time
-import CameraServoWrapper as servo
+import CameraServoWrapper as SERVO
 
-smallServo = servo.Servo()
+smallServo = SERVO.CameraServoWrapper()
 smallServo.setRawAngle(90)
 time.sleep(5)
 smallServo.upAngle(10)
