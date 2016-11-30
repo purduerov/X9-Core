@@ -33,6 +33,7 @@ class MatrixMaker(object):
         """
         Explanation
 
+
         Definitions:
         R = right thrusters (Thrusters 2 and 4) (value for the first column on thrusters 2 and 4)
         L = left thrusters (Thrusters 1 and 3) (value for the first column on thrusters 1 and 3)
