@@ -26,7 +26,7 @@
             }
         },
         methods: {
-            update: function(info) {
+            update: function() {
                 console.log('update')
                 var titles = ["x", "y", "z", "pitch", "roll", "yaw"];
                 var i = 0;
