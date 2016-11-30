@@ -2,9 +2,10 @@ import logging
 import sys
 import time
 import smbus
-from CameraServo import Servo
+from ServoClass import Servo
 
-#ASSUME that you are using a Servo Class created by Power and Movement that sets the servo to a raw angle.
+#ASSUME that you are using a Servo Class created by Power and Movement that sets the servo
+#  to a raw angle.
 #ASSUME that servo has a function called setAngle which sets the servo angle appropriately.
 
 class CameraServoWrapper(object):
