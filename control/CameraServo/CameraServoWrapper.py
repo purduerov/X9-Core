@@ -10,7 +10,7 @@ from ServoClass import Servo
 
 class CameraServoWrapper(object):
     def __init__(self):
-        self.servo = Servo
+        self.servo = Servo()
             #The angle is the raw angle from servo.
         self.angle = 0
             #The reference angle is the angle we SET zero
