@@ -27,27 +27,26 @@
         },
         methods: {
             update: function() {
-                console.log('update')
-                var titles = ["x", "y", "z", "pitch", "roll", "yaw"];
-                var i = 0;
-                for (i; i < 3; i++) {
-                    this.moving[i].val = info[titles[i]];
-                }
-                if (info[titles[i]] >= 0) {
-                    this.moving[i].val = "up: "+info[titles[i]];
-                } else {
-                    this.moving[i].val = "down: "+(-info[titles[i]]);
-                }
-                i++;
+              var titles = ["x", "y", "z", "pitch", "roll", "yaw"];
+              var i = 0;
+              for (i; i < 3; i++) {
+                  this.moving[i].val = info[titles[i]];
+              }
+              if (info[titles[i]] >= 0) {
+                  this.moving[i].val = "up: "+info[titles[i]];
+              } else {
+                  this.moving[i].val = "down: "+(-info[titles[i]]);
+              }
+              i++;
 
-                for (i; i < 6; i++) {
-                    if (info[titles[i]] >= 0) {
-                        this.moving[i].val = "right: "+info[titles[i]];
-                    } else {
-                        this.moving[i].val = "left: "+(-info[titles[i]]);
-                    }
-                }
-            }
+              for (i; i < 6; i++) {
+                  if (info[titles[i]] >= 0) {
+                      this.moving[i].val = "right: "+info[titles[i]];
+                  } else {
+                      this.moving[i].val = "left: "+(-info[titles[i]]);
+                  }
+              }
+          }
         },
         mounted: function() {
             setInterval(this.update, 500)
