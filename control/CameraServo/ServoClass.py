@@ -13,6 +13,6 @@ class Servo(object):
         wiringpi.pwmSetRange(2000)
 
     def setAngle(self, angle):
-        pulse = ((angle/180)+1)
+        pulse = ((angle*100/180)+100)
         wiringpi.pwmWrite(18, pulse)
         
