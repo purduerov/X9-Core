@@ -21,7 +21,7 @@ class PID(object):
         updated_phi = self.update_phi()
         updated_mu = self.update_mu()
         updated_theta = self.update_theta()
-        return np.array([updated_x, updated_y, updated_z, updated_phi, updated_mu, updated_theta])
+        return np.array([updated_x, updated_y, updated_z, updated_mu, updated_phi, updated_theta])
 
     def update_x(self):
         self.controller_x.update(self.data.get_state())
