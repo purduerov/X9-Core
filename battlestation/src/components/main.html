@@ -10,7 +10,20 @@
       <status-item v-for="item in moving" v-bind:status="item"></status-item>
     </ul>
   </div>
+  <div  id = "Pressure-orient">
+    <p>Pressure header</p>
+    <ul id="pressure-stats" >
+      <status-item v-for="pressure changing"></status-item>
+    </ul>
+  </div>
+  <div>
+    <p>Thrusters header</p>
+    <ul id=Thruster-orient">
+      <status-item v-for="thruster power changing"></status-item>
+    </ul>
+  </div>
   <script>
+
     Vue.component("status-item", {
       props: ["status"],
       template: "<li>{{ status.head+status.val }}</li>"
