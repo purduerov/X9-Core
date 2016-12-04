@@ -1,8 +1,11 @@
-from Adafruit_BNO055 import BNO055
+import sys
+sys.path.append('./sensors/sensorLibs/Adafruit_Python_BNO055-master/Adafruit_BNO055')
+import BNO055
+
 import logging
 import sys
 import time
-import smbus
+from smbus import SMBus
 
 # Create and configure the BNO sensor connection.  Make sure only ONE of the
 # below 'bno = ...' lines is uncommented:
