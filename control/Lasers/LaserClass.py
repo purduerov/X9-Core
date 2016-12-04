@@ -7,10 +7,10 @@ class Laser(object):
         self._pin = pin
 
     def turnOn(self):
-        wiringpi.digitalWrite(self._pin, 1)
+        wiringpi.digitalWrite(self._pin, 0)
 
     def turnOff(self):
-        wiringpi.digitalWrite(self._pin, 0)
+        wiringpi.digitalWrite(self._pin, 1)
 
     def cleanUp(self):
         wiringpi.digitalWrite(self._pin, 0)
