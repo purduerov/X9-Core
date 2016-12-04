@@ -1,6 +1,6 @@
 #import time
 import wiringpi
-
+""" Brown Wire -> Ground, Red Wire -> 5V, Yellow->pin 12 (only PWM pin)"""
 class Servo(object):
     def __init__(self):
         wiringpi.wiringPiSetupGpio()
@@ -13,6 +13,6 @@ class Servo(object):
         wiringpi.pwmSetRange(2000)
 
     def setAngle(self, angle):
-        pulse = ((angle/180)+1)
+        pulse = ((angle*100/180)+100)
         wiringpi.pwmWrite(18, pulse)
         
