@@ -1,4 +1,6 @@
-The semi-set standard for IMU packets
+# Semi-set standard for pulling info for IMU packets
+
+
 
 x & yaw comes from one joystick
 pitch and roll comes from another joystick
@@ -8,3 +10,7 @@ pitch and roll comes from another joystick
 
 joysticks can be interchangeable (later)
 pitch should be able to be inverted
+
+
+
+All IMU properties should be relative, conversion to absolute will happen on the server
