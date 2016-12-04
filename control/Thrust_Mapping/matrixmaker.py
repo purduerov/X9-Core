@@ -40,7 +40,7 @@ class MatrixMaker(object):
         self.rot_angle1 = math.sin(math.acos(abs(self.thruster1[0] / self.radius1)) + math.radians(22))
         self.rot_angle2 = math.sin(math.acos(abs(self.thruster2[0] / self.radius2)) + math.radians(22))
         self.rot_angle3 = math.sin(math.acos(abs(self.thruster3[0] / self.radius3)) + math.radians(22))
-        self.rot_angle4 = math.sin((math.radians(90) - math.acos(abs(self.thruster4[0] / self.radius4))) + math.radians(22))
+        self.rot_angle4 = math.sin(math.acos(abs(self.thruster4[0] / self.radius4)) + math.radians(22))
 
         # two rot_angles are needed for each of the z-thrusters(1 in xz, 2 in yz
         self.rot_angle5_1 = 1 / math.cos(math.atan(self.thruster5[2] / self.thruster5[0]))
@@ -204,10 +204,10 @@ class MatrixMaker(object):
         print "|\t %0.9f\t-%0.9f\t 0.000000000\t 0.000000000\t 0.000000000\t %0.9f\t|" % (right, upper, rot1_1)
         print "|\t-%0.9f\t %0.9f\t 0.000000000\t 0.000000000\t 0.000000000\t %0.9f\t|" % (left, lower, rot1_1)
         print "|\t-%0.9f\t-%0.9f\t 0.000000000\t 0.000000000\t 0.000000000\t-%0.9f\t|" % (right, lower, rot1_1)
-        print "|\t 0.000000000\t 0.000000000\t %0.9f\t %0.9f\t %0.9f\t 0.000000000\t|" % (upper_z, roty1_1, rotx1_1)
-        print "|\t 0.000000000\t 0.000000000\t %0.9f\t-%0.9f\t %0.9f\t 0.000000000\t|" % (upper_z, roty1_1, rotx1_1)
-        print "|\t 0.000000000\t 0.000000000\t %0.9f\t %0.9f\t-%0.9f\t 0.000000000\t|" % (lower_z, roty1_1, rotx1_1)
-        print "|\t 0.000000000\t 0.000000000\t %0.9f\t-%0.9f\t-%0.9f\t 0.000000000\t|" % (lower_z, roty1_1, rotx1_1)
+        print "|\t 0.000000000\t 0.000000000\t %0.9f\t %0.9f\t %0.9f\t 0.000000000\t|" % (upper_z, rotx1_1, roty1_1)
+        print "|\t 0.000000000\t 0.000000000\t %0.9f\t-%0.9f\t %0.9f\t 0.000000000\t|" % (right_z, rotx1_1, roty1_1)
+        print "|\t 0.000000000\t 0.000000000\t %0.9f\t %0.9f\t-%0.9f\t 0.000000000\t|" % (left_z, rotx1_1, roty1_1)
+        print "|\t 0.000000000\t 0.000000000\t %0.9f\t-%0.9f\t-%0.9f\t 0.000000000\t|" % (lower_z, rotx1_1, roty1_1)
 
 # this is for testing and will be removed later
 maker = MatrixMaker(3, -1.5, 0, 3, 1, 0,
@@ -216,7 +216,7 @@ maker = MatrixMaker(3, -1.5, 0, 3, 1, 0,
                     -1, -1, 1, -1, 0.5, 1)
 """desired = [0, 0, 0, 0, 0, 0]
 relation1 = 1
-relation2 = 1
+relation2 = 1ee4
 try:
     relation1 = desired[0] / desired[5]
 except ZeroDivisionError:
