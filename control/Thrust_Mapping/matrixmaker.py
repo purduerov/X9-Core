@@ -43,14 +43,14 @@ class MatrixMaker(object):
         self.rot_angle4 = math.sin((math.radians(90) - math.acos(abs(self.thruster4[0] / self.radius4))) + math.radians(22))
 
         # two rot_angles are needed for each of the z-thrusters(1 in xz, 2 in yz
-        self.rot_angle5_1 = math.cos(math.atan(self.thruster5[2] / self.thruster5[0]))
-        self.rot_angle5_2 = math.cos(math.atan(self.thruster5[2] / self.thruster5[1]))
-        self.rot_angle6_1 = math.cos(math.atan(self.thruster6[2] / self.thruster6[0]))
-        self.rot_angle6_2 = math.cos(math.atan(self.thruster6[2] / self.thruster6[1]))
-        self.rot_angle7_1 = math.cos(math.atan(self.thruster7[2] / self.thruster7[0]))
-        self.rot_angle7_2 = math.cos(math.atan(self.thruster7[2] / self.thruster7[1]))
-        self.rot_angle8_1 = math.cos(math.atan(self.thruster8[2] / self.thruster8[0]))
-        self.rot_angle8_2 = math.cos(math.atan(self.thruster8[2] / self.thruster8[1]))
+        self.rot_angle5_1 = 1 / math.cos(math.atan(self.thruster5[2] / self.thruster5[0]))
+        self.rot_angle5_2 = 1 / math.cos(math.atan(self.thruster5[2] / self.thruster5[1]))
+        self.rot_angle6_1 = 1 / math.cos(math.atan(self.thruster6[2] / self.thruster6[0]))
+        self.rot_angle6_2 = 1 / math.cos(math.atan(self.thruster6[2] / self.thruster6[1]))
+        self.rot_angle7_1 = 1 / math.cos(math.atan(self.thruster7[2] / self.thruster7[0]))
+        self.rot_angle7_2 = 1 / math.cos(math.atan(self.thruster7[2] / self.thruster7[1]))
+        self.rot_angle8_1 = 1 / math.cos(math.atan(self.thruster8[2] / self.thruster8[0]))
+        self.rot_angle8_2 = 1 / math.cos(math.atan(self.thruster8[2] / self.thruster8[1]))
 
     # add proportionality constant to allow for different values (need one for left/right and up/down?)
     def generate_matrix(self): #, lrrelation, udrelation):
@@ -177,12 +177,12 @@ class MatrixMaker(object):
         else:
             print "rot1_1 != rot2_1"
 
-        right_z_coe = ((self.rot_angle5_2 * self.radius5_2) + (self.rot_angle7_2 * self.radius7_2)) - 2
-        left_z_coe = ((self.rot_angle6_2 * self.radius6_2) + (self.rot_angle8_2 * self.radius8_2)) + 2
+        right_z_coe = ((self.rot_angle5_2 * self.radius5_2) + (self.rot_angle7_2 * self.radius7_2)) + 2
+        left_z_coe = ((self.rot_angle6_2 * self.radius6_2) + (self.rot_angle8_2 * self.radius8_2)) - 2
         right_z_needed = 1 / ((left_z_coe / right_z_coe) * 2 + 2)
         left_z_needed = (left_z_coe / right_z_coe) * right_z_needed
-        left_z_coe -= 2
-        right_z_coe += 2
+        left_z_coe += 2
+        right_z_coe -= 2
         right_z = 1 / ((left_z_coe / right_z_coe) * 2 + 2)
         left_z = (left_z_coe / right_z_coe) * right_z
         rotx1_1 = abs(right_z - right_z_needed)
@@ -191,18 +191,23 @@ class MatrixMaker(object):
             print "rotx1_1 == rotx1_2"
         else:
             print "rotx1_1 != rotx1_2"
+        print left_z_needed
+        print right_z_needed
+        print left_z_coe
+        print right_z_coe
         print left_z
         print right_z
-        print rotx1_1
+        print upper_z
+        print lower_z
 
-        print "|\t %0.9f\t %0.9f\t 0.000000000\t 0.000000000\t 0.000000000\t-%0.9f|" % (left, upper, rot1_1)
-        print "|\t %0.9f\t-%0.9f\t 0.000000000\t 0.000000000\t 0.000000000\t %0.9f|" % (right, upper, rot1_1)
-        print "|\t-%0.9f\t %0.9f\t 0.000000000\t 0.000000000\t 0.000000000\t %0.9f|" % (left, lower, rot1_1)
-        print "|\t-%0.9f\t-%0.9f\t 0.000000000\t 0.000000000\t 0.000000000\t-%0.9f|" % (right, lower, rot1_1)
-        print "|\t 0.000000000\t 0.000000000\t %0.9f\t %0.9f\t %0.9f\t 0.000000000|" % (upper_z, roty1_1, rotx1_1)
-        print "|\t 0.000000000\t 0.000000000\t %0.9f\t-%0.9f\t %0.9f\t 0.000000000|" % (upper_z, roty1_1, rotx1_1)
-        print "|\t 0.000000000\t 0.000000000\t %0.9f\t %0.9f\t-%0.9f\t 0.000000000|" % (lower_z, roty1_1, rotx1_1)
-        print "|\t 0.000000000\t 0.000000000\t %0.9f\t-%0.9f\t-%0.9f\t 0.000000000|" % (lower_z, roty1_1, rotx1_1)
+        print "|\t %0.9f\t %0.9f\t 0.000000000\t 0.000000000\t 0.000000000\t-%0.9f\t|" % (left, upper, rot1_1)
+        print "|\t %0.9f\t-%0.9f\t 0.000000000\t 0.000000000\t 0.000000000\t %0.9f\t|" % (right, upper, rot1_1)
+        print "|\t-%0.9f\t %0.9f\t 0.000000000\t 0.000000000\t 0.000000000\t %0.9f\t|" % (left, lower, rot1_1)
+        print "|\t-%0.9f\t-%0.9f\t 0.000000000\t 0.000000000\t 0.000000000\t-%0.9f\t|" % (right, lower, rot1_1)
+        print "|\t 0.000000000\t 0.000000000\t %0.9f\t %0.9f\t %0.9f\t 0.000000000\t|" % (upper_z, roty1_1, rotx1_1)
+        print "|\t 0.000000000\t 0.000000000\t %0.9f\t-%0.9f\t %0.9f\t 0.000000000\t|" % (upper_z, roty1_1, rotx1_1)
+        print "|\t 0.000000000\t 0.000000000\t %0.9f\t %0.9f\t-%0.9f\t 0.000000000\t|" % (lower_z, roty1_1, rotx1_1)
+        print "|\t 0.000000000\t 0.000000000\t %0.9f\t-%0.9f\t-%0.9f\t 0.000000000\t|" % (lower_z, roty1_1, rotx1_1)
 
 # this is for testing and will be removed later
 maker = MatrixMaker(3, -1.5, 0, 3, 1, 0,
