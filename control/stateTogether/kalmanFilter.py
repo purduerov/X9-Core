@@ -1,4 +1,5 @@
 import platform
+import numpy as np
 
 if platform.system() == "Darwin":
     from timeS_OSX import absTime
@@ -50,10 +51,10 @@ class kalman(object):
         self.stateTime = absTime()
         self.dT = 0
 
-        self.xVar = pow(aXnoise,2/5)*np.array(
+        self.xVar = 1/np.arctan(pow(aXnoise,2))*np.array(
                 [(pow(self.dT,4)/4,pow(self.dT,3)/2),
                     (pow(self.dT,3)/2,pow(self.dT,2))])
-        self.yVar = pow(aYnoise,2/5)*np.array(
+        self.yVar = 1/np.arctan(pow(aYnoise,2))*np.array(
                 [(pow(self.dT,4)/4,pow(self.dT,3)/2),
                     (pow(self.dT,3)/2,pow(self.dT,2))])
         self.zVar = pow(aZnoise,2)*np.array(

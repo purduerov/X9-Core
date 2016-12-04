@@ -27,9 +27,9 @@ while (t < 1000):
 
     t = t + 1;
     zPos.append(craft.increase+craft.noiseZ*np.random.random())
-    yPos.append(craft.increase+craft.noiseY*pow(np.random.random(),5))
-    tPos.append(craft.increase+craft.noiseT*pow(np.random.random(),5))
-    xPos.append(craft.increase+craft.noiseX*pow(np.random.random(),5))
+    yPos.append(craft.increase+craft.noiseY*np.arctan(np.random.random()))
+    tPos.append(craft.increase+craft.noiseT*np.random.random())
+    xPos.append(craft.increase+craft.noiseX*np.arctan(np.random.random()))
 
     zPos_act_plot.append(craft.stateZ[0])
     xPos_act_plot.append(craft.stateX[0])
