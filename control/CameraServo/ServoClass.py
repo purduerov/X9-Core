@@ -1,6 +1,6 @@
 #import time
 import wiringpi
-
+""" Brown Wire -> Ground, Red Wire -> 5V, Yellow->pin 12 (only PWM pin)"""
 class Servo(object):
     def __init__(self):
         wiringpi.wiringPiSetupGpio()
