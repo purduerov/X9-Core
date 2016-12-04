@@ -2,7 +2,7 @@
     <div id="Thrusters-orient">
         <p>{{ thrustershead }}</p>
         <ul id="thrusters-stats">
-            <li v-for="thruster power changing ">
+            <li v-for="item in moving">
                 {{ item.head+item.val }}
             </li>
         </ul>

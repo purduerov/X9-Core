@@ -16,13 +16,17 @@
 var Navbar = require("./Navbar.vue")
 var CameraView = require("./CameraView.vue")
 var IMU = require("./IMU.vue")
+var Pressure = require("./Pressure.vue")
+var Thrusters = require("./Thrusters.vue")
 
 
 export default {
   components: {
     Navbar,
     CameraView,
-    IMU
+    IMU,
+    Pressure,
+    Thrusters
   }
 }
 </script>

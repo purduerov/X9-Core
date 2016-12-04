@@ -2,7 +2,7 @@
     <div id="Pressure-orient">
         <p>{{ pressurehead }}</p>
         <ul id="pressure-stats">
-            <li v-for="pressure change">
+            <li v-for="item in moving">
                 {{ item.head+item.val }}
             </li>
         </ul>
