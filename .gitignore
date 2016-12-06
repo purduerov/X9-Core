@@ -59,6 +59,7 @@ instance/
 .webassets-cache
 flask/venv
 flask/venv/*
+<<<<<<< HEAD
 
 # Scrapy stuff:
 .scrapy
@@ -91,3 +92,5 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+.idea/*
