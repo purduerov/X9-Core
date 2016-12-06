@@ -1,1 +1,0 @@
-This folder contains any files served by flask that do not fall into the cateories laid out by the other folders. If a file type crowds out this folder, it may recieve its own designated folder.

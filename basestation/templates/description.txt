@@ -1,1 +1,0 @@
-This folder contains all served files (mostly html) that have templating code in them. This is not in the static folder because the files will be changed and they may not all be of the same file type.
