@@ -1,5 +1,5 @@
 from flask import Flask
-from flask_socketio import SocketIO, send, emit
+from flask_socketio import SocketIO
 import threading
 
 from rov.rov import ROV
@@ -78,6 +78,7 @@ def build_dearclient():
 
 if __name__ == '__main__':
     rov_run = threading.Thread(target=rov.run)
+    rov_run.daemon = True
     rov_run.start()
 
     socketio.run(app, debug=True, host="0.0.0.0")
