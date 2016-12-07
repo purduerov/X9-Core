@@ -34,3 +34,8 @@ class ThrustMapper(object):
         # some math to determine the thrustMap
         self.thrustMap = desired.dot(self.mutationMatrix)
         return self.thrustMap
+
+desired = np.array([1, 1, 0, 0, 1, .5])
+Mapper = ThrustMapper()
+ThrustMap = Mapper.generate_thrust_map(desired)
+print ThrustMap
