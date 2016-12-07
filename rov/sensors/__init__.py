@@ -1,2 +1,2 @@
-from pressure import Pressure
-from imu import IMU
+from pressure.pressure import Pressure
+from imu.imu import IMU
