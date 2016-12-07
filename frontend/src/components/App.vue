@@ -8,9 +8,9 @@
                 <CameraView></CameraView>
             </div>
             <div id="info">
-              <IMU imuhead="ROV inertia status: "></IMU>
-              <GpInfo gphead="Gamepad Current Status: "></GpInfo>
-            </data>
+                <IMU :data="data.imu"></IMU>
+                <!--<GpInfo gphead="Gamepad Current Status: "></GpInfo>-->
+            </div>
         </div>
     </div>
 </template>
@@ -21,18 +21,35 @@ var CameraView = require("./CameraView.vue")
 var IMU = require("./IMU.vue")
 //var Pressure = require("./Pressure.vue")
 //var Thrusters = require("./Thrusters.vue")
-var GpInfo = require("./GpInfo.vue");
+//var GpInfo = require("./GpInfo.vue");
 
 
 export default {
-  components: {
-    Navbar,
-    CameraView,
-    IMU,
-//    Pressure,
-//    Thrusters,
-    GpInfo
-  }
+    components: {
+        Navbar,
+        CameraView,
+        IMU
+    },
+    data: function() {
+        return {
+            data: {}
+        }
+    },
+    mounted: function() {
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+        var that = this
+
+        socket.on('connect', function () {
+            setInterval(function() {
+                socket.emit("dearclient")
+            }, 100);
+        });
+
+        socket.on("dearflask", function(d) {
+            that.data = d
+            console.log(d)
+        });
+    }
 }
 </script>
 
@@ -69,18 +86,8 @@ export default {
   position: absolute;
   top: 0;
   right: 0;
-  display: flex;
-  flex-direction: column;
+  bottom: 0;
   width: 200px;
-}
-
-#IMU-orient {
-  height: 200px;
-  width: 100%
-}
-
-#gp-describe {
-  height: 200px;
-  width: 100%;
+  background-color: red;
 }
 </style>

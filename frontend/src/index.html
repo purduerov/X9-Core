@@ -2,11 +2,13 @@
 <html lang="en">
 <head>
     <!-- Things to test the GpInfo.vue file, and keep the IMU.vue file from rolling errors in the console -->
-		<script type="text/javascript" src="./gplib/gp_layouts.js" ></script>
-		<script type="text/javascript" src="./gplib/gp_library.js" ></script>
+    <script type="text/javascript" src="./gplib/gp_layouts.js" ></script>
+    <script type="text/javascript" src="./gplib/gp_library.js" ></script>
     <script> var info = {x: 0, y:0, z: -1, pitch: 3, yaw: 8, roll: -3} </script>
     <script> var gp = {buttons: {a: {val: 7, press: 7, release: 7}, b: {val: 7, press: 7, release: 7}}, axes: axes = {left: {x: 3, y: 3, r: 1, theta: 30}, right: {x: 4, y: 4, r: 1, theta: 40}}} </script>
-    
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+
     <!-- Basic Page Needs ––––––––––––––––––––––––––––––––––––––––––––––––– -->
     <meta charset="utf-8">
     <title>Purdue ROV | BattleStation</title>

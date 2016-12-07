@@ -47,8 +47,8 @@ class ROV(object):
 
     def run(self):
         while True:
-            while time() - self.last_update < 0.01:
-                sleep(0.001)
+            while time() - self.last_update < 0.1:
+                sleep(0.05)
 
             self.update()
 
