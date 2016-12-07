@@ -1,4 +1,5 @@
 import math
+import numpy as np
 
 
 class MatrixMaker(object):
@@ -200,6 +201,15 @@ class MatrixMaker(object):
         print upper_z
         print lower_z
 
+        matrix = np.array([left, upper, 0, 0, 0, -rot1_1],
+                          [right, -upper, 0, 0, 0, rot1_1],
+                          [-left, lower, 0, 0, 0, rot1_1],
+                          [-right, -lower, 0, 0, 0, -rot1_1],
+                          [0, 0, upper_z, rotx1_1, roty1_1, 0],
+                          [0, 0, right_z, -rotx1_1, roty1_1, 0],
+                          [0, 0, left_z, rotx1_1, -roty1_1, 0],
+                          [0, 0, lower_z, -rotx1_1, -roty1_1, 0])
+
         print "|\t %0.9f\t %0.9f\t 0.000000000\t 0.000000000\t 0.000000000\t-%0.9f\t|" % (left, upper, rot1_1)
         print "|\t %0.9f\t-%0.9f\t 0.000000000\t 0.000000000\t 0.000000000\t %0.9f\t|" % (right, upper, rot1_1)
         print "|\t-%0.9f\t %0.9f\t 0.000000000\t 0.000000000\t 0.000000000\t %0.9f\t|" % (left, lower, rot1_1)
@@ -209,24 +219,4 @@ class MatrixMaker(object):
         print "|\t 0.000000000\t 0.000000000\t %0.9f\t %0.9f\t-%0.9f\t 0.000000000\t|" % (left_z, rotx1_1, roty1_1)
         print "|\t 0.000000000\t 0.000000000\t %0.9f\t-%0.9f\t-%0.9f\t 0.000000000\t|" % (lower_z, rotx1_1, roty1_1)
 
-# this is for testing and will be removed later
-maker = MatrixMaker(3, -1.5, 0, 3, 1, 0,
-                    -2, -1.5, 0, -2, 1, 0,
-                    1.5, -1, 1, 1.5, 0.5, 1,
-                    -1, -1, 1, -1, 0.5, 1)
-"""desired = [0, 0, 0, 0, 0, 0]
-relation1 = 1
-relation2 = 1ee4
-try:
-    relation1 = desired[0] / desired[5]
-except ZeroDivisionError:
-    relation1 = 1
-try:
-    relation2 = desired[1] / desired[5]
-except ZeroDivisionError:
-    relation2 = 1
-if desired[0] == 0:
-    relation1 = 1
-if desired[1] == 0:
-    relation2 = 1"""
-maker.generate_matrix()  # relation1, relation2)
+        return matrix
