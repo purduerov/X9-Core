@@ -26,7 +26,7 @@
             }
         },
         methods: {
-            update: function() {
+            update_imu: function() {
               var titles = ["x", "y", "z", "pitch", "roll", "yaw"];
               var i = 0;
               for (i; i < 3; i++) {
@@ -49,7 +49,7 @@
           }
         },
         mounted: function() {
-            setInterval(this.update, 500)
+            setInterval(this.update_imu, 500)
         }
     }
 </script>

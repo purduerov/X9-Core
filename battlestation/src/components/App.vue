@@ -7,8 +7,10 @@
             <div id="camera-view">
                 <CameraView></CameraView>
             </div>
-            <IMU imuhead="ROV inertia status: "></IMU>
-            <GpInfo gphead="Gamepad Current Status: "></GpInfo>
+            <div id="info">
+              <IMU imuhead="ROV inertia status: "></IMU>
+              <GpInfo gphead="Gamepad Current Status: "></GpInfo>
+            </data>
         </div>
     </div>
 </template>
@@ -17,8 +19,8 @@
 var Navbar = require("./Navbar.vue")
 var CameraView = require("./CameraView.vue")
 var IMU = require("./IMU.vue")
-var Pressure = require("./Pressure.vue")
-var Thrusters = require("./Thrusters.vue")
+//var Pressure = require("./Pressure.vue")
+//var Thrusters = require("./Thrusters.vue")
 var GpInfo = require("./GpInfo.vue");
 
 
@@ -27,8 +29,8 @@ export default {
     Navbar,
     CameraView,
     IMU,
-    Pressure,
-    Thrusters,
+//    Pressure,
+//    Thrusters,
     GpInfo
   }
 }
@@ -63,11 +65,22 @@ export default {
     width: 200px;
 }
 
-#IMU-orient {
+#info {
   position: absolute;
   top: 0;
   right: 0;
-  height: 400px;
-  width: 150px;
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+}
+
+#IMU-orient {
+  height: 200px;
+  width: 100%
+}
+
+#gp-describe {
+  height: 200px;
+  width: 100%;
 }
 </style>
