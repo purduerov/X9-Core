@@ -60,11 +60,11 @@
                 //socket.emit('dearflask', packet);
                 setInterval(function() {
                     socket.emit("dearclient")
-                }, 100);
+                }, 5);
             });
 
             socket.on("dearflask", function(data) {
-                console.table(data);
+                document.body.innerHTML = JSON.stringify(data)
             });
         </script>
     </body>
