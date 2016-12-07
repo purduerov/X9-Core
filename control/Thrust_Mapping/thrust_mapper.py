@@ -32,10 +32,10 @@ class ThrustMapper(object):
         desired (Vector6)
         """
         # some math to determine the thrustMap
-        self.thrustMap = desired.dot(self.mutationMatrix)
+        self.thrustMap = self.mutationMatrix.dot(desired)
         return self.thrustMap
 
-desired = np.array([1, 1, 0, 0, 1, .5])
+desired = np.array([(1), (1),( 0), (0), (1), (.5)])
 Mapper = ThrustMapper()
 ThrustMap = Mapper.generate_thrust_map(desired)
 print ThrustMap

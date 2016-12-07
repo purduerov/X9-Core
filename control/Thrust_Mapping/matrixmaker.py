@@ -201,14 +201,14 @@ class MatrixMaker(object):
         # print upper_z
         # print lower_z
 
-        matrix = np.array([left, upper, 0, 0, 0, -rot1_1],
-                          [right, -upper, 0, 0, 0, rot1_1],
-                          [-left, lower, 0, 0, 0, rot1_1],
-                          [-right, -lower, 0, 0, 0, -rot1_1],
-                          [0, 0, upper_z, rotx1_1, roty1_1, 0],
-                          [0, 0, right_z, -rotx1_1, roty1_1, 0],
-                          [0, 0, left_z, rotx1_1, -roty1_1, 0],
-                          [0, 0, lower_z, -rotx1_1, -roty1_1, 0])
+        matrix = np.array([(left, upper, 0, 0, 0, -rot1_1),
+                          (right, -upper, 0, 0, 0, rot1_1),
+                          (-left, lower, 0, 0, 0, rot1_1),
+                          (-right, -lower, 0, 0, 0, -rot1_1),
+                          (0, 0, upper_z, rotx1_1, roty1_1, 0),
+                          (0, 0, right_z, -rotx1_1, roty1_1, 0),
+                          (0, 0, left_z, rotx1_1, -roty1_1, 0),
+                          (0, 0, lower_z, -rotx1_1, -roty1_1, 0)])
 
         """print "|\t %0.9f\t %0.9f\t 0.000000000\t 0.000000000\t 0.000000000\t-%0.9f\t|" % (left, upper, rot1_1)
         print "|\t %0.9f\t-%0.9f\t 0.000000000\t 0.000000000\t 0.000000000\t %0.9f\t|" % (right, upper, rot1_1)
