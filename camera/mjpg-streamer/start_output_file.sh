@@ -24,10 +24,11 @@
 
 ## This example shows how to invoke mjpg-streamer from the command line
 
-export LD_LIBRARY_PATH="$(pwd)"
 #./mjpg_streamer -i "input_uvc.so --help"
 
-./mjpg_streamer -i "./input_uvc.so" -o "./output_file.so -f ./laser_img -d 100 -s 3 -e 0"
+#./mjpg_streamer -i "./input_uvc.so" -o "./output_file.so -f ./laser_img -d 100 -s 3 -e 0"
+mjpg_streamer -i "/usr/local/lib/input_uvc.so -d /dev/video0 " -o "/usr/local/lib/output_http.so -f ./laser_img -d 100 -s 3 -e 0"
+
 #./mjpg_streamer -i "./input_uvc.so -d /dev/video0" -i "./input_uvc.so -d /dev/video1" -o "./output_http.so -w ./www"
 #valgrind ./mjpg_streamer -i "./input_uvc.so" -o "./output_http.so -w ./www"
 
