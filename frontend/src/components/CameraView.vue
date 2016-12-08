@@ -1,6 +1,6 @@
 <template>
     <div id="camera-view">
-
+        <img src="assets/image.jpg">
     </div>
 </template>
 
@@ -14,6 +14,10 @@ export default {
 #camera-view {
     height: 100%;
     width: 100%;
-    background-color: blue;
+}
+
+#camera-view > img {
+    max-height: 100%;
+    max-width: 100%;
 }
 </style>

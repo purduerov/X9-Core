@@ -1,15 +1,25 @@
 <template>
     <div id="app">
         <div id="navbar">
-            <Navbar title="Purdue ROV | BattleStation"></Navbar>
+            <Navbar title="Purdue ROV - BattleStation"></Navbar>
         </div>
         <div id="main-container">
-            <div id="camera-view">
+            <Card color="#FF9800" class="camera-width full-height">
                 <CameraView></CameraView>
-            </div>
-            <div id="info">
-                <IMU :data="data.imu"></IMU>
-                <!--<GpInfo gphead="Gamepad Current Status: "></GpInfo>-->
+            </Card>
+            <div style="width: calc(100% - 800px); height: 100%; float: left">
+                <Card color="#FFC107" class="half-width half-height">
+                    <IMU :data="data.imu"></IMU>
+                </Card>
+                <Card class="half-width half-height">
+                    <DataView title="Pressure:" :data="data.pressure"></DataView>
+                </Card>
+                <Card color="#00BCD4" class="half-width half-height">
+                    <IMU :data="data.imu"></IMU>
+                </Card>
+                <Card color="#E91E63" class="half-width half-height">
+                    <IMU :data="data.imu"></IMU>
+                </Card>
             </div>
         </div>
     </div>
@@ -19,35 +29,37 @@
 var Navbar = require("./Navbar.vue")
 var CameraView = require("./CameraView.vue")
 var IMU = require("./IMU.vue")
-//var Pressure = require("./Pressure.vue")
-//var Thrusters = require("./Thrusters.vue")
-//var GpInfo = require("./GpInfo.vue");
-
+var DataView = require("./DataView.vue")
+var Card = require("./Card.vue")
 
 export default {
     components: {
         Navbar,
         CameraView,
-        IMU
+        IMU,
+        Card,
+        DataView
     },
     data: function() {
         return {
             data: {}
         }
     },
+
     mounted: function() {
+        var vm = this
+
         var socket = io.connect('http://' + document.domain + ':' + location.port);
-        var that = this
 
         socket.on('connect', function () {
-            setInterval(function() {
-                socket.emit("dearclient")
-            }, 100);
+            console.log("connected")
         });
 
         socket.on("dearflask", function(d) {
-            that.data = d
-            console.log(d)
+            vm.data = d
+            setTimeout(function() {
+                socket.emit("dearclient")
+            }, 10);
         });
     }
 }
@@ -58,6 +70,8 @@ export default {
     font-family: 'Roboto', Helvetica, Arial, sans-serif;
     width: 100%;
     height: 100%;
+    background-color: #f5f5f5;
+    font-weight: 100;
 }
 
 #navbar {
@@ -70,24 +84,25 @@ export default {
     left: 6px;
     right: 6px;
     bottom: 6px;
-    background-color: cadetblue;
     margin: 0;
 }
 
-#camera-view {
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 200px;
+.half-width {
+    width: 50%;
+    float: left;
 }
 
-#info {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 200px;
-  background-color: red;
+.half-height {
+    height: 50%;
+    float: left;
+}
+
+.full-height {
+    height: 100%;
+    float: left;
+}
+
+.camera-width {
+    width: 800px;
 }
 </style>

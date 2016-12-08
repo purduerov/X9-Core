@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>IMU:</h1>
+        <h1>{{title}}</h1>
         <hr>
         <ul v-for="(value, key) in data">
             <li>{{key}}: {{value}}</li>
@@ -11,7 +11,7 @@
 
 <script>
     export default {
-        props: ['data']
+        props: ['title', 'data']
     }
 </script>
 
