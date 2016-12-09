@@ -31,7 +31,7 @@
     width: 100%;
     height: 100%;
     min-height: 100px;
-    background-color: #607D8B;
+    background-color: #2e2e2e;
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     transition: all 0.3s cubic-bezier(.25,.8,.25,1);
     border-radius: 2px;
@@ -39,5 +39,8 @@
 
 #padding {
     padding: 10px;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
 }
 </style>

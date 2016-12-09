@@ -19,7 +19,7 @@ export default {
 }
 
 .nav-wrapper {
-    background-color: #009688;
+    background-color: #37474f;
 }
 
 #title {

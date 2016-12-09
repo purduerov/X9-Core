@@ -4,20 +4,20 @@
             <Navbar title="Purdue ROV - BattleStation"></Navbar>
         </div>
         <div id="main-container">
-            <Card color="#FF9800" class="camera-width full-height">
+            <Card class="camera-width full-height">
                 <CameraView></CameraView>
             </Card>
             <div style="width: calc(100% - 800px); height: 100%; float: left">
-                <Card color="#FFC107" class="half-width half-height">
+                <Card class="half-width half-height">
                     <IMU :data="data.imu"></IMU>
                 </Card>
                 <Card class="half-width half-height">
                     <DataView title="Pressure:" :data="data.pressure"></DataView>
                 </Card>
-                <Card color="#00BCD4" class="half-width half-height">
+                <Card class="half-width half-height">
                     <IMU :data="data.imu"></IMU>
                 </Card>
-                <Card color="#E91E63" class="half-width half-height">
+                <Card class="half-width half-height">
                     <IMU :data="data.imu"></IMU>
                 </Card>
             </div>
@@ -70,7 +70,7 @@ export default {
     font-family: 'Roboto', Helvetica, Arial, sans-serif;
     width: 100%;
     height: 100%;
-    background-color: #f5f5f5;
+    background-color: #1a1a1a;
     font-weight: 100;
 }
 
