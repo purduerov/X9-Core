@@ -21,7 +21,7 @@ class PID(object):
         updated_phi = self.update_phi()
         updated_mu = self.update_mu()
         updated_theta = self.update_theta()
-        return np.array([updated_x, updated_y, updated_z, updated_phi, updated_mu, updated_theta])
+        return np.array([(updated_x), (updated_y), (updated_z), (updated_phi), (updated_mu), (updated_theta)])
 
     def update_x(self):
         self.controller_x.update(self.data.get_state())
@@ -47,7 +47,7 @@ class PID(object):
         self.controller_theta.update(self.data.get_state('Heading'))
         return self.controller_theta.getOutput()
 
-    def set_destination (self, delta_x, delta_y, delta_z, delta_phi, delta_mu, delta_theta):
+    def set_destination(self, delta_x, delta_y, delta_z, delta_phi, delta_mu, delta_theta):
 
         curr_x = self.data.get_state('')
         curr_y = self.data.get_state('')
