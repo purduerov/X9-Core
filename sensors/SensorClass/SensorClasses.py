@@ -1,5 +1,5 @@
 import sys
-sys.path.append('../Adafruit_BNO055')
+sys.path.append('./sensors/sensorLibs/Adafruit_Python_BNO055-master/Adafruit_BNO055')
 import BNO055
 
 import logging
