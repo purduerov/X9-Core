@@ -1,5 +1,5 @@
-import PID.PID_wrap
-import Thrust_Mapping.thrust_mapper
+import PID
+import Thrust_Mapping
 
 pidwrapper = PID.PID_wrap.PID()
 pidwrapper.set_destination(0, 0, 0, 0, 0, 0)
