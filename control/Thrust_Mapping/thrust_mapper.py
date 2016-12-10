@@ -35,7 +35,7 @@ class ThrustMapper(object):
         self.thrustMap = self.mutationMatrix.dot(desired)
         return self.thrustMap
 
-desired = np.array([(1), (1),( 0), (0), (1), (.5)])
-Mapper = ThrustMapper()
-ThrustMap = Mapper.generate_thrust_map(desired)
-print ThrustMap
+# desired = np.array([(1), (1),( 0), (0), (1), (.5)])
+# Mapper = ThrustMapper()
+# ThrustMap = Mapper.generate_thrust_map(desired)
+# print ThrustMap
