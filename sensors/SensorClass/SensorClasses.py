@@ -1,6 +1,6 @@
 import sys
-#sys.path.append('./sensors/sensorLibs/Adafruit_Python_BNO055-master/Adafruit_BNO055')
-import Adafruit_BNO055
+sys.path.append('../Adafruit_BNO055')
+import BNO055
 
 import logging
 import sys
@@ -20,7 +20,7 @@ from smbus import SMBus
 
 class IMU(object):
     def __init__(self):
-        self.bno = Adafruit_BNO055.BNO055(rst=18)
+        self.bno = BNO055.BNO055(rst=18)
         self.bno.begin()
         
 
