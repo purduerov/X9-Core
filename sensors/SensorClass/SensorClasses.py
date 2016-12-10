@@ -20,7 +20,7 @@ from smbus import SMBus
 
 class IMU(object):
     def __init__(self):
-        self.bno = BNO055.BNO055(rst=18)
+        self.bno = Adafruit_BNO055.BNO055(rst=18)
         self.bno.begin()
         
 
