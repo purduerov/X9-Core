@@ -29,8 +29,8 @@ def index():
 
 @app.route('/UI/')
 def index_front():
-    print "Send /src/index.html"
-    return app.send_static_file('src/index.html')
+    print "Send /src/index2.html"
+    return app.send_static_file('src/index2.html')
 
 @app.route('/UI/<path:path>')
 def send_UI_files(path):
@@ -78,10 +78,6 @@ def error_handler(e):
 
 
 def build_dearclient():
-
-    # TODO:
-    # Once this has been certified to work, the dictionary will be
-    # created only once and then updated with new values in this method.
 
     return rov.data
 
