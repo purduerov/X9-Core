@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_socketio import SocketIO
 import threading
 
@@ -24,8 +24,18 @@ rov = ROV()
 # ROUTING:
 @app.route('/')
 def index():
+    print "Send index.html"
     return app.send_static_file('index.html')
 
+@app.route('/UI/')
+def index_front():
+    print "Send /src/index.html"
+    return app.send_static_file('src/index.html')
+
+@app.route('/UI/<path:path>')
+def send_UI_files(path):
+    print path
+    return send_from_directory('frontend/src/', path)
 
 # SOCKET-IO:
 @socketio.on('dearflask')
@@ -40,8 +50,8 @@ def send_packet():
 
     packet = build_dearclient()
 
-    print "Sent:"
-    print packet
+    #print "Sent:"
+    #print packet
 
     socketio.emit("dearflask", packet, json=True)
 
