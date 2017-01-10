@@ -13,13 +13,13 @@ class Camera:
 		self.inp = '/home/pi/mjpg-streamer/mjpg-streamer-experimental/input_uvc.so -r ' + self.r + ' -f ' + str(self.f) + ' -d ' + self.d
 		self.out = '/home/pi/mjpg-streamer/mjpg-streamer-experimental/output_http.so -w /usr/local/www -p ' + str(self.p)
 
-'''
+"""
 - allows the resolution, framerate, device and port to be changed, way to have multiple cameras working at once,
 - resolution is in string format: "VGA" - 640x480, "PAL" - 768x576, "SVGA" - 800x600, "WXGA" - 1280x720,
 - framerate shouldn't be changed: keep at 24 unless necessary change, allows for a good image while reserving processing power,
 - device is in string format: /dev/videoNUM where NUM is the number for the order in which camera is plugged in,
 - port is the web port where you want to output image to: change as needed
-'''
+"""
 
 	def changeSet(self, resolution, framerate, device, port):
 
