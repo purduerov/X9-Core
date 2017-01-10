@@ -1,7 +1,7 @@
 class PID_Controller(object):
 	""" PID Controller Class
 	"""
-	def __init__(self,P=0.1,I=0.01,D=0.0):
+	def __init__(self, P=0.1 ,I=0.01 ,D=0.0):
 		"""
 		Initialize the PID controller with the given P, I, D values
 		"""
@@ -32,7 +32,7 @@ class PID_Controller(object):
 		# calculate the new output value
 		self.out = err * self.Kp+ derivitive * self.Kd + self.integral * self.Ki
 		# update the previous error
-		self.prev_err = err   
+		self.prev_err = err
 
 	def set_setpoint(self, sp):
 		"""
@@ -44,6 +44,6 @@ class PID_Controller(object):
 
 	def getOutput(self):
 		"""
-		# get the current output of the PID controller 
+		# get the current output of the PID controller
 		"""
 		return self.out

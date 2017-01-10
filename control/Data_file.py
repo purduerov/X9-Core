@@ -3,6 +3,7 @@ import sys
 import time
 import SensorClasses
 
+# BMAX:TODO: MAJOR: I realize this class may work and be good for testing, but I need a folder of the IMU and Pressure classes that don't rely on integrating with this class, but rather integrate with how the actual ROV object will work. We can talk about this on Saturday, but essentially I need the classes returning dicts containing their sensor statuses only. Pressure is currently not compatible with this.
 
 class State(object):
     def __init__(self):
@@ -26,6 +27,6 @@ class State(object):
 
 if __name__ == '__main__':
     	test = State()
-	
+
 	while True:
         	print( test.get_state('Pressure'))

@@ -20,6 +20,7 @@ class ThrustMapper(object):
     """
     def __init__(self):
         self.thrustMap = np.array([0, 0, 0, 0, 0, 0])   # list for values that need to be output to the thrusters
+# BMAX:TODO: WARN: MatrixMaker is a pretty vague name for something that makes what you are calling the mutation matrix... Maybe it should be called something closer to that? This may seem nitpicky, but for readers of your code next year may not get the significance of the name MatrixMaker, and just assume it takes number input and makes a pseudo matrix object.
         self.maker = matrixmaker.MatrixMaker(3, -1.5, 0, 3, 1, 0,
                                              -2, -1.5, 0, -2, 1, 0,
                                              1.5, -1, 1, 1.5, 0.5, 1,
