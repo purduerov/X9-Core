@@ -20,6 +20,7 @@ class Camera:
 - device is in string format: /dev/videoNUM where NUM is the number for the order in which camera is plugged in,
 - port is the web port where you want to output image to: change as needed
 '''
+
 	def changeSet(self, resolution, framerate, device, port):
 
 		self.r = resolution
