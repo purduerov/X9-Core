@@ -22,7 +22,7 @@ class IMU(object):
     def __init__(self):
         self.bno = BNO055.BNO055(rst=18)
         self.bno.begin()
-        
+
 
     def imu_get_data(self):
 
@@ -31,11 +31,12 @@ class IMU(object):
         accel_x, accel_y, accel_z = self.bno.read_accelerometer()
         LinAccel_x, LinAccel_y, LinAccel_z = self.bno.read_linear_acceleration()
         temp = self.bno.read_temp()
+# BMAX:TODO: WARN: I would say this is an efficiency warning, but I can't entirely justify that creation of a whole new dict with N elements is that much more expensive than inserting N elements... So if you find it irking that you are creating a new dict object potentially 100 times a second, make it an instance variable and insert the new values. Otherwise, you can keep this... I just want you to be aware of the implications of your code.
         return {'Heading': heading, 'Roll': roll, 'Pitch': pitch, 'Gyro-X': gyro_x, 'Gyro-Y': gyro_y, 'Gyro-Z': gyro_z,
                 'Acceleration-X': accel_x, 'Acceleration-Y': accel_y, 'Acceleration-Z': accel_z,
                 'Linear Acceleration-X': LinAccel_x, 'Linear Acceleration-Y': LinAccel_y, 'Linear Acceleration-Z': LinAccel_z,
                 'Temp' : temp}
-
+# BMAX:TODO: WARN: Private variables typically start with _ to signify they should not be used publicly. Apply to all necessary within this file.
     def get_calibration(self):
         cal_array = self.bno.get_calibration()
         return cal_array
@@ -70,12 +71,13 @@ class IMU(object):
 
         return True
 
-    
+
 class Pressure(object):
-    
+
     def __init__(self):
         self.bus = smbus.SMBus(1)
-        
+
+# BMAX:TODO: MAJOR: Minor change here, to fit the return pattern of rov data, I want the function changed to pressure_get_data(), and the return object be a dict of the pressure: {"mbar": #, "Temp-F": #, "Temp-C": #} not just #. (I'm guessing the unit is mbars... correct me if I'm wrong).
     def get_pressure(self):
         self.bus.write_byte(0x76, 0x1E)
 #time.sleep(.5)
@@ -154,11 +156,11 @@ class Pressure(object):
         pressure = ((((D1 * SENS2) / 2097152) - OFF2) / 8192) / 10.0
         cTemp = TEMP / 100.0
         fTemp = cTemp * 1.8 + 32
-        
+
         return [pressure, cTemp, fTemp]
 
-    
-    
+
+
 if __name__ == "__main__":
         test = IMU()
         test2 = Pressure()
