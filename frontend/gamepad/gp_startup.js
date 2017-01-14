@@ -18,6 +18,7 @@ var run = function(abt) {
   if(gp.ready) {
     window.clearInterval(go1);
     go1 = -1;
+    bind.activate();
     go2 = window.setInterval(function() {
       gp.get_current();
 /*      set_imu();

@@ -54,6 +54,7 @@ function Gamepad() {
   var buttons_last = new Object;
   var axes_off = new Object;
   var but_func = new Object;
+  var ax_func = new Object;
   
   this.butfuncexist = function(key) {
     return but_func[key] != undefined;
@@ -61,6 +62,14 @@ function Gamepad() {
   
   this.butfuncreturn = function() {
     return but_func;
+  };
+  
+  this.axfuncexist = function(key) {
+    return ax_func[key] != undefined;
+  };
+  
+  this.axfuncreturn = function() {
+    return ax_func;
   };
   
   //these are for identifying if a button has just been pressed or released
@@ -128,38 +137,70 @@ function Gamepad() {
     return {"x": x, "y": y, "theta": theta, "r": r};
   }
   
-  //string for btn and trigger, and function for func; i.e. this.bind("a", "change", function() {kill_all_humans} );
-  //btn is the button key property of buttons, trigger can be 'change', 'press', or 'release'
-  //arg is an object that holds the parameter 
-  this.bind = function(btn, trigger, func, arg) {
-    var func_key;
-    var f_full;
+  //string for btn and trigger, and function for func; i.e. this.btn_bind("a", "change", function() {kill_all_humans} );
+  //btn is the button key property of buttons, trigger can be 'value', 'change', 'press', or 'release'
+  //------value = while it's being pressed, press = first instant it gets pressed
+  //arg is an object that holds the parameter
+  /* -----FUNCTION assumed to depend on when status turns TRUE----- */
+  this.btn_bind = function(btn, trigger, func, arg) {
+    var bfunc_key = null;
+    var bf_full = null;
     if(trigger == "change") {
-      func_key = "change_func";
-      f_full = function() {
+      bfunc_key = "change_func";
+      bf_full = function() {
         if(gp.buttons[btn].val != buttons_last[btn].val) {
-          arg.message.text("hi");
           func(arg);
         }
       };
+    } else if(trigger == "value") {
+      bfunc_key = "val_func";
+      bf_full = function() {
+        if(gp.buttons[btn].val){
+          func(arg);
+        }
+      }
     } else if(trigger == "press") {
-      func_key = "press_func";
-      f_full = function() {
+      bfunc_key = "press_func";
+      bf_full = function() {
         if(gp.buttons[btn].pressed) {
           func(arg);
         }
       };
     } else if(trigger == "release") {
-      func_key = "release_func";
-      f_full = function() {
+      bfunc_key = "release_func";
+      bf_full = function() {
         if(gp.buttons[btn].released) {
           func(arg);
         }
       };
     }
     
-    but_func[btn][func_key] = f_full;
-    console.log(but_func[btn][func_key])
+    if(bf_full != null && bfunc_key != null) {
+      but_func[btn][bfunc_key] = bf_full;
+      //console.log(but_func[btn][bfunc_key]);
+    }
+  }
+  
+  //string for side and trigger, and function for func; i.e. this.ax_bind("left", "polar", function() {kill_all_humans} );
+  //side is the button key property of buttons, trigger can be 'polar' or 'cartesian'
+  //arg is an object that holds the parameter
+  /* -----FUNCTION assumed to work for ANY VALUE given by joysticks----- */
+  this.ax_bind = function(side, trigger, func, arg) {
+    var afunc_key = null;
+    if(trigger == "polar") {
+      afunc_key = "polar_func";
+      
+    } else if(trigger == "cartesian") {
+      afunc_key = "cartes_func";
+      
+    }
+    
+    if(afunc_key != null) {
+      ax_func[side][afunc_key] = function() {
+        func(arg);
+      }
+      //console.log(ax_func[side][afunc_key]);
+    }
   }
   
   
@@ -206,7 +247,7 @@ function Gamepad() {
             gp.setButtonLast(key_b, true);
             gp.buttons[key_b] = {val: 0, pressed: 0, released: 0};
             if(but_func[key_b] == undefined) {
-              but_func[key_b] = {change_func: null, press_func: null, release_func: null};
+              but_func[key_b] = {val_func: null, change_func: null, press_func: null, release_func: null};
             }
           } else {
             gp.buttons[key_b] = layouts[key].buttons[key_b];
@@ -217,6 +258,9 @@ function Gamepad() {
           if(key_a != "length") {
             gp.setDisplace(key_a, arrays[layouts[gp.layout].axes[key_a].x], arrays[layouts[gp.layout].axes[key_a].y]);
             gp.axes[key_a] = {x: 0, y: 0, theta: 0, r: 0};
+            if(ax_func[key_a] == undefined) {
+              ax_func[key_a] = {polar_func: null, cartes_func: null};
+            }
           } else {
             gp.axes[key_a] = layouts[key].axes[key_a];
           }
@@ -242,6 +286,10 @@ function Gamepad() {
             but_func[key_b].change_func();
           }
           
+          if(but_func[key_b].val_func != null) {
+            but_func[key_b].val_func();
+          }
+          
           if(but_func[key_b].press_func != null) {
             but_func[key_b].press_func();
           }
@@ -256,6 +304,13 @@ function Gamepad() {
       Object.keys(gp.axes).forEach(function(key_a, i) {
         if(key_a != "length"){
           gp.axes[key_a] = gp.axesAdjust(key_a, read.axes[layouts[gp.layout].axes[key_a].x], read.axes[layouts[gp.layout].axes[key_a].y]);
+          if(ax_func[key_a].polar_func != null) {
+            ax_func[key_a].polar_func();
+          }
+          
+          if(ax_func[key_a].cartes_func != null) {
+            ax_func[key_a].cartes_func();
+          }
           //console.log("Axes: "+gp.axes[key_a].pos+" "+key_a);
         }
       });
@@ -263,13 +318,17 @@ function Gamepad() {
     } else {
       Object.keys(gp.buttons) .forEach(function(key_b, i) {
         if(key_b != "length"){
-          gp.buttons[key_b].val = 0;            //let go of all buttons
+          Object.keys(gp.buttons[key_b]).forEach(function(butn_bit, j) {
+            gp.buttons[key_b][butn_bit] = 0;            //let go of all buttons
+          });
           //console.log("Buttons: "+gp.buttons[key_b].press+" "+key_b);
         }
       });
       Object.keys(gp.axes).forEach(function(key_a, i) {
         if(key_a != "length"){
-          gp.axes[key_a].pos = 0;               //don't want to run the ROV into a wall if the gamepad disconnects
+          Object.keys(gp.axes[key_a]).forEach(function(ax_bit, j) {
+            gp.axes[key_a][ax_bit] = 0;               //don't want to run the ROV into a wall if the gamepad disconnects
+          });
           //console.log("Axes: "+gp.axes[key_a].pos+" "+key_a);
         }
       });

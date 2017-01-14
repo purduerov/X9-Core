@@ -1,6 +1,7 @@
 from flask import Flask, send_from_directory
 from flask_socketio import SocketIO
 import threading
+import os
 
 from rov.rov import ROV
 
@@ -32,10 +33,24 @@ def index_front():
     print "Send /src/index2.html"
     return app.send_static_file('src/index2.html')
 
-@app.route('/UI/<path:path>')
-def send_UI_files(path):
+@app.route('/UI/fonts/<path:path>')
+def send_font_files(path):
+    print "front file"
     print path
     return send_from_directory('frontend/src/', path)
+
+@app.route('/UI/gp/<path:path>')
+def send_UI_files(path):
+#    print "UI file"
+#    print path
+    print os.path.dirname(os.path.realpath(__file__))
+    return send_from_directory('frontend/gamepad/', path)
+
+@app.route('/UI/pg2/<path:path>')
+def send_index2_page_files(path):
+    print "Page file"
+    print path
+    return app.send_static_file('src/'+path)
 
 # SOCKET-IO:
 @socketio.on('dearflask')

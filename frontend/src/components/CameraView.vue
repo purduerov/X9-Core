@@ -1,6 +1,6 @@
 <template>
     <div id="camera-view">
-        <img src="assets/image.jpg">
+        <img src="pg2/assets/image.jpg">
     </div>
 </template>
 
