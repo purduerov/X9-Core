@@ -1,11 +1,11 @@
-import Data_file
+import sensors.SensorClass as SensorClass
 import PID_controller
 import numpy as np
 
 
 class PID(object):
     def __init__(self):
-        self.data = Data_file.State(self)
+        self.data = SensorClass.Data_file.State()
         self.controller_x = PID_controller.PID_Controller(self)
         self.controller_y = PID_controller.PID_Controller(self)
         self.controller_z = PID_controller.PID_Controller(self)
