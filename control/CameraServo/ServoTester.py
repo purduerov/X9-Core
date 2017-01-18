@@ -1,8 +1,10 @@
 import time
+import wiringpi
 import ServoClass as Servo
 from CameraServoWrapper import CameraServoWrapper as ServoWrapper
 
-smallServo = ServoWrapper()
+wiringpi.wiringPiSetupGPIO()
+smallServo = ServoWrapper(pin=18)
 smallServo.setRawAngle(45)
 time.sleep(5)
 smallServo.upAngle(10)
