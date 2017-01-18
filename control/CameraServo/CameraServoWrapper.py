@@ -9,8 +9,8 @@ from ServoClass import Servo
 #ASSUME that servo has a function called setAngle which sets the servo angle appropriately.
 
 class CameraServoWrapper(object):
-    def __init__(self):
-        self.servo = Servo()
+    def __init__(self, pin=18):
+        self.servo = Servo(pin)
             #The angle is the raw angle from servo.
         self.angle = 0
             #The reference angle is the angle we SET zero
