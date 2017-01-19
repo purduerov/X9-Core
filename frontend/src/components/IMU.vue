@@ -11,7 +11,11 @@
 
 <script>
     export default {
-        props: ['data']
+        props: ['data'],
+      
+        mounted: function() {
+            console.log(this.data);
+        }
     }
 </script>
 

@@ -9,16 +9,16 @@
             </Card>
             <div style="width: calc(100% - 800px); height: 100%; float: left">
                 <Card class="half-width half-height">
-                    <IMU :data="data.imu"></IMU>
+                    <IMU :data="packet.imu"></IMU>
                 </Card>
                 <Card class="half-width half-height">
-                    <DataView title="Pressure:" :data="data.pressure"></DataView>
+                    <DataView title="Pressure:" :data="packet.pressure"></DataView>
                 </Card>
                 <Card class="half-width half-height">
-                    <IMU :data="data.imu"></IMU>
+                    <IMU :data="packet.imu"></IMU>
                 </Card>
                 <Card class="half-width half-height">
-                    <IMU :data="data.imu"></IMU>
+                    <IMU :data="packet.imu"></IMU>
                 </Card>
             </div>
         </div>
@@ -42,10 +42,32 @@ export default {
     },
     data: function() {
         return {
-            data: {}
-        }
+            packet: {
+                IMU: {
+                    x: 7,
+                    y: 6,
+                    z: 5,
+                    pitch:4,
+                    roll: 3,
+                    yaw: 2
+                },
+                PRESSURE: {
+                    pressure: 9,
+                    temperature: 72
+                },
+                Thrusters: {
+                    t0 : { power: "11"},
+                    t1 : { power: "14"},
+                    t2 : { power: "23"},
+                    t3 : { power: "7"},
+                    t4 : { power: "15"},
+                    t5 : { power: "4"},
+                    t6 : { power: "18"},
+                    t7 : { power: "10"}
+                }
+            }
+        };
     },
-
     mounted: function() {
         var vm = this
 
@@ -61,6 +83,8 @@ export default {
                 socket.emit("dearclient")
             }, 10);
         });
+        
+        console.log(vm.packet);
     }
 }
 </script>
