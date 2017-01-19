@@ -9,16 +9,16 @@
             </Card>
             <div style="width: calc(100% - 800px); height: 100%; float: left">
                 <Card class="half-width half-height">
-                    <IMU :data="packet.imu"></IMU>
+                    <IMU :data="packet.IMU"></IMU>
                 </Card>
                 <Card class="half-width half-height">
                     <DataView title="Pressure:" :data="packet.pressure"></DataView>
                 </Card>
                 <Card class="half-width half-height">
-                    <IMU :data="packet.imu"></IMU>
+                    <IMU :data="packet.IMU"></IMU>
                 </Card>
                 <Card class="half-width half-height">
-                    <IMU :data="packet.imu"></IMU>
+                    <IMU :data="packet.IMU"></IMU>
                 </Card>
             </div>
         </div>
@@ -43,29 +43,29 @@ export default {
     data: function() {
         return {
             packet: {
-                IMU: {
-                    x: 7,
-                    y: 6,
-                    z: 5,
-                    pitch:4,
-                    roll: 3,
-                    yaw: 2
-                },
-                PRESSURE: {
-                    pressure: 9,
-                    temperature: 72
-                },
-                Thrusters: {
-                    t0 : { power: "11"},
-                    t1 : { power: "14"},
-                    t2 : { power: "23"},
-                    t3 : { power: "7"},
-                    t4 : { power: "15"},
-                    t5 : { power: "4"},
-                    t6 : { power: "18"},
-                    t7 : { power: "10"}
-                }
+            IMU: {
+              x: 0,
+              y: 0,
+              z: 0,
+              pitch: 0,
+              roll: 0,
+              yaw: 0
+            },
+            PRESSURE: {
+              pressure: 0,
+              temperature: 0
+            },
+            Thrusters: {
+              t0 : { power: "0"},
+              t1 : { power: "0"},
+              t2 : { power: "0"},
+              t3 : { power: "0"},
+              t4 : { power: "0"},
+              t5 : { power: "0"},
+              t6 : { power: "0"},
+              t7 : { power: "0"}
             }
+          }
         };
     },
     mounted: function() {
@@ -78,7 +78,7 @@ export default {
         });
 
         socket.on("dearflask", function(d) {
-            vm.data = d
+            vm.packet = d
             setTimeout(function() {
                 socket.emit("dearclient")
             }, 10);

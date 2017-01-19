@@ -5,6 +5,31 @@ import os
 
 from rov.rov import ROV
 
+packet = {
+    IMU: {
+        x: 7,
+        y: 6,
+        z: 5,
+        pitch: 4,
+        roll: 3,
+        yaw: 2
+    },
+    PRESSURE: {
+        pressure: 9,
+        temperature: 72
+    },
+    Thrusters: {
+        t0 : { power: "11"},
+        t1 : { power: "14"},
+        t2 : { power: "23"},
+        t3 : { power: "7"},
+        t4 : { power: "15"},
+        t5 : { power: "4"},
+        t6 : { power: "18"},
+        t7 : { power: "10"}
+    }
+}
+
 """
 PRIMARY FLASK APPLICATION:
 
