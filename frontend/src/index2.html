@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Things to test the GpInfo.vue file, and keep the IMU.vue file from rolling errors in the console -->
+    
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="gp/gp_layouts.js" ></script>
+    <script type="text/javascript" src="gp/gp_library.js" ></script>
+    <script type="text/javascript" src="gp/bind_functions.js" ></script>
+    <script type="text/javascript" src="gp/gp_startup.js" ></script>
+    <!--
+    <script>
+    packet = {
+            IMU: {
+              x: 7,
+              y: 6,
+              z: 5,
+              pitch: 4,
+              roll: 3,
+              yaw: 2
+            },
+            PRESSURE: {
+              pressure: 9,
+              temperature: 72
+            },
+            Thrusters: {
+              t0 : { power: "11"},
+              t1 : { power: "14"},
+              t2 : { power: "23"},
+              t3 : { power: "7"},
+              t4 : { power: "15"},
+              t5 : { power: "4"},
+              t6 : { power: "18"},
+              t7 : { power: "10"}
+            }
+          };
+    </script>
+    -->
+    <!--
+    <script> var gp = {buttons: {a: {val: 7, press: 7, release: 7}, b: {val: 7, press: 7, release: 7}}, axes: axes = {left: {x: 3, y: 3, r: 1, theta: 30}, right: {x: 4, y: 4, r: 1, theta: 40}}} </script>
+    -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+
+    <!-- Basic Page Needs ––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta charset="utf-8">
+    <title>Purdue ROV | BattleStation</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.8/vue.js"></script>
+    
+    <!-- Set Mobile Scaling to Device Width ––––––––––––––––––––––––––––––  -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSS –––––––––––––––––––––––––––––––––------------––––––––––––––––– -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:200,300,600,900" rel="stylesheet">
+    <link rel="stylesheet" href="pg2/.build.css">
+    <link rel="stylesheet" href="pg2/assets/materialize.min.css">
+    <link rel="stylesheet" href="pg2/assets/reset.css">
+    <link rel="stylesheet" href="pg2/assets/main.css">
+    <body>
+        <div id="app"></div>
+
+        <!-- Scripts ––––––––––––––––––––––––––––––––––––----–––––––––––––– -->
+        <script src="pg2/.build.js"></script>
+        <script src="pg2/assets/jquery.min.js"></script>
+        <script src="pg2/assets/materialize.min.js"></script>
+    </body>
+</html>
