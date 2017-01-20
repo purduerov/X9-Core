@@ -2,42 +2,56 @@ import subprocess
 import time
 
 class classTrial():
-
-	def getTemp():#need to parse to get only the number(outputs temp = x)
+        
+        x = None
+        y = None
+        z = None
+        avg = None
+        u = None
+        
+	def startTemp():#need to parse to get only the number(outputs temp = x)
 		x =(subprocess.Popen(['vcgencmd','measure_temp']))
-		time.sleep(2)
-		x.terminate()
 		#return x.split('=')[1]#-----problem here, triple '
 		
-	def getClockRate():
+	def startClockRate():
 		y =(subprocess.Popen(['cat','/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq']))
-		time.sleep(2)
-		y.terminate()
 		#return y		
 	
-	def getVolt():
+	def startVolt():
 		z =(subprocess.Popen(['vcgencmd','measure_volts']))
-		time.sleep(2)
-		z.terminate()
 		#return z.split('=')[1]
 
-	def getLoadAvg():
+	def startLoadAvg():
 		avg = (subprocess.Popen(['cat', '/proc/loadavg']))	
-		time.sleep(2)
-		avg.terminate()
 		#return avg
 
-	def getMemUsed():
+	def startMemUsed():
 		u = (subprocess.Popen(['du', '-hs']))#, '/dev/root']))
-		time.sleep(2)
-		u.terminate()
 
-	def endFunctions():
-		x.terminate()
-		y.terminate()
-		z.terminate()
-		avg.terminate()
-		u.terminate()
+        def getTemp():
+            if x != None and x.poll()==True:
+                # TODO: if stdout is not reporting output, change popen constructor argument stdout=PIPE
+                for line in x.stdout:
+                    print(line)
+
+	def endFunctions(id=0):
+            if id==0:
+                # TODO: change terminate to kill
+                x.terminate()
+                y.terminate()
+                z.terminate()
+                avg.terminate()
+                u.terminate()
+            if id==1:
+                x.terminate()
+            if id==2
+                y.terminate()
+            if id==3
+                z.terminate()
+            if id==4
+                avg.terminate()
+            if id==5
+                u.terminate()
 		#return u.split('K')[0]		
 
 	#print getTemp()
