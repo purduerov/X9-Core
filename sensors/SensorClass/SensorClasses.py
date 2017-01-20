@@ -36,7 +36,6 @@ class IMU(object):
                 'Acceleration-X': accel_x, 'Acceleration-Y': accel_y, 'Acceleration-Z': accel_z,
                 'Linear Acceleration-X': LinAccel_x, 'Linear Acceleration-Y': LinAccel_y, 'Linear Acceleration-Z': LinAccel_z,
                 'Temp' : temp}
-# BMAX:TODO: WARN: Private variables typically start with _ to signify they should not be used publicly. Apply to all necessary within this file.
     def get_calibration(self):
         cal_array = self.bno.get_calibration()
         return cal_array
@@ -77,8 +76,7 @@ class Pressure(object):
     def __init__(self):
         self.bus = smbus.SMBus(1)
 
-# BMAX:TODO: MAJOR: Minor change here, to fit the return pattern of rov data, I want the function changed to pressure_get_data(), and the return object be a dict of the pressure: {"mbar": #, "Temp-F": #, "Temp-C": #} not just #. (I'm guessing the unit is mbars... correct me if I'm wrong).
-    def get_pressure(self):
+    def pressure_get_data(self):
         self.bus.write_byte(0x76, 0x1E)
 #time.sleep(.5)
         # Read 12 bytes of calibration data
@@ -157,7 +155,8 @@ class Pressure(object):
         cTemp = TEMP / 100.0
         fTemp = cTemp * 1.8 + 32
 
-        return [pressure, cTemp, fTemp]
+        #return [pressure, cTemp, fTemp]
+        return { "mbar": pressure, "cTemp": cTemp, "fTemp": fTemp }
 
 
 
