@@ -1,12 +1,12 @@
 import sensors.SensorClass as SensorClass
 import PID_controller
 import numpy as np
-import Accel_to_Pos as posfinder
+import Accel_to_Pos as converter
 
 
 class PID(object):
     def __init__(self):
-        self.pos = posfinder(self)
+        self.posfinder = converter.Accel_to_Pos(self)
         self.data = SensorClass.Data_file.State()
         self.controller_x = PID_controller.PID_Controller(self)
         self.controller_y = PID_controller.PID_Controller(self)
@@ -25,16 +25,17 @@ class PID(object):
         updated_theta = self.update_theta()
         return np.array([(updated_x), (updated_y), (updated_z), (updated_phi), (updated_mu), (updated_theta)])
 
+    
     def update_x(self):
-        self.controller_x.update(self.data.get_state())
+        self.controller_x.update(self.posfinder.integration(self.data.get_state('Acceleration-X')))
         return self.controller_x.getOutput()
 
     def update_y(self):
-        self.controller_y.update(self.data.get_state())
+        self.controller_y.update(self.posfinder.integration(self.data.get_state('Acceleration-Y')))
         return self.controller_y.getOutput()
 
     def update_z(self):
-        self.controller_z.update(self.data.get_state())
+        self.controller_z.update(self.posfinder.integration(self.data.get_state('Acceleration-Z')))
         return self.controller_z.getOutput()
 
     def update_phi(self):
@@ -58,6 +59,8 @@ class PID(object):
         curr_y = self.data.get_state('')
         curr_z = self.data.get_state('')
         """
+        self.posfinder.start_over(self)
+        
         curr_x = self.pos.integration(self.data.get_state('Acceleration-X'))
         curr_y = self.pos.integration(self.data.get_state('Acceleration-Y'))
         curr_z = self.pos.integration(self.data.get_state('Acceleration-Z'))
