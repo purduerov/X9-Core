@@ -1,10 +1,12 @@
 import sensors.SensorClass as SensorClass
 import PID_controller
 import numpy as np
+import Accel_to_Pos as posfinder
 
 
 class PID(object):
     def __init__(self):
+        self.pos = posfinder(self)
         self.data = SensorClass.Data_file.State()
         self.controller_x = PID_controller.PID_Controller(self)
         self.controller_y = PID_controller.PID_Controller(self)
@@ -49,9 +51,17 @@ class PID(object):
 
     def set_destination(self, delta_x, delta_y, delta_z, delta_phi, delta_mu, delta_theta):
 
+        """
+        Depended on Sonar
+
         curr_x = self.data.get_state('')
         curr_y = self.data.get_state('')
         curr_z = self.data.get_state('')
+        """
+        curr_x = self.pos.integration(self.data.get_state('Acceleration-X'))
+        curr_y = self.pos.integration(self.data.get_state('Acceleration-Y'))
+        curr_z = self.pos.integration(self.data.get_state('Acceleration-Z'))
+        
         curr_phi = self.data.get_state('Roll')
         curr_mu = self.data.get_state('Pitch')
         curr_theta = self.data.get_state('Heading')
