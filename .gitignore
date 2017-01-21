@@ -1,7 +1,6 @@
 # Ignores remnants of files/folders also ignored in other branches
 venv/
 node_modules/
-frontend/
 *.pyc
 
 # Byte-compiled / optimized / DLL files
