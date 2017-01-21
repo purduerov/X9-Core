@@ -22,7 +22,16 @@ class IMU(object):
     def __init__(self):
         self.bno = BNO055.BNO055(rst=18)
         self.bno.begin()
-
+        # Code below was added to constructor to make the instance variable dict
+        heading, roll, pitch = self.bno.read_euler()
+        gyro_x, gyro_y, gyro_z = self.bno.read_gyroscope()
+        accel_x, accel_y, accel_z = self.bno.read_accelerometer()
+        LinAccel_x, LinAccel_y, LinAccel_z = self.bno.read_linear_acceleration()
+        temp = self.bno.read_temp()
+        self.data_dict = {'Heading': heading, 'Roll': roll, 'Pitch': pitch, 'Gyro-X': gyro_x, 'Gyro-Y': gyro_y, 'Gyro-Z': gyro_z,
+                'Acceleration-X': accel_x, 'Acceleration-Y': accel_y, 'Acceleration-Z': accel_z,
+                'Linear Acceleration-X': LinAccel_x, 'Linear Acceleration-Y': LinAccel_y, 'Linear Acceleration-Z': LinAccel_z,
+                'Temp' : temp}
 
     def imu_get_data(self):
 
@@ -31,11 +40,25 @@ class IMU(object):
         accel_x, accel_y, accel_z = self.bno.read_accelerometer()
         LinAccel_x, LinAccel_y, LinAccel_z = self.bno.read_linear_acceleration()
         temp = self.bno.read_temp()
-# BMAX:TODO: WARN: I would say this is an efficiency warning, but I can't entirely justify that creation of a whole new dict with N elements is that much more expensive than inserting N elements... So if you find it irking that you are creating a new dict object potentially 100 times a second, make it an instance variable and insert the new values. Otherwise, you can keep this... I just want you to be aware of the implications of your code.
-        return {'Heading': heading, 'Roll': roll, 'Pitch': pitch, 'Gyro-X': gyro_x, 'Gyro-Y': gyro_y, 'Gyro-Z': gyro_z,
-                'Acceleration-X': accel_x, 'Acceleration-Y': accel_y, 'Acceleration-Z': accel_z,
-                'Linear Acceleration-X': LinAccel_x, 'Linear Acceleration-Y': LinAccel_y, 'Linear Acceleration-Z': LinAccel_z,
-                'Temp' : temp}
+        # added this to update the instance variable dictionary
+        self.data_dict['Heading'] = heading
+        self.data_dict['Roll'] = roll
+        self.data_dict['Pitch'] = pitch
+        self.data_dict['Gyro-X'] = gyro_x
+        self.data_dict['Gyro-Y'] = gyro_y
+        self.data_dict['Gyro-Z'] = gyro_z
+        self.data_dict['Acceleration-X'] = accel_x
+        self.data_dict['Acceleration-Y'] = accel_y
+        self.data_dict['Acceleration-Z'] = accel_z
+        self.data_dict['Linear Acceleration-X'] = LinAccel_x
+        self.data_dict['Linear Acceleration-Y'] = LinAccel_y
+        self.data_dict['Linear Acceleration-Z'] = LinAccel_z
+        self.data_dict['Temp'] = temp
+        # comment section below was the original return statement before the dictionary was an instance variable
+        return self.data_dict # {'Heading': heading, 'Roll': roll, 'Pitch': pitch, 'Gyro-X': gyro_x, 'Gyro-Y': gyro_y, 'Gyro-Z': gyro_z,
+                # 'Acceleration-X': accel_x, 'Acceleration-Y': accel_y, 'Acceleration-Z': accel_z,
+                # 'Linear Acceleration-X': LinAccel_x, 'Linear Acceleration-Y': LinAccel_y, 'Linear Acceleration-Z': LinAccel_z,
+                # 'Temp' : temp}
     def get_calibration(self):
         cal_array = self.bno.get_calibration()
         return cal_array
