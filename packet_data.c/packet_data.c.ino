@@ -3,7 +3,7 @@ char incomingByte;  // incoming data
 int  LED = 13;      // LED pin
 char n;
 char c = 0;
-int* packetdata[8] = {0};
+int packetdata[8] = {0};
  
 void setup() {
   Serial.begin(9600); // initialization
@@ -31,9 +31,5 @@ void sendi2c(int* packetdata) {
  
 void loop() {  
   Serial.flush();
-  while(c== 0){
-    if (Serial.available() > 0) {  // if the data came
-    incomingByte = Serial.read(); // read byte   
-    }
-  }
+  sendi2c(packetdata);
 }
