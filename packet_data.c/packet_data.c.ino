@@ -1,10 +1,13 @@
 #include <Wire.h>
+
+#define I2C_ID 0x13
+
 char incomingByte;  // incoming data
 int  LED = 13;      // LED pin
 char n;
 char c = 0;
-int packetdata[8] = {0};
- 
+int16_t packetdata[8] = {0};
+
 void setup() {
   Serial.begin(9600); // initialization
   Wire.begin();   
