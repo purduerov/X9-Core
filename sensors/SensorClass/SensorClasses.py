@@ -22,7 +22,19 @@ class IMU(object):
     def __init__(self):
         self.bno = BNO055.BNO055(rst=18)
         self.bno.begin()
-
+        # Code below was added to constructor to make the instance variable dict
+        heading, roll, pitch = self.bno.read_euler()
+        gyro_x, gyro_y, gyro_z = self.bno.read_gyroscope()
+        accel_x, accel_y, accel_z = self.bno.read_accelerometer()
+        LinAccel_x, LinAccel_y, LinAccel_z = self.bno.read_linear_acceleration()
+        temp = self.bno.read_temp()
+        self.data_dict = {
+                'Heading': heading, 'Roll': roll, 'Pitch': pitch,
+                'Gyro-X': gyro_x, 'Gyro-Y': gyro_y, 'Gyro-Z': gyro_z,
+                'Acceleration-X': accel_x, 'Acceleration-Y': accel_y, 'Acceleration-Z': accel_z,
+                'Linear Acceleration-X': LinAccel_x, 'Linear Acceleration-Y': LinAccel_y, 'Linear Acceleration-Z': LinAccel_z,
+                'Temp' : temp
+                }
 
     def imu_get_data(self):
 
@@ -31,11 +43,26 @@ class IMU(object):
         accel_x, accel_y, accel_z = self.bno.read_accelerometer()
         LinAccel_x, LinAccel_y, LinAccel_z = self.bno.read_linear_acceleration()
         temp = self.bno.read_temp()
-        return {'Heading': heading, 'Roll': roll, 'Pitch': pitch, 'Gyro-X': gyro_x, 'Gyro-Y': gyro_y, 'Gyro-Z': gyro_z,
-                'Acceleration-X': accel_x, 'Acceleration-Y': accel_y, 'Acceleration-Z': accel_z,
-                'Linear Acceleration-X': LinAccel_x, 'Linear Acceleration-Y': LinAccel_y, 'Linear Acceleration-Z': LinAccel_z,
-                'Temp' : temp}
-
+        # added this to update the instance variable dictionary
+        self.data_dict['Heading'] = heading
+        self.data_dict['Roll'] = roll
+        self.data_dict['Pitch'] = pitch
+        self.data_dict['Gyro-X'] = gyro_x
+        self.data_dict['Gyro-Y'] = gyro_y
+        self.data_dict['Gyro-Z'] = gyro_z
+        self.data_dict['Acceleration-X'] = accel_x
+        self.data_dict['Acceleration-Y'] = accel_y
+        self.data_dict['Acceleration-Z'] = accel_z
+        self.data_dict['Linear Acceleration-X'] = LinAccel_x
+        self.data_dict['Linear Acceleration-Y'] = LinAccel_y
+        self.data_dict['Linear Acceleration-Z'] = LinAccel_z
+        self.data_dict['Temp'] = temp
+        # comment section below was the original return statement before the dictionary was an instance variable
+        return self.data_dict # {'Heading': heading, 'Roll': roll, 'Pitch': pitch, 'Gyro-X': gyro_x, 'Gyro-Y': gyro_y, 'Gyro-Z': gyro_z,
+                # 'Acceleration-X': accel_x, 'Acceleration-Y': accel_y, 'Acceleration-Z': accel_z,
+                # 'Linear Acceleration-X': LinAccel_x, 'Linear Acceleration-Y': LinAccel_y, 'Linear Acceleration-Z': LinAccel_z,
+                # 'Temp' : temp}
+>>>>>>> 3a2b247d8c2d12d9fd6e7ea760d6be9c45c27885
     def get_calibration(self):
         cal_array = self.bno.get_calibration()
         return cal_array
@@ -76,7 +103,7 @@ class Pressure(object):
     def __init__(self):
         self.bus = smbus.SMBus(1)
 
-    def get_pressure(self):
+    def pressure_get_data(self):
         self.bus.write_byte(0x76, 0x1E)
 #time.sleep(.5)
         # Read 12 bytes of calibration data
@@ -155,6 +182,7 @@ class Pressure(object):
         cTemp = TEMP / 100.0
         fTemp = cTemp * 1.8 + 32
 
+        #return [pressure, cTemp, fTemp]
         return { "mbar": pressure, "cTemp": cTemp, "fTemp": fTemp }
 
 
