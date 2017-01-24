@@ -1,0 +1,16 @@
+1. Install dependencies with
+ sudo apt-get install libjpeg8-dev imagemagick libv4l-dev
+
+2. create symbolic link of video.h with
+ sudo ln -s /usr/include/linux/videodev2.h /usr/include/linux/videodev.h
+
+3. inside mjpg-streamer run
+ sudo make
+ AND
+ sudo make install
+
+4. create environment variable to installed .so files (could insert it into .bashrc):
+ export LD_LIBRARY_PATH=/usr/local/lib/
+
+5. If problems persist, make .so files in /usr/local/lib have all permissions:
+ sudo chmod 777 *.so (when in /usr/local/lib/mjpg-streamer/ directory)

@@ -20,8 +20,10 @@ socketio = SocketIO(app, async_mode=None)
 
 camera1 = Camera()
 camera2 = Camera(device='/dev/video1', port=8081)
+camera3 = Camera(device='/dev/video2', port=8082)
 camera1.on()
 camera2.on()
+camera3.on()
 
 
 # ROUTING:
