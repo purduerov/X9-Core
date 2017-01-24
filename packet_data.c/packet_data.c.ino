@@ -15,7 +15,7 @@ void setup() {
     incomingByte = Serial.read();
     if(incomingByte == '5'){
         c = 0;
-        Serial.println("Changed");
+        Serial.println("Receieved 5");
        }
   }
 }
@@ -23,7 +23,7 @@ void setup() {
 void sendi2c(int* packetdata) {
    // transmit to device #9
   for(int i = 0;i<10;i++){
-    Wire.beginTransmission(9);
+    Wire.beginTransmission(I2C_ID);
     Wire.write(packetdata[i]);    
     Wire.endTransmission();
     delay(10);
