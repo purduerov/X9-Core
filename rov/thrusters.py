@@ -12,7 +12,20 @@ class Thrusters:
         self.t5 = Thruster()
         self.t6 = Thruster()
         self.t7 = Thruster()
+
+        # Public segment:
         self._data = { "t0": self.t0, "t1": self.t1, "t2": self.t2, "t3": self.t3, "t4": self.t4, "t5": self.t5, "t6": self.t6, "t7": self.t7 }
+
+        # Pi -> I2C-to-PWM variables:
+        #   I2C Pin
+        self.i2c_pin = 0
+        #   I2C-to-PWM Pins
+        self.pins = [0, 0, 0, 0, 0, 0, 0, 0]
+        #   Thruster I2C address
+        self.thrusterid = 0
+
+        # Pi -> Coprocessor variables:
+
 
     def update_actives(self, vect8):
         self.t0.setActive(vect8.a)
