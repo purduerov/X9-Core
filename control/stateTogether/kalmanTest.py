@@ -2,7 +2,7 @@ from kalmanFilter import kalman
 import numpy as np
 import matplotlib.pyplot as plt
 from time import sleep
-craft = kalman(5,5,10,5,10,10,10,10,10,10,10,10);
+craft = kalman(5,5,5,5,10,10,10,10,10,10,10,10);
 t = 0
 dT =0.01
 zPos = []

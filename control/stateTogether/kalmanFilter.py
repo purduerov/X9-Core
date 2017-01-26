@@ -51,12 +51,12 @@ class kalman(object):
         self.stateTime = absTime()
         self.dT = 0
 
-        self.xVar = np.tan(pow(aXnoise,2)*np.array(
+        self.xVar = pow(aXnoise,2)*np.array(
                 [(pow(self.dT,4)/4,pow(self.dT,3)/2),
-                    (pow(self.dT,3)/2,pow(self.dT,2))]))
-        self.yVar = np.tan(pow(aYnoise,2)*np.array(
+                    (pow(self.dT,3)/2,pow(self.dT,2))])
+        self.yVar = pow(aYnoise,2)*np.array(
                 [(pow(self.dT,4)/4,pow(self.dT,3)/2),
-                    (pow(self.dT,3)/2,pow(self.dT,2))]))
+                    (pow(self.dT,3)/2,pow(self.dT,2))])
         self.zVar = pow(aZnoise,2)*np.array(
                 [(pow(self.dT,4)/4,pow(self.dT,3)/2),
                     (pow(self.dT,3)/2,pow(self.dT,2))])
