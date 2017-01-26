@@ -43,15 +43,13 @@ bind = {
     a: {
       press: {
         func: function() {
-          console.log(packet.IMU.z);
-          packet.IMU.z = gp.buttons.a.val;
+          controls.IMU.z = gp.buttons.a.val;
         },  
       },
       release: {
         func: function() {
-          console.log(packet.IMU.z);
-          if(packet.IMU.z > 0) {
-            packet.IMU.z = 0;
+          if(controls.IMU.z > 0) {
+            controls.IMU.z = 0;
           }
         },
       },
@@ -59,15 +57,13 @@ bind = {
     b: {
       press: {
         func: function() {
-          console.log(packet.IMU.z);
-          packet.IMU.z = -gp.buttons.b.val;
+          controls.IMU.z = -gp.buttons.b.val;
         }, 
       },
       release: {
         func: function() {
-          console.log(packet.IMU.z);
-          if(packet.IMU.z < 0) {
-            packet.IMU.z = 0;
+          if(controls.IMU.z < 0) {
+            controls.IMU.z = 0;
           }
         }, 
       },
@@ -75,15 +71,13 @@ bind = {
     lb: {
       press: {
         func: function() {
-          console.log(packet.IMU.roll);
-          packet.IMU.roll = -gp.buttons.lb.val;
+          controls.IMU.roll = -gp.buttons.lb.val;
         },  
       },
       release: {
         func: function() {
-          console.log(packet.IMU.roll);
-          if(packet.IMU.roll < 0) {
-            packet.IMU.roll = 0;
+          if(controls.IMU.roll < 0) {
+            controls.IMU.roll = 0;
           }
         },
       },
@@ -91,15 +85,13 @@ bind = {
     rb: {
       press: {
         func: function() {
-          console.log(packet.IMU.roll);
-          packet.IMU.roll = gp.buttons.rb.val;
+          controls.IMU.roll = gp.buttons.rb.val;
         }, 
       },
       release: {
         func: function() {
-          console.log(packet.IMU.roll);
-          if(packet.IMU.roll > 0) {
-            packet.IMU.roll = 0;
+          if(controls.IMU.roll > 0) {
+            controls.IMU.roll = 0;
           }
         }, 
       },
@@ -110,16 +102,16 @@ bind = {
     left: {
       cartesian: {
         func: function() {
-          packet.IMU.y = gp.axes.left.x;
-          packet.IMU.x = gp.axes.left.y;
+          controls.IMU.y = gp.axes.left.x;
+          controls.IMU.x = gp.axes.left.y;
         },
       },
     },
     right: {
       cartesian: {
         func: function() {
-          packet.IMU.pitch = gp.axes.right.y;
-          packet.IMU.yaw = gp.axes.right.x;
+          controls.IMU.pitch = gp.axes.right.y;
+          controls.IMU.yaw = gp.axes.right.x;
         },
       },
     },
@@ -129,7 +121,7 @@ bind = {
       if(btn_ax != "activate") {
         Object.keys(bind[btn_ax]).forEach(function(piece, j) { //goes through buttons or left and right axes
           Object.keys(bind[btn_ax][piece]).forEach(function(which, k) {  //goes through the individual functions
-            console.log(btn_ax+": "+piece+", "+which);
+            //console.log(btn_ax+": "+piece+", "+which);
             gp[btn_ax+"_bind"](piece, which, bind[btn_ax][piece][which].func);
           });
         });

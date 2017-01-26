@@ -12,6 +12,9 @@
                     <IMU :data="packet.IMU"></IMU>
                 </Card>
                 <Card class="half-width half-height">
+                    <Press_Temp :data="packet.PRESSURE"></Press_Temp>
+                </Card>
+                <Card class="half-width half-height">
                     <DataView title="Pressure:" :data="packet.pressure"></DataView>
                 </Card>
                 <Card class="half-width half-height">
@@ -31,6 +34,7 @@ var CameraView = require("./CameraView.vue")
 var IMU = require("./IMU.vue")
 var DataView = require("./DataView.vue")
 var Card = require("./Card.vue")
+var Press_Temp = require("./Pressure.vue")
 
 export default {
     components: {
@@ -38,22 +42,23 @@ export default {
         CameraView,
         IMU,
         Card,
-        DataView
+        DataView,
+        Press_Temp
     },
     data: function() {
         return {
             packet: {
             IMU: {
-              x: 0,
-              y: 0,
-              z: 0,
-              pitch: 0,
-              roll: 0,
-              yaw: 0
+              x: 3,
+              y: 4,
+              z: 2,
+              pitch: 6,
+              roll: -4,
+              yaw: .243
             },
             PRESSURE: {
-              pressure: 0,
-              temperature: 0
+              pressure: 7,
+              temperature: 4
             },
             Thrusters: {
               t0 : { power: "0"},
@@ -69,19 +74,37 @@ export default {
         };
     },
     mounted: function() {
-        var vm = this
+        var vm = this;
+        
+        gp.vue = vm;
+        
+        var go1 = -1;
+        var go2 = -1;
+        var send = {};
+        gp.set();
+        go1 = window.setInterval(function() {
+            if(gp.ready) {
+                window.clearInterval(go1);
+                go1 = -1;
+                bind.activate();
+                go2 = window.setInterval(function() {
+                  gp.get_current();
+                });
+            }
+        });
 
         var socket = io.connect('http://' + document.domain + ':' + location.port);
 
-        socket.on('connect', function () {
-            console.log("connected")
-        });
-
-        socket.on("dearflask", function(d) {
-            vm.packet = d
-            setTimeout(function() {
-                socket.emit("dearclient")
-            }, 10);
+        var app_refresh = setInterval(function() {
+            socket.emit("dearflask", JSON.stringify({buttons: gp.buttons, axes: gp.axes}));
+        }, 50);
+        socket.on("dearclient", function(status) {
+            Object.keys(status).forEach(function(key, i) {
+                vm.packet[key] = status[key];
+            });
+            //setTimeout(function() {
+                //console.log(vm.packet);
+            //}, 10);
         });
         
         console.log(vm.packet);

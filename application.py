@@ -2,34 +2,14 @@ from flask import Flask, send_from_directory
 from flask_socketio import SocketIO
 import threading
 import os
+import json
 
 from rov.rov import ROV
 
-packet = {
-    IMU: {
-        x: 7,
-        y: 6,
-        z: 5,
-        pitch: 4,
-        roll: 3,
-        yaw: 2
-    },
-    PRESSURE: {
-        pressure: 9,
-        temperature: 72
-    },
-    Thrusters: {
-        t0 : { power: "11"},
-        t1 : { power: "14"},
-        t2 : { power: "23"},
-        t3 : { power: "7"},
-        t4 : { power: "15"},
-        t5 : { power: "4"},
-        t6 : { power: "18"},
-        t7 : { power: "10"}
-    }
-}
 
+import logging
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 """
 PRIMARY FLASK APPLICATION:
 
@@ -46,6 +26,9 @@ socketio = SocketIO(app, async_mode=None)
 
 rov = ROV()
 
+last_controller = ""
+last_rov = {}
+
 
 # ROUTING:
 @app.route('/')
@@ -55,45 +38,44 @@ def index():
 
 @app.route('/UI/')
 def index_front():
-    print "Send /src/index2.html"
+    print "Send /src/index2.html & co."
     return app.send_static_file('src/index2.html')
 
 @app.route('/UI/fonts/<path:path>')
 def send_font_files(path):
-    print "front file"
-    print path
+#    print "front file"
+#    print path
     return send_from_directory('frontend/src/', path)
 
 @app.route('/UI/gp/<path:path>')
 def send_UI_files(path):
 #    print "UI file"
 #    print path
-    print os.path.dirname(os.path.realpath(__file__))
+#    print os.path.dirname(os.path.realpath(__file__))
     return send_from_directory('frontend/gamepad/', path)
 
 @app.route('/UI/pg2/<path:path>')
 def send_index2_page_files(path):
-    print "Page file"
-    print path
+#    print "Page file"
+#    print path
     return app.send_static_file('src/'+path)
 
 # SOCKET-IO:
 @socketio.on('dearflask')
 def recieve_controls(data):
+    global last_controller, last_rov
     # parse json controls object into onside object.
     # print("controls: " + str(json))
-    print('received message: ' + str(data))
-
-
-@socketio.on('dearclient')
-def send_packet():
-
-    packet = build_dearclient()
-
-    #print "Sent:"
-    #print packet
-
-    socketio.emit("dearflask", packet, json=True)
+    # print('received message: ' + str(data))
+    send_packet()
+    if data != last_controller:
+      last_controller = data
+      controller = json.loads(data)
+      print controller['buttons']['a']
+    
+    if rov.data != last_rov:
+      last_rov = rov.data
+      print rov.data
 
 
 @socketio.on('connect')
@@ -116,6 +98,14 @@ def error_handler(e):
 
 # HELPER METHODS:
 
+def send_packet():
+
+    packet = build_dearclient()
+
+    #print "Sent:"
+    #print packet
+
+    socketio.emit("dearclient", packet, json=True)
 
 def build_dearclient():
 
