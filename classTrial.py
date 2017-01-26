@@ -1,7 +1,7 @@
 import subprocess
 import time
 
-class classTrial():
+class RasPiStats():
         
         x = None
         y = None
@@ -30,12 +30,36 @@ class classTrial():
 
         def getTemp():
             if x != None and x.poll()==True:
-                # TODO: if stdout is not reporting output, change popen constructor argument stdout=PIPE
+                # TODO: if stdout is not reporting output, change popen constructor argument stdout=PIPE //to do this put it outside array brackets but within parenthesis([~~~~], PIPE) 
                 for line in x.stdout:
+                    print(line)
+                x = None
+                return True
+            return False
+
+
+        def getClockRate():
+            if y != None and y.poll()==True:
+                for line in y.stdout:
+                    print(line) #save text somewhere else
+
+        def getVolt():
+            if z != None and z.poll()==True:
+                for line in z.stdout:
+                    print(line)
+        
+        def getLoadAvg():
+            if avg != None and avg.poll()==True:
+                for line in avg.stdout:
+                    print(line)
+
+        def getMemUsed():
+            if u != None and u.poll()==True:
+                for line in u.stdout:
                     print(line)
 
 	def endFunctions(id=0):
-            if id==0:
+            if id==0 and (x != None and y != None and z != None and avg != None and u != None):
                 # TODO: change terminate to kill
                 x.terminate()
                 y.terminate()
@@ -52,11 +76,20 @@ class classTrial():
                 avg.terminate()
             if id==5
                 u.terminate()
-		#return u.split('K')[0]		
+		#return u.split('K')[0]	
 
-	#print getTemp()
-	#print getVolt()
-	#print getClockRate()
-	#print getLoadAvg()
-	#print getMemUsed()
-	getMemUsed()
+#print getTemp()
+#print getVolt()
+#print getClockRate()
+#print getLoadAvg()
+#print getMemUsed()
+#getMemUsed()
+
+if __name__ == '__main__': #if the name of the class is the same as the one being called, run this code
+    test = RasPiStats()
+
+    test.startTemp()
+
+    while test.getTemp() != False:
+        pass
+    #test.endFunctions(0)
