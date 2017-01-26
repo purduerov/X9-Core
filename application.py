@@ -12,7 +12,6 @@ log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 """
 PRIMARY FLASK APPLICATION:
-
 This file handles the primary functions of the webapp. Handles:
     Routing
     SocketIO
@@ -112,7 +111,7 @@ def build_dearclient():
     return rov.data
 
 
-if __name__ == '__main__':
+if __name__ == 'application':
     rov_run = threading.Thread(target=rov.run)
     rov_run.daemon = True
     rov_run.start()
