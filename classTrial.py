@@ -10,7 +10,7 @@ class RasPiStats():
         u = None
 
 	def startTemp():#need to parse to get only the number(outputs temp = x)
-		x =(subprocess.Popen(['vcgencmd','measure_temp']))
+		x =(subprocess.Popen(['vcgencmd','measure_temp'], PIPE))
 		#return x.split('=')[1]#-----problem here, triple '
 
 	def startClockRate():
