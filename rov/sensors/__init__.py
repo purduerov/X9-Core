@@ -1,1 +1,2 @@
-from SensorClasses import IMU, Pressure
+from imu import IMU
+from pressure import Pressure
