@@ -30,20 +30,16 @@ class ThrustMapper(object):
         # self.mutationMatrix = self.maker.generate_matrix()
         self.mutationMatrix = self.maker.generateMatrix()
 
-    def generate_thrust_map(self, desired):
+    def generate_thrust_map(self, enabledThrusters, desired):
         """generate the thrustMap to move to the desired vector
 
         desired (Vector6)
         """
+        if not np.array_equal(enabledThrusters, self.maker.thrusterStatus):
+            self.mutationMatrix = self.maker.setThrusterStatus(enabledThrusters)
         # some math to determine the thrustMap
         self.thrustMap = self.mutationMatrix.dot(desired)
         return self.thrustMap
-
-    def turnOffThruster(self, thrusterNum):
-        self.mutationMatrix = self.maker.setThrusterOff(thrusterNum)
-
-    def turnOnThruster(self, thrusterNum):
-        self.mutationMatrix = self.maker.setThrusterOn(thrusterNum)
 
 
 if __name__ == "__main__":
@@ -52,8 +48,11 @@ if __name__ == "__main__":
     for i in range(0,8):
         print "[%f,\t%f,\t%f,\t%f,\t%f,\t%f]," % (mutatorMatrix[i,0], mutatorMatrix[i,1], mutatorMatrix[i,2], mutatorMatrix[i,3], mutatorMatrix[i,4], mutatorMatrix[i,5])
     print "\n\n"
-    mapper.turnOffThruster(5)
-    mapper.turnOffThruster(6)
+    array = np.array([0, 0, 0, 0, 0, 1, 1, 0])
+    desired = np.array([[0],[0],[0],[0],[0],[0]])
+    mapper.generate_thrust_map(array, desired)
+    # mapper.turnOffThruster(5)
+    # mapper.turnOffThruster(6)
     mutatorMatrix = mapper.mutationMatrix
     for i in range(0,8):
         print "[%f,\t%f,\t%f,\t%f,\t%f,\t%f]," % (mutatorMatrix[i,0], mutatorMatrix[i,1], mutatorMatrix[i,2], mutatorMatrix[i,3], mutatorMatrix[i,4], mutatorMatrix[i,5])
