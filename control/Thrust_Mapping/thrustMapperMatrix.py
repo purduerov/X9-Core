@@ -47,7 +47,7 @@ class MutatorMatrix(object):
         """
         for i in range(0, 8):
             if self.thrusterStatus[i] == 1:
-                self.m[i, :] = 0
+                self.m[:, i] = 0
 
     def setThrusterOff(self, thrusterNum):
         self.thrusterStatus[thrusterNum] = 1
