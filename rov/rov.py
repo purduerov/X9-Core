@@ -17,44 +17,44 @@ class ROV(object):
             "pressure": Pressure()
         }
 
+        self._running = True
         self._data_lock = Lock()
 
     @property
     def data(self):
-        self._data_lock.acquire()
+        with self._data_lock:
+            self._data['last_update'] = self.last_update
+            ret = copy.deepcopy(self._data)
 
-        self._data['last_update'] = self.last_update
-        ret = copy.deepcopy(self._data)
-
-        self._data_lock.release()
-
-        return ret
+            return ret
 
     def update(self):
-        self._data_lock.acquire()
+        with self._data_lock:
+            # Update all simple sensor data and stuff it in data
+            for sensor in self.simple_sensors.keys():
+                self.simple_sensors[sensor].update()
+                self._data[sensor] = self.simple_sensors[sensor].data
 
-        print "Update! last update was: %.5f s ago" % (time() - self.last_update)
-
-        # Update all simple sensor data and stuff it in data
-        for sensor in self.simple_sensors.keys():
-            self.simple_sensors[sensor].read()
-            self._data[sensor] = self.simple_sensors[sensor].data
-
-        # Our last update
-        self.last_update = time()
-
-        self._data_lock.release()
+            # Our last update
+            self.last_update = time()
 
     def run(self):
-        while True:
-            while time() - self.last_update < 0.1:
-                sleep(0.05)
+        while self._running:
+            while time() - self.last_update < 0.01:
+                sleep(0.005)
 
             self.update()
 
-
-
-
 if __name__ == "__main__":
+    import threading
+    import json
+
     r = ROV()
-    r.run()
+    r_thread = threading.Thread(target=r.run)
+    r_thread.daemon = True
+    r_thread.start()
+
+    while True:
+        print json.dumps(r.data, indent=4)
+        sleep(0.1)
+
