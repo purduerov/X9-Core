@@ -41,5 +41,15 @@ class ThrustMapper(object):
 
 
 if __name__ == "__main__":
-    print ThrustMapper().mutationMatrix
+    mapper = ThrustMapper()
+    mutatorMatrix = mapper.mutationMatrix
+    for i in range(0,8):
+        print "[%f,\t%f,\t%f,\t%f,\t%f,\t%f]," % (mutatorMatrix[i,0], mutatorMatrix[i,1], mutatorMatrix[i,2], mutatorMatrix[i,3], mutatorMatrix[i,4], mutatorMatrix[i,5])
+    print "\n\n"
+    mapper.maker.setThrusterOff(5)
+    mapper.mutationMatrix = mapper.maker.setThrusterOff(6)
+    mutatorMatrix = mapper.mutationMatrix
+    for i in range(0,8):
+        print "[%f,\t%f,\t%f,\t%f,\t%f,\t%f]," % (mutatorMatrix[i,0], mutatorMatrix[i,1], mutatorMatrix[i,2], mutatorMatrix[i,3], mutatorMatrix[i,4], mutatorMatrix[i,5])
 
+    
