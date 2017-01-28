@@ -39,6 +39,12 @@ class ThrustMapper(object):
         self.thrustMap = self.mutationMatrix.dot(desired)
         return self.thrustMap
 
+    def turnOffThruster(self, thrusterNum):
+        self.mutationMatrix = self.maker.setThrusterOff(thrusterNum)
+
+    def turnOnThruster(self, thrusterNum):
+        self.mutationMatrix = self.maker.setThrusterOn(thrusterNum)
+
 
 if __name__ == "__main__":
     mapper = ThrustMapper()
@@ -46,8 +52,8 @@ if __name__ == "__main__":
     for i in range(0,8):
         print "[%f,\t%f,\t%f,\t%f,\t%f,\t%f]," % (mutatorMatrix[i,0], mutatorMatrix[i,1], mutatorMatrix[i,2], mutatorMatrix[i,3], mutatorMatrix[i,4], mutatorMatrix[i,5])
     print "\n\n"
-    mapper.maker.setThrusterOff(5)
-    mapper.mutationMatrix = mapper.maker.setThrusterOff(6)
+    mapper.turnOffThruster(5)
+    mapper.turnOffThruster(6)
     mutatorMatrix = mapper.mutationMatrix
     for i in range(0,8):
         print "[%f,\t%f,\t%f,\t%f,\t%f,\t%f]," % (mutatorMatrix[i,0], mutatorMatrix[i,1], mutatorMatrix[i,2], mutatorMatrix[i,3], mutatorMatrix[i,4], mutatorMatrix[i,5])
