@@ -36,7 +36,7 @@ class MutatorMatrix(object):
         self.m = np.concatenate((self.m, temp))
         self.turnOffThruster()
         matrix = np.linalg.pinv(self.m)
-        matrix[:, 3:5] = matrix[:, 3:5] / 10
+        matrix[:, 3:6] = matrix[:, 3:6] / 10
         self.mutationMatrix = matrix
         return self.mutationMatrix
 
