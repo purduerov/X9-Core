@@ -36,7 +36,7 @@ class MutatorMatrix(object):
         self.m = np.concatenate((self.m, temp))
         self.turnOffThruster()
         matrix = np.linalg.pinv(self.m)
-        matrix[:, 4:6] = matrix[:, 4:6] / 10
+        matrix[:, 3:5] = matrix[:, 3:5] / 10
         self.mutationMatrix = matrix
         return self.mutationMatrix
 
@@ -57,5 +57,10 @@ class MutatorMatrix(object):
         self.thrusterStatus[thrusterNum] = 0
         return self.generateMatrix()
 
-matrix = MutatorMatrix()
-print matrix.generateMatrix()
+if __name__ == "__main__":
+    matrix = MutatorMatrix()
+    mutatorMatrix = matrix.generateMatrix()
+    for i in range(0,8):
+        print "[%f,\t%f,\t%f,\t%f,\t%f,\t%f]," % (mutatorMatrix[i,0], mutatorMatrix[i,1], mutatorMatrix[i,2], mutatorMatrix[i,3], mutatorMatrix[i,4], mutatorMatrix[i,5])
+    # print matrix.generateMatrix()
+
