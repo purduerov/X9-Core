@@ -27,7 +27,7 @@ class MutatorMatrix(object):
                                            [0, 0, 1]]))
         # used for some manipulation later
         self.m = None
-        self.thrusterStatus = [0, 0, 0, 0, 0, 0, 0, 0]
+        self.thrusterStatus = np.array([0, 0, 0, 0, 0, 0, 0, 0])
         self.mutationMatrix = None
 
     def generateMatrix(self):
@@ -49,12 +49,8 @@ class MutatorMatrix(object):
             if self.thrusterStatus[i] == 1:
                 self.m[:, i] = 0
 
-    def setThrusterOff(self, thrusterNum):
-        self.thrusterStatus[thrusterNum] = 1
-        return self.generateMatrix()
-
-    def setThrusterOn(self, thrusterNum):
-        self.thrusterStatus[thrusterNum] = 0
+    def setThrusterStatus(self, enabledThrusters):
+        self.thrusterStatus = enabledThrusters
         return self.generateMatrix()
 
 if __name__ == "__main__":
