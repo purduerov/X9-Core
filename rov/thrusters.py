@@ -34,7 +34,7 @@ class Thrusters:
         self.t7 = Thruster()
 
         # Public segment:
-        self._data = { "t0": self.t0, "t1": self.t1, "t2": self.t2, "t3": self.t3, "t4": self.t4, "t5": self.t5, "t6": self.t6, "t7": self.t7 }
+        self._data = { "t0": self.t0.data, "t1": self.t1.data, "t2": self.t2.data, "t3": self.t3.data, "t4": self.t4.data, "t5": self.t5.data, "t6": self.t6.data, "t7": self.t7.data }
 
         # Pi -> I2C-to-PWM variables:
         #   I2C-to-PWM Pins
@@ -84,11 +84,10 @@ class Thrusters:
 
 class Thruster:
     def __init__(self):
-        self.power = 0
-        self.active = False
+        self.data = { "active": 0, "power": 0 }
 
     def setActive(self, value):
-        self.active = value
+        self.data["active"] = value
 
     def setPower(self, value):
-        self.power = value
+        self.data["power"] = value
