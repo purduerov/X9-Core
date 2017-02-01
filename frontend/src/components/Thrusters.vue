@@ -27,21 +27,6 @@
                 ]
             }
         },
-        methods: {
-            update: function(info) {
-                console.log('update')
-                var titles = ["t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7"];
-                for (var i = 0; i < 8; i++) {
-                    this.moving[i].val = info[titles[i]];
-                    if (info[titles[i]] >= 0) {
-                    this.moving[i].val = "Increasing "+info[titles[i]];
-                } else {
-                    this.moving[i].val = "Decreasing "+(-info[titles[i]]);
-                }
-                }
-
-            }
-        },
         mounted: function() {
             setInterval(this.update, 500)
         }
