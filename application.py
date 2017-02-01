@@ -67,10 +67,23 @@ def recieve_controls(data):
     # print("controls: " + str(json))
     # print('received message: ' + str(data))
     send_packet()
+<<<<<<< a2bbe974e0328d3ef12468edc817f127d2aeefb4
 
     # if rov.data != last_rov:
       # last_rov = rov.data
       #print rov.data
+=======
+    # if data != last_controller:
+      # last_controller = data
+      # controller = json.loads(data)
+      # print controller['buttons']['a']
+    
+    """
+    if rov.data != last_rov:
+      last_rov = rov.data
+      print rov.data
+    """
+>>>>>>> Works with unfinished classes, & GpInfo shows
 
 
 @socketio.on('connect')
@@ -117,9 +130,13 @@ def build_dearclient():
 def start_sio():
     socketio.run(app, host="127.0.0.1")
 
+<<<<<<< a2bbe974e0328d3ef12468edc817f127d2aeefb4
     
 >>>>>>> Fixed server stalling... socketio.run was causing errors
 if __name__ == 'application':
+=======
+if __name__ == 'aplication':
+>>>>>>> Works with unfinished classes, & GpInfo shows
     rov_run = threading.Thread(target=rov.run)
     rov_run.daemon = True
     rov_run.start()

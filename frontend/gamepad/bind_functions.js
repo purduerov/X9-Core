@@ -81,6 +81,11 @@ bind = {
           }
         },
       },
+      change: {
+        func: function() {
+          vue_app.gpinfo.buttons.a = gp.buttons.a.val;
+        } 
+      },
     },
     rb: {
       press: {
@@ -94,6 +99,25 @@ bind = {
             controls.IMU.yaw = 0;
           }
         }, 
+      },
+      change: {
+        func: function() {
+          vue_app.gpinfo.buttons.b = gp.buttons.b.val;
+        }
+      },
+    },
+    x: {
+      change: {
+        func: function() {
+          vue_app.gpinfo.buttons.x = gp.buttons.x.val;
+        }
+      },
+    },
+    y: {
+      change: {
+        func: function() {
+          vue_app.gpinfo.buttons.y = gp.buttons.y.val;
+        }
       },
     },
     up: {
