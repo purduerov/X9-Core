@@ -18,7 +18,7 @@
                     <DataView title="Pressure:" :data="packet.pressure"></DataView>
                 </Card>
                 <Card class="half-width half-height">
-                    <IMU :data="packet.IMU"></IMU>
+                    <GpInfo :data="gpinfo"></GpInfo>
                 </Card>
                 <Card class="half-width half-height">
                     <IMU :data="packet.IMU"></IMU>
@@ -35,6 +35,7 @@ var IMU = require("./IMU.vue")
 var DataView = require("./DataView.vue")
 var Card = require("./Card.vue")
 var Press_Temp = require("./Pressure.vue")
+var GpInfo = require("./GpInfo.vue")
 
 export default {
     components: {
@@ -43,40 +44,59 @@ export default {
         IMU,
         Card,
         DataView,
-        Press_Temp
+        Press_Temp,
+        GpInfo
     },
     data: function() {
         return {
             packet: {
-            IMU: {
-              x: 3,
-              y: 4,
-              z: 2,
-              pitch: 6,
-              roll: -4,
-              yaw: .243
+                IMU: {
+                    x: 3,
+                    y: 4,
+                    z: 2,
+                    pitch: 6,
+                    roll: -4,
+                    yaw: .243
+                },
+                PRESSURE: {
+                    pressure: 7,
+                    temperature: 4
+                },
+                Thrusters: {
+                    t0 : { power: "0"},
+                    t1 : { power: "0"},
+                    t2 : { power: "0"},
+                    t3 : { power: "0"},
+                    t4 : { power: "0"},
+                    t5 : { power: "0"},
+                    t6 : { power: "0"},
+                    t7 : { power: "0"}
+                }
             },
-            PRESSURE: {
-              pressure: 7,
-              temperature: 4
-            },
-            Thrusters: {
-              t0 : { power: "0"},
-              t1 : { power: "0"},
-              t2 : { power: "0"},
-              t3 : { power: "0"},
-              t4 : { power: "0"},
-              t5 : { power: "0"},
-              t6 : { power: "0"},
-              t7 : { power: "0"}
+            gpinfo: {
+                buttons: {
+                    a: 0,
+                    b: 0,
+                    x: 0,
+                    y: 0
+                },
+                axes: {
+                    left: {
+                        x: 0,
+                        y: 0
+                    },
+                    right: {
+                        x: 0,
+                        y: 0
+                    }
+                }
             }
-          }
         };
     },
     mounted: function() {
         var vm = this;
         
-        gp.vue = vm;
+        vue_app = vm;
         
         var go1 = -1;
         var go2 = -1;
@@ -107,7 +127,7 @@ export default {
             //}, 10);
         });
         
-        console.log(vm.packet);
+        console.log(vm.gpinfo);
     }
 }
 </script>
