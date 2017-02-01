@@ -23,7 +23,7 @@ class Camera:
         self.inp = 'input_uvc.so -r ' + self.r + ' -f ' + str(self.f) + ' -d ' + self.d + ' -br ' + str(self.b) + ' -co ' + str(self.c)
         self.out = 'output_http.so -w /usr/local/www -p ' + str(self.p)
 
-   
+
 
     # framerate shouldn't be changed: keep at 30, allows for a good image while
     # reserving valuable processing power for other devices. Device is formatted as a
@@ -42,3 +42,14 @@ class Camera:
         # using this method
     def off(self):
         self.switch.kill()
+
+if __name__ == "__main__":
+    cam = Camera()
+    cam.on()
+    print "Opened Camera at 8080, /dev/video0"
+    while True:
+        i = raw_input("Waiting for keyboard input (enter)")
+        if not i:
+            break
+    cam.off()
+    print "Closed Camera"

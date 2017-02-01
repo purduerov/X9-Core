@@ -14,3 +14,5 @@
 
 5. If problems persist, make .so files in /usr/local/lib have all permissions:
  sudo chmod 777 *.so (when in /usr/local/lib/mjpg-streamer/ directory)
+
+6. Stick an iframe in html: <iframe src="http://10.42.0.?:8080/?action=stream" width="1024" height="768" scrolling="no" frameborder="no" marginheight="0px" position"absolute" css="right=0; top=0;"></ifram>
