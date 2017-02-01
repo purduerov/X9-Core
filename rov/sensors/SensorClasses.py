@@ -1,11 +1,11 @@
 import sys
 sys.path.append('./sensors/sensorLibs/Adafruit_Python_BNO055-master/Adafruit_BNO055')
-import BNO055
+#import BNO055
 
 import logging
 import sys
 import time
-from smbus import SMBus
+#from smbus import SMBus
 
 # Create and configure the BNO sensor connection.  Make sure only ONE of the
 # below 'bno = ...' lines is uncommented:
@@ -20,8 +20,9 @@ from smbus import SMBus
 
 class IMU(object):
     def __init__(self):
-        self.bno = BNO055.BNO055(rst=18)
-        self.bno.begin()
+        #self.bno = BNO055.BNO055(rst=18)
+        #self.bno.begin()
+      pass
 
 
     def imu_get_data(self):
@@ -74,7 +75,8 @@ class IMU(object):
 class Pressure(object):
 
     def __init__(self):
-        self.bus = smbus.SMBus(1)
+        #self.bus = smbus.SMBus(1)
+        pass
 
     def pressure_get_data(self):
         self.bus.write_byte(0x76, 0x1E)
@@ -157,6 +159,9 @@ class Pressure(object):
 
         #return [pressure, cTemp, fTemp]
         return { "mbar": pressure, "cTemp": cTemp, "fTemp": fTemp }
+        
+    def read(self):
+        pass
 
 
 

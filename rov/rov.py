@@ -33,12 +33,12 @@ class ROV(object):
     def update(self):
         self._data_lock.acquire()
 
-        print "Update! last update was: %.5f s ago" % (time() - self.last_update)
+        #print "Update! last update was: %.5f s ago" % (time() - self.last_update)
 
         # Update all simple sensor data and stuff it in data
-        for sensor in self.simple_sensors.keys():
-            self.simple_sensors[sensor].read()
-            self._data[sensor] = self.simple_sensors[sensor].data
+        #for sensor in self.simple_sensors.keys():
+            #self.simple_sensors[sensor].read()
+            #self._data[sensor] = self.simple_sensors[sensor].data
 
         # Our last update
         self.last_update = time()
