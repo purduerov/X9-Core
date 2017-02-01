@@ -112,8 +112,7 @@ def build_dearclient():
 
     return rov.data
 
-
-if __name__ == 'aplication':
+if __name__ == 'application':
     rov_run = threading.Thread(target=rov.run)
     rov_run.daemon = True
     rov_run.start()
