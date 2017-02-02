@@ -41,20 +41,39 @@ class ThrustMapper(object):
         self.thrustMap = self.mutationMatrix.dot(desired)
         return self.thrustMap
 
+def printMatrix(mutatorMatrix):
+    for i in range(0, 8):
+        print "[%f,\t%f,\t%f,\t%f,\t%f,\t%f]," % (mutatorMatrix[i,0], mutatorMatrix[i,1], mutatorMatrix[i,2], mutatorMatrix[i,3], mutatorMatrix[i,4], mutatorMatrix[i,5])
+    print "\n\n"
 
 if __name__ == "__main__":
     mapper = ThrustMapper()
     mutatorMatrix = mapper.mutationMatrix
-    for i in range(0, 8):
-        print "[%f,\t%f,\t%f,\t%f,\t%f,\t%f]," % (mutatorMatrix[i,0], mutatorMatrix[i,1], mutatorMatrix[i,2], mutatorMatrix[i,3], mutatorMatrix[i,4], mutatorMatrix[i,5])
-    print "\n\n"
-    array = np.array([0, 0, 0, 0, 0, 1, 1, 0])
-    desired = np.array([[0], [0], [0], [0], [0], [0]])
-    mapper.generate_thrust_map(array, desired)
-    # mapper.turnOffThruster(5)
-    # mapper.turnOffThruster(6)
-    mutatorMatrix = mapper.mutationMatrix
-    for i in range(0, 8):
-        print "[%f,\t%f,\t%f,\t%f,\t%f,\t%f]," % (mutatorMatrix[i,0], mutatorMatrix[i,1], mutatorMatrix[i,2], mutatorMatrix[i,3], mutatorMatrix[i,4], mutatorMatrix[i,5])
-
+    print "********** Mutation Matrix **********"
+    printMatrix(mapper.mutationMatrix)
+    thrusters = np.array([0, 0, 0, 0, 0, 0, 0, 0])
     
+    desired = np.array([[1], [0], [0], [0], [0], [0]])
+    print "********** Thruster Output 1X **********"
+    print mapper.generate_thrust_map(thrusters, desired)
+    print "\n\n"
+
+    desired = np.array([[0], [1], [0], [0], [0], [0]])
+    print "********** Thruster Output 1Y **********"
+    print mapper.generate_thrust_map(thrusters, desired)
+    print "\n\n"
+
+    desired = np.array([[0], [0], [1], [0], [0], [0]])
+    print "********** Thruster Output 1Z **********"
+    print mapper.generate_thrust_map(thrusters, desired)
+    print "\n\n"
+
+    desired = np.array([[0], [0], [0], [1], [0], [0]])
+    print "********** Thruster Output 1 Rotation about Z **********"
+    print mapper.generate_thrust_map(thrusters, desired)
+    print "\n\n"
+    
+    desired = np.array([[0], [0], [0], [0], [1], [0]])
+    print "********** Thruster Output 1 Rotation about X **********"
+    print mapper.generate_thrust_map(thrusters, desired)
+    print "\n\n"
