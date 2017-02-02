@@ -6,17 +6,17 @@ class MutatorMatrix(object):
     def __init__(self):
         # these are the locations of the thrusters given in X, Y, Z
         self.loc = np.transpose(np.matrix([[5.575, -6.59, 0],
-                     [5.575, 6.59, 0],
-                     [-5.575, -6.34, 0],
-                     [-5.575, 6.34, 0],
-                     [3.925, -7.19, 1.95],
-                     [3.925, 7.19, 1.95],
-                     [-2.575, -7.19, 1.95],
-                     [-2.575, 7.19, 1.95]]))
+                                           [5.575, 6.59, 0],
+                                           [-5.575, -6.34, 0],
+                                           [-5.575, 6.34, 0],
+                                           [3.925, -7.19, 1.95],
+                                           [3.925, 7.19, 1.95],
+                                           [-2.575, -7.19, 1.95],
+                                           [-2.575, 7.19, 1.95]]))
         self.loc *= .0254
         z = np.sqrt(1-.342*.342)
         # these are the rotation components of each thruster given by putting origin on the thruster
-        # the direction is given by drawing a line from the origin to the point (given in x, Y, Z)
+        # the direction is given by drawing a line from the origin to the point on the unit sphere (given in X, Y, Z)
         self.rot = np.transpose(np.matrix([[z, 0.342, 0],
                                            [z, -0.342, 0],
                                            [-z, 0.342, 0],
@@ -49,13 +49,6 @@ class MutatorMatrix(object):
             if self.thrusterStatus[i] == 1:
                 self.m[:, i] = 0
 
-    def setThrusterOff(self, thrusterNum):
-        self.thrusterStatus[thrusterNum] = 1
-        return self.generateMatrix()
-
-    def setThrusterOn(self, thrusterNum):
-        self.thrusterStatus[thrusterNum] = 0
-        return self.generateMatrix()
 
 if __name__ == "__main__":
     matrix = MutatorMatrix()

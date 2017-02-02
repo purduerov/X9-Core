@@ -1,6 +1,6 @@
 import numpy as np
-# import mutatormatrix 
 import thrustMapperMatrix as mm
+
 
 class ThrustMapper(object):
     """Class to be used to generate the desired thrust map based on the current and desired position"""
@@ -45,16 +45,16 @@ class ThrustMapper(object):
 if __name__ == "__main__":
     mapper = ThrustMapper()
     mutatorMatrix = mapper.mutationMatrix
-    for i in range(0,8):
+    for i in range(0, 8):
         print "[%f,\t%f,\t%f,\t%f,\t%f,\t%f]," % (mutatorMatrix[i,0], mutatorMatrix[i,1], mutatorMatrix[i,2], mutatorMatrix[i,3], mutatorMatrix[i,4], mutatorMatrix[i,5])
     print "\n\n"
     array = np.array([0, 0, 0, 0, 0, 1, 1, 0])
-    desired = np.array([[0],[0],[0],[0],[0],[0]])
+    desired = np.array([[0], [0], [0], [0], [0], [0]])
     mapper.generate_thrust_map(array, desired)
     # mapper.turnOffThruster(5)
     # mapper.turnOffThruster(6)
     mutatorMatrix = mapper.mutationMatrix
-    for i in range(0,8):
+    for i in range(0, 8):
         print "[%f,\t%f,\t%f,\t%f,\t%f,\t%f]," % (mutatorMatrix[i,0], mutatorMatrix[i,1], mutatorMatrix[i,2], mutatorMatrix[i,3], mutatorMatrix[i,4], mutatorMatrix[i,5])
 
     
