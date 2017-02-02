@@ -23,6 +23,17 @@ class MutatorMatrix(object):
                                 [-2.485, -5.5709, 5.6384],
                                 [-2.485, 5.5709, 5.6384]])
 
+        self.TORNADO_COM = np.matrix([[1.31, 0.0, 0.31],
+                                    [1.31, 0.0, 0.31],
+                                    [1.31, 0.0, 0.31],
+                                    [1.31, 0.0, 0.31],
+                                    [1.31, 0.0, 0.31],
+                                    [1.31, 0.0, 0.31],
+                                    [1.31, 0.0, 0.31],
+                                    [1.31, 0.0, 0.31]])
+        self.TORNADO = self.TORNADO - self.TORNADO_COM
+                                    
+
         self.loc = np.transpose(self.TORNADO)
         self.loc *= .0254
         z = np.sqrt(1-.342*.342)
