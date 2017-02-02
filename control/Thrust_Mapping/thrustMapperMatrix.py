@@ -34,7 +34,7 @@ class MutatorMatrix(object):
         self.TORNADO = self.TORNADO - self.TORNADO_COM
                                     
 
-        self.loc = np.transpose(self.TORNADO)
+        self.loc = np.transpose(self.XNINE)
         self.loc *= .0254
         z = np.sqrt(1-.342*.342)
         # these are the rotation components of each thruster given by putting origin on the thruster
