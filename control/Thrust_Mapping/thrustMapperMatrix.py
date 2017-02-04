@@ -71,8 +71,8 @@ class MutatorMatrix(object):
             if self.thrusterStatus[i] == 1:
                 self.m[:, i] = 0
     
-    def setThrusterStatus(self, enabledThrusters):
-        self.thrusterStatus = enabledThrusters
+    def setThrusterStatus(self, disabledThrusters):
+        self.thrusterStatus = disabledThrusters
         return self.generateMatrix()
 
 if __name__ == "__main__":
