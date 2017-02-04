@@ -49,34 +49,16 @@ class Thrusters:
 
         # Pi -> Coprocessor variables:
 
-
-    def update_actives(self, vect8):
-        self.t0.setActive(vect8.a)
-        self.t1.setActive(vect8.b)
-        self.t2.setActive(vect8.c)
-        self.t3.setActive(vect8.d)
-        self.t4.setActive(vect8.e)
-        self.t5.setActive(vect8.f)
-        self.t6.setActive(vect8.g)
-        self.t7.setActive(vect8.h)
-
-    def update_powers(self, vect8):
-        self.t0.setPower(vect8.a)
-        self.t1.setPower(vect8.b)
-        self.t2.setPower(vect8.c)
-        self.t3.setPower(vect8.d)
-        self.t4.setPower(vect8.e)
-        self.t5.setPower(vect8.f)
-        self.t6.setPower(vect8.g)
-        self.t7.setPower(vect8.h)
-
     # BMAX:TODO: Implement pushing motors to coprocessor, which will then push motors to i2c to pwm chip.
     def push_coprocessor_motors(self):
         pass
 
-    # BMAX:TODO: Implement pushing motors directly from the pi to the i2c to pwm chip, bypassing the coprocessor.
-    def push_pi_motors(self):
+    def _ramp(self):
         pass
+
+    # BMAX:TODO: Implement pushing motors directly from the pi to the i2c to pwm chip, bypassing the coprocessor.
+    def push_pi_motors(self, powers, actives):
+
 
     def get_data(self):
         return self._data
@@ -84,10 +66,16 @@ class Thrusters:
 
 class Thruster:
     def __init__(self):
-        self.data = { "active": 0, "power": 0 }
+        self.data = { "active": 0, "target": 0, "current": 0, "pwm_actual": 0 }
 
     def setActive(self, value):
         self.data["active"] = value
 
-    def setPower(self, value):
-        self.data["power"] = value
+    def setTarget(self, value):
+        self.data["target"] = value
+
+    def setCurrent(self, value):
+        self.data["current"] = value
+
+    def setPWMActual(self, value):
+        self.data["pwm_actual"] = value
