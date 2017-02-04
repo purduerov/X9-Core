@@ -21,7 +21,7 @@ This file handles the primary functions of the webapp. Handles:
 
 # GLOBALS:
 app = Flask(__name__, static_url_path="", static_folder="frontend")
-socketio = SocketIO(app, async_mode=None)
+socketio = SocketIO(app, async_mode='threading')
 
 rov = ROV()
 
@@ -67,15 +67,11 @@ def recieve_controls(data):
     # print("controls: " + str(json))
     # print('received message: ' + str(data))
     send_packet()
-    if data != last_controller:
-      last_controller = data
-      controller = json.loads(data)
-      print controller['buttons']['a']
     
     
-    if rov.data != last_rov:
-      last_rov = rov.data
-      print rov.data
+    # if rov.data != last_rov:
+      # last_rov = rov.data
+      #print rov.data
     
 
 
@@ -112,10 +108,17 @@ def build_dearclient():
 
     return rov.data
 
+def start_sio():
+    socketio.run(app, host="127.0.0.1")
+
     
 if __name__ == 'application':
     rov_run = threading.Thread(target=rov.run)
     rov_run.daemon = True
     rov_run.start()
+    
+    # socket_run = threading.Thread(target=start_sio)
+    # socket_run.daemon = True
+    # socket_run.start()
 
-    socketio.run(app, debug=True, host="0.0.0.0")
+    #socketio.run(app, debug=False, host="0.0.0.0")
