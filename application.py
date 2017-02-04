@@ -119,22 +119,10 @@ def build_dearclient():
 
     return rov.data
 
-<<<<<<< dbe931fb7ff216a4f029b70b50cbafd47b53ff57
-<<<<<<< 695479f35c6884266b87c63bccf980ded2bde83b
-=======
-def start_sio():
-    socketio.run(app, host="127.0.0.1")
+# def start_sio():
+    # socketio.run(app, host="127.0.0.1")
 
-<<<<<<< a2bbe974e0328d3ef12468edc817f127d2aeefb4
-    
->>>>>>> Fixed server stalling... socketio.run was causing errors
 if __name__ == 'application':
-=======
-if __name__ == 'aplication':
->>>>>>> Works with unfinished classes, & GpInfo shows
-=======
-if __name__ == 'application':
->>>>>>> Fix conflice
     rov_run = threading.Thread(target=rov.run)
     rov_run.daemon = True
     rov_run.start()
