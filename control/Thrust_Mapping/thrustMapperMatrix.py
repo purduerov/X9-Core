@@ -5,14 +5,36 @@ class MutatorMatrix(object):
 
     def __init__(self):
         # these are the locations of the thrusters given in X, Y, Z
-        self.loc = np.transpose(np.matrix([[5.575, -6.59, 0],
-                                           [5.575, 6.59, 0],
-                                           [-5.575, -6.34, 0],
-                                           [-5.575, 6.34, 0],
-                                           [3.925, -7.19, 1.95],
-                                           [3.925, 7.19, 1.95],
-                                           [-2.575, -7.19, 1.95],
-                                           [-2.575, 7.19, 1.95]]))
+        self.XNINE = np.matrix([[5.575, -6.59, 0], 
+                                [5.575, 6.59, 0],
+                                [-5.575, -6.34, 0],
+                                [-5.575, 6.34, 0],
+                                [3.925, -7.19, 1.95],
+                                [3.925, 7.19, 1.95],
+                                [-2.575, -7.19, 1.95],
+                                [-2.575, 7.19, 1.95]])
+
+        self.TORNADO = np.matrix([[11.2148, -4.7524, 0],
+                                [11.2148, 4.7524, 0],
+                                [-7.631, -4.7524, 0],
+                                [-7.631, 4.7524, 0],
+                                [6.0419, -5.5709, 5.6384],
+                                [6.0419, 5.5709, 5.6384],
+                                [-2.485, -5.5709, 5.6384],
+                                [-2.485, 5.5709, 5.6384]])
+
+        self.TORNADO_COM = np.matrix([[1.31, 0.0, 0.31],
+                                    [1.31, 0.0, 0.31],
+                                    [1.31, 0.0, 0.31],
+                                    [1.31, 0.0, 0.31],
+                                    [1.31, 0.0, 0.31],
+                                    [1.31, 0.0, 0.31],
+                                    [1.31, 0.0, 0.31],
+                                    [1.31, 0.0, 0.31]])
+        self.TORNADO = self.TORNADO - self.TORNADO_COM
+                                    
+
+        self.loc = np.transpose(self.XNINE)
         self.loc *= .0254
         z = np.sqrt(1-.342*.342)
         # these are the rotation components of each thruster given by putting origin on the thruster
@@ -48,7 +70,10 @@ class MutatorMatrix(object):
         for i in range(0, 8):
             if self.thrusterStatus[i] == 1:
                 self.m[:, i] = 0
-
+    
+    def setThrusterStatus(self, enabledThrusters):
+        self.thrusterStatus = enabledThrusters
+        return self.generateMatrix()
 
 if __name__ == "__main__":
     matrix = MutatorMatrix()
