@@ -53,12 +53,11 @@ class Thrusters:
     def push_coprocessor_motors(self):
         pass
 
-    def _ramp(self):
-        pass
-
     # BMAX:TODO: Implement pushing motors directly from the pi to the i2c to pwm chip, bypassing the coprocessor.
     def push_pi_motors(self, powers, actives):
 
+    def _ramp(self):
+        pass
 
     def get_data(self):
         return self._data
