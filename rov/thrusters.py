@@ -121,7 +121,34 @@ class Thrusters:
         pwm.set_all_pwm(0, self.ZERO_POWER)
 
     def _ramp(self):
-        pass
+		for t in range(0, self.NUM_THRUSTERS):
+			
+			if (self.thrusters[t].getActive() = 1):
+				self.thrusters.getTarget()
+				_ramp = self.thrusters.setCurrent()
+				
+				# convert percentage before or after incriment or decrement?
+				
+				if (self.thrusters.getTarget != _ramp):
+					if (self.thrusters.getTarget > _ramp):
+						#increment
+						#loop to increase by 3 then by 1
+						
+					if (self.thrusters.getTarget < _ramp):
+						#decrement
+						#loop to increase by 3 then by 1
+						
+				#set to pwm_actual
+					
+				else:
+					#not ramped
+			
+			else:
+				self.thrusters.stop()
+			
+			
+		
+		
 
     def get_data(self):
         return self._data
