@@ -39,6 +39,10 @@ class ThrustMapper(object):
             self.mutationMatrix = self.maker.setThrusterStatus(enabledThrusters)
         # some math to determine the thrustMap
         self.thrustMap = self.mutationMatrix.dot(desired)
+        if self.thrustMap.max() > 1:
+            self.thrustMap[:,:] *= (1 / self.thrustMap.max())
+        if self.thrustMap.min() < -1:
+            self.thrustMap[:,:] *= (-1 / self.thrustMap.min())
         return self.thrustMap
 
 def printMatrix(mutatorMatrix):
@@ -75,5 +79,10 @@ if __name__ == "__main__":
 
     desired = np.array([[0], [0], [0], [0], [1], [0]])
     print "********** Thruster Output 1 Rotation about X **********"
+    print mapper.generate_thrust_map(thrusters, desired)
+    print "\n\n"
+    
+    desired = np.array([[1], [1], [0], [0], [0], [1]])
+    print "********** Thruster Output MAX X Y ROT Z **********"
     print mapper.generate_thrust_map(thrusters, desired)
     print "\n\n"
