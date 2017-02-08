@@ -1,5 +1,6 @@
 from Adafruit_PCA9685 import PCA9685
-import time, pprint
+import time, pprint     # For Testing code
+import numpy            # For Compliance with thrust_mapping outputs
 
 # using PCA9685 object:
 # functions:
@@ -86,8 +87,8 @@ class Thrusters:
 
         # Update thruster data
         for t in range(0, self.NUM_THRUSTERS):
-            self.thrusters[t].setActive(actives[t])
-            self.thrusters[t].setTarget(powers[t])
+            self.thrusters[t].setActive(int(actives[t]))
+            self.thrusters[t].setTarget(float(powers[t]))
 
         # Ramp the power from current to reach target
         #_ramp()
