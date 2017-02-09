@@ -90,7 +90,7 @@ export default {
                         y: 0
                     }
                 }
-            }
+            },
         };
     },
     mounted: function() {
@@ -116,7 +116,9 @@ export default {
         var socket = io.connect('http://' + document.domain + ':' + location.port);
 
         var app_refresh = setInterval(function() {
-            socket.emit("dearflask", JSON.stringify({buttons: gp.buttons, axes: gp.axes}));
+            if(gp.ready) {
+                socket.emit("dearflask", JSON.stringify(controls.IMU));
+            }
         }, 50);
         socket.on("dearclient", function(status) {
             Object.keys(status).forEach(function(key, i) {
