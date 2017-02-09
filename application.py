@@ -99,6 +99,12 @@ def error_handler(e):
 
 # HELPER METHODS:
 
+def thrusters_scale(IMU):
+    for key in IMU:
+        IMU[key] = int(83 * IMU[key])
+    
+    return IMU
+
 def send_packet():
 
     packet = build_dearclient()
@@ -112,13 +118,9 @@ def build_dearclient():
 
     return rov.data
 
-<<<<<<< 9aa653b54a29bf3c4c70163b9b00b0e9d4219e02
-=======
-def start_sio():
-    socketio.run(app, host="127.0.0.1")
+# def start_sio():
+    # socketio.run(app, host="127.0.0.1")
 
-    
->>>>>>> Fixed server stalling... socketio.run was causing errors
 if __name__ == 'application':
     rov_run = threading.Thread(target=rov.run)
     rov_run.daemon = True

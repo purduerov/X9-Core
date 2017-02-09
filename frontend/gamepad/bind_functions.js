@@ -41,18 +41,6 @@
 bind = {
   btn: {
     a: {
-      press: {
-        func: function() {
-          controls.IMU.z = gp.buttons.a.val;
-        },  
-      },
-      release: {
-        func: function() {
-          if(controls.IMU.z > 0) {
-            controls.IMU.z = 0;
-          }
-        },
-      },
       change: {
         func: function() {
           vue_app.gpinfo.buttons.a = gp.buttons.a.val;
@@ -60,18 +48,6 @@ bind = {
       },
     },
     b: {
-      press: {
-        func: function() {
-          controls.IMU.z = -gp.buttons.b.val;
-        }, 
-      },
-      release: {
-        func: function() {
-          if(controls.IMU.z < 0) {
-            controls.IMU.z = 0;
-          }
-        }, 
-      },
       change: {
         func: function() {
           vue_app.gpinfo.buttons.b = gp.buttons.b.val;
@@ -95,13 +71,13 @@ bind = {
     lb: {
       press: {
         func: function() {
-          controls.IMU.roll = -gp.buttons.lb.val;
+          controls.IMU.yaw = -gp.buttons.lb.val / 2;
         },  
       },
       release: {
         func: function() {
-          if(controls.IMU.roll < 0) {
-            controls.IMU.roll = 0;
+          if(controls.IMU.yaw < 0) {
+            controls.IMU.yaw = 0;
           }
         },
       },
@@ -109,18 +85,45 @@ bind = {
     rb: {
       press: {
         func: function() {
-          controls.IMU.roll = gp.buttons.rb.val;
+          controls.IMU.yaw = gp.buttons.rb.val / 2;
         }, 
       },
       release: {
         func: function() {
-          if(controls.IMU.roll > 0) {
-            controls.IMU.roll = 0;
+          if(controls.IMU.yaw > 0) {
+            controls.IMU.yaw = 0;
           }
         }, 
       },
     },
-    
+    up: {
+      press: {
+        func: function() {
+          controls.IMU.z = gp.buttons.up.val / 2;
+        },  
+      },
+      release: {
+        func: function() {
+          if(controls.IMU.z > 0) {
+            controls.IMU.z = 0;
+          }
+        },
+      },
+    },
+    down: {
+      press: {
+        func: function() {
+          controls.IMU.z = -gp.buttons.down.val / 2;
+        }, 
+      },
+      release: {
+        func: function() {
+          if(controls.IMU.z < 0) {
+            controls.IMU.z = 0;
+          }
+        }, 
+      },
+    }
   },
   ax: {
     left: {
@@ -137,7 +140,7 @@ bind = {
       cartesian: {
         func: function() {
           controls.IMU.pitch = gp.axes.right.y;
-          controls.IMU.yaw = gp.axes.right.x;
+          controls.IMU.roll = gp.axes.right.x;
           vue_app.gpinfo.axes.right.x = gp.axes.right.x;
           vue_app.gpinfo.axes.right.y = gp.axes.right.y;
         },
