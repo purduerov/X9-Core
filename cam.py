@@ -42,6 +42,12 @@ class Camera:
         # using this method
     def off(self):
         self.switch.kill()
+        
+    def saveImage(self, fil = 'image.jpg'):
+        r = requests.get('http://localhost:' + str(self.p) + '/?action=snapshot', stream=True)
+        with open(fil, 'wb') as fd:
+            for chunk in r.iter_content(chunk_size=128):
+                fd.write(chunk)
 
 if __name__ == "__main__":
     cam = Camera()
