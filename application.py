@@ -67,7 +67,14 @@ def recieve_controls(data):
     # print("controls: " + str(json))
     # print('received message: ' + str(data))
     send_packet()
-    
+    if data != last_controller:
+        last_controller = data
+        IMU = json.loads(data)
+        print thrusters_scale(IMU)
+       # try:
+            # print thrusters_scale(me)["x"]
+        # except KeyError:
+            # print "Not found!"
     
     # if rov.data != last_rov:
       # last_rov = rov.data
@@ -94,6 +101,12 @@ def error_handler(e):
 """
 
 # HELPER METHODS:
+
+def thrusters_scale(IMU):
+    for key in IMU:
+        IMU[key] = int(83 * IMU[key])
+    
+    return IMU
 
 def send_packet():
 
