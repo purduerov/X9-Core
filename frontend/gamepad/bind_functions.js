@@ -68,58 +68,6 @@ bind = {
         }
       },
     },
-    lb: {
-      press: {
-        func: function() {
-          controls.IMU.yaw = -gp.buttons.lb.val / 2;
-        },  
-      },
-      release: {
-        func: function() {
-          if(controls.IMU.yaw < 0) {
-            controls.IMU.yaw = 0;
-          }
-        },
-      },
-      change: {
-        func: function() {
-          vue_app.gpinfo.buttons.a = gp.buttons.a.val;
-        } 
-      },
-    },
-    rb: {
-      press: {
-        func: function() {
-          controls.IMU.yaw = gp.buttons.rb.val / 2;
-        }, 
-      },
-      release: {
-        func: function() {
-          if(controls.IMU.yaw > 0) {
-            controls.IMU.yaw = 0;
-          }
-        }, 
-      },
-      change: {
-        func: function() {
-          vue_app.gpinfo.buttons.b = gp.buttons.b.val;
-        }
-      },
-    },
-    x: {
-      change: {
-        func: function() {
-          vue_app.gpinfo.buttons.x = gp.buttons.x.val;
-        }
-      },
-    },
-    y: {
-      change: {
-        func: function() {
-          vue_app.gpinfo.buttons.y = gp.buttons.y.val;
-        }
-      },
-    },
     up: {
       press: {
         func: function() {
