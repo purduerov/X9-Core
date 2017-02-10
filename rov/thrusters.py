@@ -76,12 +76,13 @@ class Thrusters:
         # thrusters must be set to 0 before they can be set to any other value.
         pwm.set_all_pwm(0, self.ZERO_POWER)
 
-
         # Pi -> Coprocessor variables:
+
 
     # BMAX:TODO: Implement pushing motors to coprocessor, which will then push motors to i2c to pwm chip.
     def push_coprocessor_motors(self):
         pass
+
 
     def push_pi_motors(self, powers, actives):
 
@@ -112,6 +113,7 @@ class Thrusters:
 
             pwm.set_pwm(self.pins[t], 0, self.thrusters[t].getPWMActual())
 
+
     def stop(self):
         for t in range(0, self.NUM_THRUSTERS):
             self.thrusters[t].setPWMActual(self.ZERO_POWER)
@@ -120,85 +122,36 @@ class Thrusters:
         print("EMERGENCY STOP CALLED: Thrusters have been stopped!")
         pwm.set_all_pwm(0, self.ZERO_POWER)
 
+
     def _ramp(self):
-		for t in range(0, self.NUM_THRUSTERS):
-			
-			if (self.thrusters[t].getActive() = 1):
-				self.thrusters.getTarget()
-				_ramp = self.thrusters.setCurrent()
-				
-				# convert percentage before or after incriment or decrement?
-				
-				if (self.thrusters.getTarget != _ramp):
-					if (self.thrusters.getTarget > _ramp):
-						#increment
-						#loop to increase by 3 then by 1
-						
-					if (self.thrusters.getTarget < _ramp):
-						#decrement
-						#loop to increase by 3 then by 1
-						
-				#set to pwm_actual
-					
-				else:
-					#not ramped
-			
-			else:
-				self.thrusters.stop()
-			
-			
-		
-		
+	for t in range(0, self.NUM_THRUSTERS):
+
+	    if (self.thrusters[t].getActive() = 1):
+		self.thrusters.getTarget()
+		_ramp = self.thrusters.setCurrent()
+
+		# convert percentage before or after incriment or decrement?
+
+		if (self.thrusters.getTarget != _ramp):
+		    if (self.thrusters.getTarget > _ramp):
+			#increment
+			#loop to increase by 3 then by 1
+
+		    if (self.thrusters.getTarget < _ramp):
+			#decrement
+			#loop to increase by 3 then by 1
+
+		    #set to pwm_actual
+
+		else:
+		    #not ramped
+
+	    else:
+		self.thrusters.stop()
+
 
     def get_data(self):
         return self._data
-
-
-        # Public segment:
-        self._data = { "t0": self.t0, "t1": self.t1, "t2": self.t2, "t3": self.t3, "t4": self.t4, "t5": self.t5, "t6": self.t6, "t7": self.t7 }
-
-        # Pi -> I2C-to-PWM variables:
-        #   I2C Pin
-        self.i2c_pin = 0
-        #   I2C-to-PWM Pins
-        self.pins = [0, 0, 0, 0, 0, 0, 0, 0]
-        #   Thruster I2C address
-        self.thrusterid = 0
-
-        # Pi -> Coprocessor variables:
-
-
-    def update_actives(self, vect8):
-        self.t0.setActive(vect8.a)
-        self.t1.setActive(vect8.b)
-        self.t2.setActive(vect8.c)
-        self.t3.setActive(vect8.d)
-        self.t4.setActive(vect8.e)
-        self.t5.setActive(vect8.f)
-        self.t6.setActive(vect8.g)
-        self.t7.setActive(vect8.h)
-
-    def update_powers(self, vect8):
-        self.t0.setPower(vect8.a)
-        self.t1.setPower(vect8.b)
-        self.t2.setPower(vect8.c)
-        self.t3.setPower(vect8.d)
-        self.t4.setPower(vect8.e)
-        self.t5.setPower(vect8.f)
-        self.t6.setPower(vect8.g)
-        self.t7.setPower(vect8.h)
-
-    # BMAX:TODO: Implement pushing motors to coprocessor, which will then push motors to i2c to pwm chip.
-    def push_coprocessor_motors(self):
-        pass
-
-    # BMAX:TODO: Implement pushing motors directly from the pi to the i2c to pwm chip, bypassing the coprocessor.
-    def push_pi_motors(self):
-        pass
-
-    def get_data(self):
-        return self._data
-
 
 class Thruster:
     def __init__(self):

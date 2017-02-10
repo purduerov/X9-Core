@@ -5,6 +5,7 @@ import copy
 
 from sensors import Pressure, IMU
 from thrusters import Thrusters
+from thrust_mapper import ThrustMapper
 
 
 class ROV(object):
@@ -18,6 +19,7 @@ class ROV(object):
             "pressure": Pressure()
         }
 
+        self.mapper = ThrustMapper()
         self.thrusters = Thrusters()
 
         self._data_lock = Lock()
@@ -45,11 +47,11 @@ class ROV(object):
 
         # Update all thrusters and at the end push motors:
         #
-        # self.thrusters.update_actives()
-        # thrust_mapping HERE
-        # self.thrusters.update_powers(thrust_map)
-        # self.thrusters.pushMotors() # which implementation?
-        # self._data["thrusters"] = thrusters.get_data()
+        # actives = self._data["thrusters"]["actives"]
+        # force = self._data["thrusters"]["force"]
+        # thrust = mapper.generate_thrust_map(np.array(actives), np.array([[0],[0],[0],[0],[0],[0]]))
+        # self.thrusters.push_pi_motors(actives)
+        # self._data["thrusters"]["thrusters"] = thrusters.get_data()
 
         # Our last update
         self.last_update = time()

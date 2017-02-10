@@ -30,13 +30,13 @@ class ThrustMapper(object):
         # self.mutationMatrix = self.maker.generate_matrix()
         self.mutationMatrix = self.maker.generateMatrix()
 
-    def generate_thrust_map(self, enabledThrusters, desired):
+    def generate_thrust_map(self, disabledThrusters, desired):
         """generate the thrustMap to move to the desired vector
 
         desired (Vector6)
         """
-        if not np.array_equal(enabledThrusters, self.maker.thrusterStatus):
-            self.mutationMatrix = self.maker.setThrusterStatus(enabledThrusters)
+        if not np.array_equal(disabledThrusters, self.maker.thrusterStatus):
+            self.mutationMatrix = self.maker.setThrusterStatus(disabledThrusters)
         # some math to determine the thrustMap
         self.thrustMap = self.mutationMatrix.dot(desired)
         if self.thrustMap.max() > 1:
@@ -60,6 +60,7 @@ if __name__ == "__main__":
     desired = np.array([[1], [0], [0], [0], [0], [0]])
     print "********** Thruster Output 1X **********"
     print mapper.generate_thrust_map(thrusters, desired)
+    print thrusters
     print "\n\n"
 
     desired = np.array([[0], [1], [0], [0], [0], [0]])
@@ -81,7 +82,7 @@ if __name__ == "__main__":
     print "********** Thruster Output 1 Rotation about X **********"
     print mapper.generate_thrust_map(thrusters, desired)
     print "\n\n"
-    
+
     desired = np.array([[1], [1], [0], [0], [0], [1]])
     print "********** Thruster Output MAX X Y ROT Z **********"
     print mapper.generate_thrust_map(thrusters, desired)
