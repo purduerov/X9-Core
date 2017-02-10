@@ -57,7 +57,7 @@ class MutatorMatrix(object):
                                            [0, 0, 1]]))
         # used for some manipulation later
         self.m = None
-        self.thrusterStatus = [0, 0, 0, 0, 0, 0, 0, 0]
+        self.thrusterStatus = [1, 1, 1, 1, 1, 1, 1, 1]
         self.mutationMatrix = None
 
     def generateMatrix(self):
@@ -82,7 +82,7 @@ class MutatorMatrix(object):
         :return:
         """
         for i in range(0, 8):
-            if self.thrusterStatus[i] == 1:
+            if self.thrusterStatus[i] == 0:
                 self.m[:, i] = 0
     
     def setThrusterStatus(self, enabledThrusters):
@@ -94,6 +94,6 @@ if __name__ == "__main__":
     matrix = MutatorMatrix()
     mutatorMatrix = matrix.generateMatrix()
     for i in range(0,8):
-        print "[%f,\t%f,\t%f,\t%f,\t%f,\t%f]," % (mutatorMatrix[i,0], mutatorMatrix[i,1], mutatorMatrix[i,2], mutatorMatrix[i,3], mutatorMatrix[i,4], mutatorMatrix[i,5])
+        print "[%f,\t%f,\t%f,\t%f,\t%f,\t%f]," % (mutatorMatrix[i, 0], mutatorMatrix[i, 1], mutatorMatrix[i, 2], mutatorMatrix[i, 3], mutatorMatrix[i, 4], mutatorMatrix[i, 5])
     # print matrix.generateMatrix()
 
