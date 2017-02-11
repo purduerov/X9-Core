@@ -1,9 +1,12 @@
 from time import time, sleep
 from threading import Lock
 import copy
+import numpy as np
 
 
 from sensors import Pressure, IMU
+from thrusters import Thrusters
+from thrust_mapper import ThrustMapper
 
 
 class ROV(object):
@@ -18,6 +21,10 @@ class ROV(object):
         }
 
         self._running = True
+        
+        self.mapper = ThrustMapper()
+        self.thrusters = Thrusters()
+
         self._data_lock = Lock()
 
     @property
@@ -30,10 +37,21 @@ class ROV(object):
 
     def update(self):
         with self._data_lock:
+    
+            print "Update! last update was: %.5f s ago" % (time() - self.last_update)
+
             # Update all simple sensor data and stuff it in data
             for sensor in self.simple_sensors.keys():
                 self.simple_sensors[sensor].update()
                 self._data[sensor] = self.simple_sensors[sensor].data
+
+            # Update all thrusters and at the end push motors:
+            #
+            actives = self._data["thrusters"]["actives"]
+            force = self._data["thrusters"]["force"]
+            thrust = self.mapper.generate_thrust_map(np.array(actives), np.array(force))
+            self.thrusters.push_pi_motors(thrust, actives)
+            self._data["thrusters"]["thrusters"] = self.thrusters.get_data()
 
             # Our last update
             self.last_update = time()
@@ -46,15 +64,9 @@ class ROV(object):
             self.update()
 
 if __name__ == "__main__":
-    import threading
-    import json
-
     r = ROV()
-    r_thread = threading.Thread(target=r.run)
-    r_thread.daemon = True
-    r_thread.start()
-
-    while True:
-        print json.dumps(r.data, indent=4)
-        sleep(0.1)
-
+    r._data["thrusters"] = { "actives": [], "force": [], "thrusters": {} }
+    r._data["thrusters"]["actives"] = [1,1,1,1,1,1,1,1]
+    r._data["thrusters"]["force"] = [[1],[0],[0],[0],[0],[0]]
+    r.run()
+    # add print statement after self.update() in r.run()
