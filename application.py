@@ -67,12 +67,7 @@ def recieve_controls(data):
     # print("controls: " + str(json))
     # print('received message: ' + str(data))
     send_packet()
-<<<<<<< a2bbe974e0328d3ef12468edc817f127d2aeefb4
-
-    # if rov.data != last_rov:
-      # last_rov = rov.data
-      #print rov.data
-=======
+    
     # if data != last_controller:
       # last_controller = data
       # controller = json.loads(data)
@@ -83,7 +78,6 @@ def recieve_controls(data):
       last_rov = rov.data
       print rov.data
     """
->>>>>>> Works with unfinished classes, & GpInfo shows
 
 
 @socketio.on('connect')
@@ -125,6 +119,7 @@ def build_dearclient():
 
     return rov.data
 
+<<<<<<< dbe931fb7ff216a4f029b70b50cbafd47b53ff57
 <<<<<<< 695479f35c6884266b87c63bccf980ded2bde83b
 =======
 def start_sio():
@@ -137,6 +132,9 @@ if __name__ == 'application':
 =======
 if __name__ == 'aplication':
 >>>>>>> Works with unfinished classes, & GpInfo shows
+=======
+if __name__ == 'application':
+>>>>>>> Fix conflice
     rov_run = threading.Thread(target=rov.run)
     rov_run.daemon = True
     rov_run.start()
