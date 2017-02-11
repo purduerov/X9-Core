@@ -1,9 +1,12 @@
 from time import time, sleep
 from threading import Lock
 import copy
+import numpy as np
 
 
 from sensors import Pressure, IMU
+from thrusters import Thrusters
+from thrust_mapper import ThrustMapper
 
 
 class ROV(object):
@@ -16,6 +19,9 @@ class ROV(object):
             "imu": IMU(),
             "pressure": Pressure()
         }
+
+        self.mapper = ThrustMapper()
+        self.thrusters = Thrusters()
 
         self._data_lock = Lock()
 
@@ -40,6 +46,14 @@ class ROV(object):
             #self.simple_sensors[sensor].read()
             #self._data[sensor] = self.simple_sensors[sensor].data
 
+        # Update all thrusters and at the end push motors:
+        #
+        actives = self._data["thrusters"]["actives"]
+        force = self._data["thrusters"]["force"]
+        thrust = self.mapper.generate_thrust_map(np.array(actives), np.array(force))
+        self.thrusters.push_pi_motors(thrust, actives)
+        self._data["thrusters"]["thrusters"] = self.thrusters.get_data()
+
         # Our last update
         self.last_update = time()
 
@@ -57,4 +71,8 @@ class ROV(object):
 
 if __name__ == "__main__":
     r = ROV()
+    r._data["thrusters"] = { "actives": [], "force": [], "thrusters": {} }
+    r._data["thrusters"]["actives"] = [1,1,1,1,1,1,1,1]
+    r._data["thrusters"]["force"] = [[1],[0],[0],[0],[0],[0]]
     r.run()
+    # add print statement after self.update() in r.run()
