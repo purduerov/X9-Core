@@ -122,6 +122,7 @@ def build_dearclient():
 # def start_sio():
     # socketio.run(app, host="127.0.0.1")
 
+
 if __name__ == 'application':
     rov_run = threading.Thread(target=rov.run)
     rov_run.daemon = True
