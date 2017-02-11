@@ -37,12 +37,16 @@ class start:
 		for filename in os.listdir("/dev"):
 			if filename.startswith('video'):
 				self.devs.append('/dev/' + filename)
-				self.camNum.append('97')
+				self.camNum.append(str(temp))
 				temp = temp + 1
 
 		for x in range(0, len(self.devs)):
 			self.camNum[x] = Camera(device = self.devs[x], port = 8080 + x)
 			self.camNum[x].on()
+	
 	def destroy(self):
 		for y in range(0, len(self.devs)):
 			self.camNum[y].off()
+
+	def off(self, index):
+		self.camNum[index].off()
