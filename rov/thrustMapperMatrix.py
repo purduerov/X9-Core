@@ -57,7 +57,7 @@ class MutatorMatrix(object):
                                            [0, 0, 1]]))
         # used for some manipulation later
         self.m = None
-        self.thrusterStatus = [0, 0, 0, 0, 0, 0, 0, 0]
+        self.thrusterStatus = [1, 1, 1, 1, 1, 1, 1, 1]
         self.mutationMatrix = None
 
     def generateMatrix(self):
@@ -82,9 +82,9 @@ class MutatorMatrix(object):
         :return:
         """
         for i in range(0, 8):
-            if self.thrusterStatus[i] == 1:
+            if self.thrusterStatus[i] == 0:
                 self.m[:, i] = 0
-    
+
     def setThrusterStatus(self, enabledThrusters):
         # checks to see if the thrusters have changed state and if a new matrix needs to be generated
         self.thrusterStatus = enabledThrusters
