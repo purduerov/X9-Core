@@ -117,14 +117,8 @@ def send_packet():
 def build_dearclient():
 
     return rov.data
-
-<<<<<<< HEAD
 # def start_sio():
     # socketio.run(app, host="127.0.0.1")
-=======
-def start_sio():
-    socketio.run(app, host="127.0.0.1")
->>>>>>> b24275f9f8a255a07cc9f110676ec1d470eddc37
 
     
 if __name__ == 'application':
