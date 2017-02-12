@@ -23,7 +23,7 @@ class Camera:
         self.inp = 'input_uvc.so -r ' + self.r + ' -f ' + str(self.f) + ' -d ' + self.d + ' -br ' + str(self.b) + ' -co ' + str(self.c)
         self.out = 'output_http.so -w /usr/local/www -p ' + str(self.p)
 
-   
+
 
     # framerate shouldn't be changed: keep at 30, allows for a good image while
     # reserving valuable processing power for other devices. Device is formatted as a
@@ -38,7 +38,7 @@ class Camera:
         #my_env["LD_LIBRARY_PATH"] = '/home/bmaxfie/ROV/mjpg-streamer/mjpg-streamer-experimental'
         self.switch = subprocess.Popen(['mjpg_streamer', '-i', self.inp, '-o', self.out]) #, env=my_env)
 
- # closes video feed for an instance of Camera: each instance of Camera must be killed
-        # using this method
+    # closes video feed for an instance of Camera: each instance of Camera must be killed
+    # using this method
     def off(self):
         self.switch.kill()
