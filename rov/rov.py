@@ -20,6 +20,8 @@ class ROV(object):
             "pressure": Pressure()
         }
 
+        self._running = True
+        
         self.mapper = ThrustMapper()
         self.thrusters = Thrusters()
 
@@ -27,47 +29,39 @@ class ROV(object):
 
     @property
     def data(self):
-        self._data_lock.acquire()
+        with self._data_lock:
+            self._data['last_update'] = self.last_update
+            ret = copy.deepcopy(self._data)
 
-        self._data['last_update'] = self.last_update
-        ret = copy.deepcopy(self._data)
-
-        self._data_lock.release()
-
-        return ret
+            return ret
 
     def update(self):
-        self._data_lock.acquire()
+        with self._data_lock:
+    
+            print "Update! last update was: %.5f s ago" % (time() - self.last_update)
 
-        #print "Update! last update was: %.5f s ago" % (time() - self.last_update)
+            # Update all simple sensor data and stuff it in data
+            for sensor in self.simple_sensors.keys():
+                self.simple_sensors[sensor].update()
+                self._data[sensor] = self.simple_sensors[sensor].data
 
-        # Update all simple sensor data and stuff it in data
-        #for sensor in self.simple_sensors.keys():
-            #self.simple_sensors[sensor].read()
-            #self._data[sensor] = self.simple_sensors[sensor].data
+            # Update all thrusters and at the end push motors:
+            #
+            actives = self._data["thrusters"]["actives"]
+            force = self._data["thrusters"]["force"]
+            thrust = self.mapper.generate_thrust_map(np.array(actives), np.array(force))
+            self.thrusters.push_pi_motors(thrust, actives)
+            self._data["thrusters"]["thrusters"] = self.thrusters.get_data()
 
-        # Update all thrusters and at the end push motors:
-        #
-        actives = self._data["thrusters"]["actives"]
-        force = self._data["thrusters"]["force"]
-        thrust = self.mapper.generate_thrust_map(np.array(actives), np.array(force))
-        self.thrusters.push_pi_motors(thrust, actives)
-        self._data["thrusters"]["thrusters"] = self.thrusters.get_data()
-
-        # Our last update
-        self.last_update = time()
-
-        self._data_lock.release()
+            # Our last update
+            self.last_update = time()
 
     def run(self):
-        while True:
-            while time() - self.last_update < 0.1:
-                sleep(0.05)
+        while self._running:
+            while time() - self.last_update < 0.01:
+                sleep(0.005)
 
             self.update()
-
-
-
 
 if __name__ == "__main__":
     r = ROV()
