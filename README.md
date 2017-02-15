@@ -28,7 +28,7 @@ All of X9's core software for the 2016-2017 Purdue ROV team.
 
 ###To install mjpg-streamer:
 1. install dependencies with
- sudo apt-get install libjpeg8-dev imagemagick libv4l-dev
+ sudo apt-get install libjpeg8-dev imagemagick libv4l-dev cmake
 
 2. create symbolic link of video.h with
  sudo ln -s /usr/include/linux/videodev2.h /usr/include/linux/videodev.h
