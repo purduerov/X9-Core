@@ -6,7 +6,7 @@ import numpy as np
 
 from sensors import Pressure, IMU
 from thrusters import Thrusters
-from thrust_mapper import ThrustMapper
+from thrusters import ThrustMapper
 
 
 class ROV(object):
@@ -21,7 +21,7 @@ class ROV(object):
         }
 
         self._running = True
-        
+
         self.mapper = ThrustMapper()
         self.thrusters = Thrusters()
 
@@ -37,7 +37,7 @@ class ROV(object):
 
     def update(self):
         with self._data_lock:
-    
+
             print "Update! last update was: %.5f s ago" % (time() - self.last_update)
 
             # Update all simple sensor data and stuff it in data
