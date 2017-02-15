@@ -1,6 +1,6 @@
 <template>
     <div id="camera-view">
-        <img src="pg2/assets/image.jpg">
+        <iframe src="http://10.42.0.?:8000/?action=stream"></iframe>
     </div>
 </template>
 

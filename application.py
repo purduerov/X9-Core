@@ -67,6 +67,7 @@ def recieve_controls(data):
     # print("controls: " + str(json))
     # print('received message: ' + str(data))
     send_packet()
+<<<<<<< HEAD
     
     # if data != last_controller:
       # last_controller = data
@@ -74,6 +75,13 @@ def recieve_controls(data):
       # print controller['buttons']['a']
       
     """
+=======
+    if data != last_controller:
+      last_controller = data
+      controller = json.loads(data)
+      print controller['buttons']['a']
+
+>>>>>>> development
     if rov.data != last_rov:
       last_rov = rov.data
       print rov.data
@@ -121,14 +129,7 @@ def build_dearclient():
 # def start_sio():
     # socketio.run(app, host="127.0.0.1")
 
-<<<<<<< HEAD
-# def start_sio():
-    # socketio.run(app, host="127.0.0.1")
-
-
-=======
     
->>>>>>> 7e35190ce972bfd62061fb1cb457baa652a0dcaa
 if __name__ == 'application':
     rov_run = threading.Thread(target=rov.run)
     rov_run.daemon = True
