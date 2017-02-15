@@ -67,7 +67,6 @@ def recieve_controls(data):
     # print("controls: " + str(json))
     # print('received message: ' + str(data))
     send_packet()
-<<<<<<< HEAD
     
     # if data != last_controller:
       # last_controller = data
@@ -75,13 +74,6 @@ def recieve_controls(data):
       # print controller['buttons']['a']
       
     """
-=======
-    if data != last_controller:
-      last_controller = data
-      controller = json.loads(data)
-      print controller['buttons']['a']
-
->>>>>>> development
     if rov.data != last_rov:
       last_rov = rov.data
       print rov.data
