@@ -72,7 +72,7 @@ def recieve_controls(data):
       last_controller = data
       controller = json.loads(data)
       print controller['buttons']['a']
-    
+
     if rov.data != last_rov:
       last_rov = rov.data
       print rov.data
