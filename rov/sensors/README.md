@@ -64,8 +64,8 @@ exception when it cannot write to the device. Other devices, like the IMU,
 throw an error when initializing, so an update call isn't required. The idea
 here is to fail fast, and once we know it fails, return the mock sensor. One
 important aspect, is to also put the import statements in the try/except. This
-will catch when imports are missing (Since some packages would not be able to
-install on a dev machine.
+will catch when imports are missing (since some packages would not be able to
+install on a dev machine).
 
 **So, if adding a new sensor library, please take a look at the completed ones and follow
 along with the proposed standard**
