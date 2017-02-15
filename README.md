@@ -65,3 +65,6 @@ All of X9's core software for the 2016-2017 Purdue ROV team.
 
 6. test with (should print out i2c addresses of devices attached to the i2c line):
  i2cdetect -y 1
+
+###To install node and Vue:
+... Ian?
