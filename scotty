@@ -269,15 +269,15 @@ def main():
     }
 
     if len(sys.argv) < 2:
-        usage()
-        return
+        usage([])
+        sys.exit(1)
 
     command = sys.argv[1]
 
     if command not in availabe_commands:
         print_color("'%s' is not an available command\n" % command, color="red")
-        usage()
-        return
+        usage([])
+        sys.exit(1)
 
     availabe_commands[command](sys.argv[2:])
 
