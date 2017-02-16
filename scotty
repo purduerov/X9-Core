@@ -82,7 +82,7 @@ def install(args):
     else:
         platform = get_platform()
         if platform not in ['linux', 'raspberry-pi']:
-            print_color("\nNon Linux Systems not supported yet! :(", color="red")
+            print_color("\nInstalls on non linux systems are not supported yet! :(", color="red")
             sys.exit()
 
         is_ras_pi = (platform == 'raspberry-pi')
