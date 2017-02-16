@@ -9,7 +9,7 @@ import platform
 CORE_DIR = os.path.dirname(os.path.realpath(__file__))
 
 # install venv to here
-V_DIR="venv" # install venv to here
+V_DIR = "venv"
 
 
 def get_platform():
@@ -236,13 +236,14 @@ def shell(args):
         'export FLASK_APP="%s"' % get_file_path("application.py"), # For running flask app
         'export FLASK_DEBUG="%s"' % ("1" if debug else ""), # enable flask debug if --debug
         'export ROV_DEBUG="%s"' % ("1" if debug else ""), # enable rov debug if --debug
-        'exec "${@:-$SHELL}"' #exec the users shell, with these variables set
+        'exec "${@:-$SHELL}"' # exec the users shell, with these variables set
     ]
 
     # Concat all the commands with ; and run as one command
     os.system("; ".join(commands))
 
     print_color("Exiting virtual env shell")
+
 
 def test(args):
     """ Run testing framework
@@ -257,14 +258,16 @@ def test(args):
     failed = []
 
     if test_all or '--pep8' in args:
-        print_color("Running pep8 linter:\n")
-        pep8_command = "pep8 --max-line-length=110 "
+        print_color("Running pep8 test:\n")
+        pep8_command = "pep8 --max-line-length=110 --ignore=E261 "
 
-        # check if either of these commands failed
+        # Keep track of if any of these commands failed
+        pep8_failed = False
+        pep8_failed = os.system(pep8_command + get_file_path("application.py")) or pep8_failed
+        pep8_failed = os.system(pep8_command + get_file_path("rov") + "/*/*.py") or pep8_failed
+        pep8_failed = os.system(pep8_command + get_file_path("scotty")) or pep8_failed
 
-        if (os.system(pep8_command + get_file_path("application.py")) or
-            os.system(pep8_command + get_file_path("rov") + "/*/*.py")):
-            # A test failed
+        if pep8_failed:
             failed.append("pep8 conformity")
 
     # Print out list of failed tests, and exit with non-zero value if failed
