@@ -2,4 +2,3 @@ gcc
 python
 python-dev
 python-pip
-virtualenv
