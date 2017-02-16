@@ -53,12 +53,21 @@ def run_commands(commands):
             sys.exit()
 
 
-def start_venv():
+def create_venv():
     venv_real_dir = get_file_path(V_DIR)
 
     if not os.path.isdir(venv_real_dir):
         print_color("\nCreating virtual env in %s..." % V_DIR)
         run_commands(["virtualenv %s" % venv_real_dir])
+    else:
+        print_color("\nVirtual env in %s already exists" % V_DIR)
+
+
+def start_venv():
+    venv_real_dir = get_file_path(V_DIR)
+
+    if not os.path.isdir(venv_real_dir):
+        print_color("\nVirual env does not exist in %s. Have you ran install?" % V_DIR)
 
     # Activate the virtual env
     print_color("\nActivating virtual env...")
@@ -69,7 +78,6 @@ def start_venv():
         print_color(e.message, color="red")
         print_color("\nError activating virtualenv", color="red")
         sys.exit()
-
 
 
 def install(args):
@@ -89,9 +97,9 @@ def install(args):
         is_ras_pi = (platform == 'raspberry-pi')
 
     if is_ras_pi:
-        print_color("\nInstalling componenents for Raspberry Pi")
+        print_color("\nInstalling components for Raspberry Pi")
     else:
-        print_color("\nInstalling componenents for dev system")
+        print_color("\nInstalling components for dev system")
 
     # Check if we have root access
     if os.geteuid() != 0:
@@ -120,6 +128,7 @@ def install(args):
     run_commands(install_command)
 
     print_color("\nInstalling and activating virtual env")
+    create_venv()
     start_venv()
 
     commands_to_run = []
@@ -136,9 +145,9 @@ def install(args):
     run_commands(commands_to_run)
 
     if os.environ['SUDO_USER']:
-        print_color("\nRunning with sudo, so chown the venv dir to the sudo user.")
+        print_color("\nRunning with sudo, so chown the virtual env dir to the sudo user.")
         command = "chown -R {user}:{user} {dir}".format(user=os.environ['SUDO_USER'],
-                                                        dir=get_file_path("venv"))
+                                                        dir=get_file_path(V_DIR))
         run_commands([command])
 
     if is_ras_pi:
@@ -179,20 +188,57 @@ def run(args):
 
 
 def shell(args):
+    print_color("Entering virtual env shell")
+
+    debug = ('--debug' in args)
+
     commands = [
-        'export VIRTUAL_ENV="%s"' % get_file_path("venv"),
+        'export VIRTUAL_ENV="%s"' % get_file_path(V_DIR),
         'export PATH="$VIRTUAL_ENV/bin:$PATH"',
         'unset PYTHON_HOME',
         'export FLASK_APP="%s"' % get_file_path("application.py"),
+        'export FLASK_DEBUG="%s"' % ("1" if debug else ""),
+        'export ROV_DEBUG="%s"' % ("1" if debug else ""),
         'exec "${@:-$SHELL}"'
     ]
 
     os.system("; ".join(commands))
 
+    print_color("Exiting virtual env shell")
 
-def usage():
-    print "scotty install [--pi] [--dev]"
-    print "   Installs requried files. Autodetects install type"
+def test(args):
+
+    start_venv()
+
+    test_all = (len(args) == 0)
+
+    failed = []
+
+    if test_all or '--pep8' in args:
+        print_color("Running pep8 linter:\n")
+        pep8_command = "pep8 --max-line-length=110 "
+
+        pep_failed = False
+        if os.system(pep8_command + get_file_path("application.py")) != 0:
+            pep_failed = True
+
+        if os.system(pep8_command + get_file_path("rov") + "/*/*.py") != 0:
+            pep_failed = True
+
+        if pep_failed:
+            failed.append("pep8 conformity")
+
+    if len(failed) > 0:
+        print_color("\nDetected %d failed test(s):" % len(failed), color="red")
+        for failure in failed:
+            print_color("- %s" % failure, color="red")
+
+        sys.exit(1)
+
+
+def usage(args):
+    print "scotty install [--pi, --dev]"
+    print "   Installs required files. Autodetects install type"
     print "   --pi:    Install as if this is a Pi"
     print "   --dev:   Install as if this is a dev machine"
     print ""
@@ -201,8 +247,15 @@ def usage():
     print "   --rov:   Just test the ROV main loop"
     print "   --debug: Set FLASK_DEBUG and ROV_DEBUG"
     print ""
-    print "scotty shell"
+    print "scotty shell [--debug]"
     print "   Runs a new shell, with the activated venv. Exit to leave venv"
+    print ""
+    print "scotty test [--pep8]"
+    print "   Runs the full testing framework"
+    print "   --pep8:  Run pep8 test"
+    print ""
+    print "scotty [-h] [--help]"
+    print "   Display this help information"
 
 
 def main():
@@ -210,6 +263,7 @@ def main():
         "install": install,
         "run": run,
         "shell": shell,
+        "test": test,
         "-h": usage,
         "--help": usage,
     }
@@ -221,7 +275,7 @@ def main():
     command = sys.argv[1]
 
     if command not in availabe_commands:
-        print_color("%s is not an availabe command\n" % command, color="red")
+        print_color("'%s' is not an available command\n" % command, color="red")
         usage()
         return
 
