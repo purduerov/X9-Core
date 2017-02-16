@@ -16,8 +16,11 @@ def get_platform():
         try:
             with open('/proc/cpuinfo') as f:
                 for line in f:
-                    line = line.strip()
-                    if line.startswith('Hardware') and line.endswith('BCM2708'):
+                    line = line.strip().split()
+                    if len(line) < 2:
+                        continue
+
+                    if line[0] == 'Hardware' and line[-1] in ['BCM2708', 'BCM2709']:
                         return 'raspberry-pi'
         except:
             pass
@@ -29,7 +32,7 @@ def get_file_path(f):
     return "%s/%s" % (CORE_DIR, f)
 
 
-def print_color(s, color="cyan"):
+def print_color(s, color="yellow"):
     colors = ["black", "red", "green", "yellow", "blue", "magenta", "cyan", "white"]
     color = color.lower()
 
@@ -44,7 +47,7 @@ def print_color(s, color="cyan"):
 
 def run_commands(commands):
     for com in commands:
-        print_color("\nRunning: %s \n" % com)
+        print_color("\nRunning: %s \n" % com, color="cyan")
         if os.system(com) != 0:
             print_color("\n Non-zero error code running: \nStopping install." % com, color="red")
             sys.exit()
@@ -54,17 +57,17 @@ def startVenv():
     venv_real_dir = get_file_path(V_DIR)
 
     if not os.path.isdir(venv_real_dir):
-        print_color("Creating virtual env in %s..." % V_DIR)
+        print_color("\nCreating virtual env in %s..." % V_DIR)
         run_commands(["virtualenv %s" % venv_real_dir])
 
     # Activate the virtual env
-    print_color("Activating virtual env...")
+    print_color("\nActivating virtual env...")
     activate_file = venv_real_dir + "/bin/activate_this.py"
     try:
         execfile(activate_file, dict(__file__=activate_file))
     except Exception as e:
         print_color(e.message, color="red")
-        print_color("Error activating virtualenv", color="red")
+        print_color("\nError activating virtualenv", color="red")
         sys.exit()
 
 
@@ -72,21 +75,26 @@ def install(args):
     is_ras_pi = False
 
     # if argument is passed and it's valid, set is_ras_pi if it's --pi
-    if len(args) > 0 and args[0] in ['--pi', --'dev']:
+    if len(args) > 0 and args[0] in ['--pi', '--dev']:
         is_ras_pi = (args[0] == '--pi')
 
     # Otherwise autodetect
     else:
         platform = get_platform()
         if platform not in ['linux', 'raspberry-pi']:
-            print_color("Non Linux Systems not supported yet! :(", color="red")
+            print_color("\nNon Linux Systems not supported yet! :(", color="red")
             sys.exit()
 
         is_ras_pi = (platform == 'raspberry-pi')
 
+    if is_ras_pi:
+        print_color("\nInstalling componenents for Raspberry Pi")
+    else:
+        print_color("\nInstalling componenents for dev system")
+
     # Check if we have root access
     if os.geteuid() != 0:
-        print_color("You don't have permissions to install items. Exiting", color="red")
+        print_color("\nYou don't have permissions to install items. Exiting", color="red")
         sys.exit()
 
     install_items = []
@@ -103,12 +111,14 @@ def install(args):
             install_items.extend(pi_install_items)
 
     install_command = [
-        "apt-get install -y " + " ".join(install_items)
+        "apt-get install -y " + " ".join(install_items),
+        "pip install --upgrade pip",
+        "pip install --upgrade virtualenv",
     ]
 
     run_commands(install_command)
 
-    print_color("\nInstalling and activating virtual env\n")
+    print_color("\nInstalling and activating virtual env")
     startVenv()
 
     commands_to_run = []
@@ -125,7 +135,7 @@ def install(args):
     run_commands(commands_to_run)
 
     if os.environ['SUDO_USER']:
-        print_color("\nRunning with sudo, chown the venv dir to the sudo user.")
+        print_color("\nRunning with sudo, so chown the venv dir to the sudo user.")
         command = "chown -R {user}:{user} {dir}".format(user=os.environ['SUDO_USER'],
                                                         dir=get_file_path("venv"))
         run_commands([command])
@@ -133,15 +143,13 @@ def install(args):
     if is_ras_pi:
         i2c_enabled = os.system("i2cdetect -y 1 > /dev/null 2>&1")
         if i2c_enabled != 0:
-            print_color("\ni2c is not enabled. Will run raspi-config to enable the device.", color=yellow)
-            print_color("Enable in Advanced Options > i2c", color="yellow")
-            print_color("\nPress n to skip, or any other key to continue and launch raspi-config", color="yellow")
+            print_color("\ni2c is not enabled. Will run raspi-config to enable the device.")
+            print_color("Enable in Advanced Options > i2c")
+            print_color("\nEnter n to skip, or any other key to continue and launch raspi-config [Y/n]:")
 
-            if raw_input().lower() == 'n':
-                break
-
-            run_commands(["raspi-config"])
-            print_color("\nYou may have to reboot to fully enable i2c\n")
+            if raw_input().lower() != 'n':
+                run_commands(["raspi-config"])
+                print_color("\nYou may have to reboot to fully enable i2c")
 
     print_color("\nFinished Install!\n", color="green")
 
