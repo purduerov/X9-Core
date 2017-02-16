@@ -53,7 +53,7 @@ def run_commands(commands):
             sys.exit()
 
 
-def startVenv():
+def start_venv():
     venv_real_dir = get_file_path(V_DIR)
 
     if not os.path.isdir(venv_real_dir):
@@ -69,6 +69,7 @@ def startVenv():
         print_color(e.message, color="red")
         print_color("\nError activating virtualenv", color="red")
         sys.exit()
+
 
 
 def install(args):
@@ -119,7 +120,7 @@ def install(args):
     run_commands(install_command)
 
     print_color("\nInstalling and activating virtual env")
-    startVenv()
+    start_venv()
 
     commands_to_run = []
 
@@ -153,32 +154,67 @@ def install(args):
 
     print_color("\nFinished Install!\n", color="green")
 
+
 def run(args):
-    if '--rov' in args:
-        print_color("Running ROV main loop:\n")
-        os.system("python %s/rov/rov.py" % CORE_DIR)
+    if '--debug' in args:
+        os.environ['FLASK_DEBUG'] = "1"
+        os.environ['ROV_DEBUG'] = "1"
     else:
+        os.environ['FLASK_DEBUG'] = ""
+        os.environ['ROV_DEBUG'] = ""
+
+    if '--rov' in args:
+        start_venv()
+        print_color("Running ROV main loop:\n")
+        os.system("python %s" % get_file_path("rov/rov.py"))
+    else:
+        start_venv()
         print_color("Running full ROV stack:\n")
-        os.environ["FLASK_APP"] = "%s/application.py" % CORE_DIR
+        os.environ["FLASK_APP"] = "%s" % get_file_path("application.py")
         os.system("flask run --host=0.0.0.0")
+
+    # cleanup
+    os.environ['FLASK_DEBUG'] = ""
+    os.environ['ROV_DEBUG'] = ""
+
+
+def shell(args):
+    commands = [
+        'export VIRTUAL_ENV="%s"' % get_file_path("venv"),
+        'export PATH="$VIRTUAL_ENV/bin:$PATH"',
+        'unset PYTHON_HOME',
+        'export FLASK_APP="%s"' % get_file_path("application.py"),
+        'exec "${@:-$SHELL}"'
+    ]
+
+    os.system("; ".join(commands))
+
 
 def usage():
     print "scotty install [--pi] [--dev]"
     print "   Installs requried files. Autodetects install type"
-    print "   --pi:   Install as if this is a Pi"
-    print "   --dev:  Install as if this is a dev machine"
+    print "   --pi:    Install as if this is a Pi"
+    print "   --dev:   Install as if this is a dev machine"
     print ""
-    print "scotty run [--rov]"
+    print "scotty run [--rov] [--debug]"
     print "   Runs the full ROV stack"
-    print "   --rov:  Just test the ROV main loop"
+    print "   --rov:   Just test the ROV main loop"
+    print "   --debug: Set FLASK_DEBUG and ROV_DEBUG"
+    print ""
+    print "scotty shell"
+    print "   Runs a new shell, with the activated venv. Exit to leave venv"
+
 
 def main():
     availabe_commands = {
         "install": install,
-        "run": run
+        "run": run,
+        "shell": shell,
+        "-h": usage,
+        "--help": usage,
     }
 
-    if len(sys.argv) <=1:
+    if len(sys.argv) < 2:
         usage()
         return
 
