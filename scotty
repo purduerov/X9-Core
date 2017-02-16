@@ -1,0 +1,94 @@
+#!/usr/bin/env python
+
+import sys
+import os
+import platform
+
+CORE_DIR = os.path.dirname(os.path.realpath(__file__))
+
+def get_platform():
+    platform = platform.system().lower()
+
+    if platform == 'linux' and platform.linux_distribution()[0].lower() == 'debian':
+        try:
+            with open('/proc/cpuinfo') as f:
+                for line in f:
+                    line = line.strip()
+                    if line.startswith('Hardware') and line.endswith('BCM2708'):
+                        return 'raspberry-pi'
+        except:
+            pass
+
+    return platform
+
+
+def install(args):
+
+    is_ras_pi = False
+
+    # if argument is passed and it's valid, set is_ras_pi if it's --pi
+    if len(args) > 0 and args[0] in ['--pi', --'dev']:
+        is_ras_pi = (args[0] == '--pi')
+
+    # Otherwise autodetect
+    else:
+        platform = get_platform()
+        if platform not in ['linux', 'raspberry-pi']:
+            print "Non Linux Systems not supported yet! :("
+            return
+        is_ras_pi = (platform == 'raspberry-pi')
+
+    print "Install will require sudo. Verifying:"
+    if os.system("sudo -v") is not 0:
+        print "You don't have permissions to install items. Exiting"
+        return
+
+    # install basic things
+    with open("%s/install/apt-get.txt" % CORE_DIR) as f:
+        install_items = f.read.split("\n")
+        os.system("apt-get update -y")
+
+    # install ras pi things
+
+
+def run(args):
+    if '--rov' in args:
+        print "Running ROV main loop:\n"
+        os.system("python %s/rov/rov.py" % CORE_DIR)
+    else:
+        print "Running full ROV stack:\n"
+        os.environ["FLASK_APP"] = "%s/application.py" % CORE_DIR
+        os.system("flask run --host=0.0.0.0")
+
+def usage():
+    print "scotty install [--pi] [--dev]"
+    print "   Installs requried files. Autodetects install type"
+    print "   --pi:   Install as if this is a Pi"
+    print "   --dev:  Install as if this is a dev machine"
+    print ""
+    print "scotty run [--rov]"
+    print "   Runs the full ROV stack"
+    print "   --rov:  Just test the ROV main loop"
+
+def main():
+    availabe_commands = {
+        "install": install,
+        "run": run
+    }
+
+    if len(sys.argv) <=1:
+        usage()
+        return
+
+    command = sys.argv[1]
+
+    if command not in availabe_commands:
+        print "%s is not an availabe command\n" % command
+        usage()
+        return
+
+    availabe_commands[command](sys.argv[2:])
+
+
+if __name__ == '__main__':
+    main()
