@@ -4,12 +4,15 @@ import sys
 import os
 import platform
 
+
 CORE_DIR = os.path.dirname(os.path.realpath(__file__))
+V_DIR="venv"
+
 
 def get_platform():
-    platform = platform.system().lower()
+    plat = platform.system().lower()
 
-    if platform == 'linux' and platform.linux_distribution()[0].lower() == 'debian':
+    if plat == 'linux' and platform.linux_distribution()[0].lower() == 'debian':
         try:
             with open('/proc/cpuinfo') as f:
                 for line in f:
@@ -19,11 +22,53 @@ def get_platform():
         except:
             pass
 
-    return platform
+    return plat
+
+
+def get_file_path(f):
+    return "%s/%s" % (CORE_DIR, f)
+
+
+def print_color(s, color="cyan"):
+    colors = ["black", "red", "green", "yellow", "blue", "magenta", "cyan", "white"]
+    color = color.lower()
+
+    if color in colors:
+        color_num = colors.index(color)
+        os.system("tput setaf %d 2>/dev/null" % color_num)
+        print s
+        os.system("tput sgr0 2>/dev/null")
+    else:
+        print s
+
+
+def run_commands(commands):
+    for com in commands:
+        print_color("\nRunning: %s \n" % com)
+        if os.system(com) != 0:
+            print_color("\n Non-zero error code running: \nStopping install." % com, color="red")
+            sys.exit()
+
+
+def startVenv():
+    venv_real_dir = get_file_path(V_DIR)
+
+    if not os.path.isdir(venv_real_dir):
+        print_color("Creating virtual env in %s..." % V_DIR)
+        run_commands(["virtualenv %s" % venv_real_dir])
+
+    # Activate the virtual env
+    print_color("Activating virtual env...")
+    activate_file = venv_real_dir + "/bin/activate_this.py"
+    try:
+        execfile(activate_file, dict(__file__=activate_file))
+    except Exception as e:
+        print_color(e.message, color="red")
+        print_color("Error activating virtualenv", color="red")
+        sys.exit()
 
 
 def install(args):
-
     is_ras_pi = False
 
     # if argument is passed and it's valid, set is_ras_pi if it's --pi
@@ -34,29 +79,78 @@ def install(args):
     else:
         platform = get_platform()
         if platform not in ['linux', 'raspberry-pi']:
-            print "Non Linux Systems not supported yet! :("
-            return
+            print_color("Non Linux Systems not supported yet! :(", color="red")
+            sys.exit()
+
         is_ras_pi = (platform == 'raspberry-pi')
 
-    print "Install will require sudo. Verifying:"
-    if os.system("sudo -v") is not 0:
-        print "You don't have permissions to install items. Exiting"
-        return
+    # Check if we have root access
+    if os.geteuid() != 0:
+        print_color("You don't have permissions to install items. Exiting", color="red")
+        sys.exit()
+
+    install_items = []
 
     # install basic things
-    with open("%s/install/apt-get.txt" % CORE_DIR) as f:
-        install_items = f.read.split("\n")
-        os.system("apt-get update -y")
+    with open(get_file_path("install/apt-get.txt")) as f:
+        basic_install_items = f.read().split("\n")[:-1]
+        install_items.extend(basic_install_items)
 
     # install ras pi things
+    if is_ras_pi:
+        with open(get_file_path("install/apt-get-hw.txt")) as f:
+            pi_install_items = f.read().split("\n")[:-1]
+            install_items.extend(pi_install_items)
 
+    install_command = [
+        "apt-get install -y " + " ".join(install_items)
+    ]
+
+    run_commands(install_command)
+
+    print_color("\nInstalling and activating virtual env\n")
+    startVenv()
+
+    commands_to_run = []
+
+    commands_to_run.append(
+        "pip install -r %s" % get_file_path("requirements.txt")
+    )
+
+    if is_ras_pi:
+        commands_to_run.append(
+            "pip install -r %s" % get_file_path("requirements-hw.txt")
+        )
+
+    run_commands(commands_to_run)
+
+    if os.environ['SUDO_USER']:
+        print_color("\nRunning with sudo, chown the venv dir to the sudo user.")
+        command = "chown -R {user}:{user} {dir}".format(user=os.environ['SUDO_USER'],
+                                                        dir=get_file_path("venv"))
+        run_commands([command])
+
+    if is_ras_pi:
+        i2c_enabled = os.system("i2cdetect -y 1 > /dev/null 2>&1")
+        if i2c_enabled != 0:
+            print_color("\ni2c is not enabled. Will run raspi-config to enable the device.", color=yellow)
+            print_color("Enable in Advanced Options > i2c", color="yellow")
+            print_color("\nPress n to skip, or any other key to continue and launch raspi-config", color="yellow")
+
+            if raw_input().lower() == 'n':
+                break
+
+            run_commands(["raspi-config"])
+            print_color("\nYou may have to reboot to fully enable i2c\n")
+
+    print_color("\nFinished Install!\n", color="green")
 
 def run(args):
     if '--rov' in args:
-        print "Running ROV main loop:\n"
+        print_color("Running ROV main loop:\n")
         os.system("python %s/rov/rov.py" % CORE_DIR)
     else:
-        print "Running full ROV stack:\n"
+        print_color("Running full ROV stack:\n")
         os.environ["FLASK_APP"] = "%s/application.py" % CORE_DIR
         os.system("flask run --host=0.0.0.0")
 
@@ -83,7 +177,7 @@ def main():
     command = sys.argv[1]
 
     if command not in availabe_commands:
-        print "%s is not an availabe command\n" % command
+        print_color("%s is not an availabe command\n" % command, color="red")
         usage()
         return
 
