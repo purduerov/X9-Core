@@ -5,11 +5,17 @@ import os
 import platform
 
 
+# where the script is located, which is the project repo root dir
 CORE_DIR = os.path.dirname(os.path.realpath(__file__))
-V_DIR="venv"
+
+# install venv to here
+V_DIR="venv" # install venv to here
 
 
 def get_platform():
+    """ Detects the running platform, and if linux checks if a raspberry pi
+    """
+
     plat = platform.system().lower()
 
     if plat == 'linux' and platform.linux_distribution()[0].lower() == 'debian':
@@ -29,10 +35,16 @@ def get_platform():
 
 
 def get_file_path(f):
+    """ Returns the full file path of a file, inside the main project repo
+    """
+
     return "%s/%s" % (CORE_DIR, f)
 
 
 def print_color(s, color="yellow"):
+    """Print with a color! Uses tput to output escape codes for colors
+    """
+
     colors = ["black", "red", "green", "yellow", "blue", "magenta", "cyan", "white"]
     color = color.lower()
 
@@ -46,6 +58,9 @@ def print_color(s, color="yellow"):
 
 
 def run_commands(commands):
+    """ Run a list of commands and print out what commands are being run when doing so
+    """
+
     for com in commands:
         print_color("\nRunning: %s \n" % com, color="cyan")
         if os.system(com) != 0:
@@ -54,6 +69,9 @@ def run_commands(commands):
 
 
 def create_venv():
+    """ Create a virtual env if it doesn't exist already
+    """
+
     venv_real_dir = get_file_path(V_DIR)
 
     if not os.path.isdir(venv_real_dir):
@@ -64,23 +82,34 @@ def create_venv():
 
 
 def start_venv():
+    """ Activate the virtual env, so we can install things with pip too it,
+    or run files and tests with it enabled
+    """
+
     venv_real_dir = get_file_path(V_DIR)
 
+    # exit the virtual env isn't created
     if not os.path.isdir(venv_real_dir):
         print_color("\nVirual env does not exist in %s. Have you ran install?" % V_DIR)
+        sys.exit(1)
 
     # Activate the virtual env
     print_color("\nActivating virtual env...")
+
+    # exec the virtual envs activate python file
     activate_file = venv_real_dir + "/bin/activate_this.py"
     try:
         execfile(activate_file, dict(__file__=activate_file))
     except Exception as e:
         print_color(e.message, color="red")
         print_color("\nError activating virtualenv", color="red")
-        sys.exit()
+        sys.exit(1)
 
 
 def install(args):
+    """ Install things
+    """
+
     is_ras_pi = False
 
     # if argument is passed and it's valid, set is_ras_pi if it's --pi
@@ -165,6 +194,11 @@ def install(args):
 
 
 def run(args):
+    """ Run the rov code. Currently supports running the flask app
+    or the rov main loop by itself. Will also set debug vars with --debug.
+    Uses the install virtual env as well.
+    """
+
     if '--debug' in args:
         os.environ['FLASK_DEBUG'] = "1"
         os.environ['ROV_DEBUG'] = "1"
@@ -172,62 +206,68 @@ def run(args):
         os.environ['FLASK_DEBUG'] = ""
         os.environ['ROV_DEBUG'] = ""
 
+    start_venv()
+
     if '--rov' in args:
-        start_venv()
         print_color("Running ROV main loop:\n")
         os.system("python %s" % get_file_path("rov/rov.py"))
     else:
-        start_venv()
         print_color("Running full ROV stack:\n")
         os.environ["FLASK_APP"] = "%s" % get_file_path("application.py")
-        os.system("flask run --host=0.0.0.0")
+        os.system("flask run --host=0.0.0.0") # bind flask app to 0.0.0.0
 
-    # cleanup
+    # unset debug vars
     os.environ['FLASK_DEBUG'] = ""
     os.environ['ROV_DEBUG'] = ""
 
 
 def shell(args):
+    """ Create a shell with the virtual env variables set
+    """
+
     print_color("Entering virtual env shell")
 
     debug = ('--debug' in args)
 
     commands = [
-        'export VIRTUAL_ENV="%s"' % get_file_path(V_DIR),
-        'export PATH="$VIRTUAL_ENV/bin:$PATH"',
-        'unset PYTHON_HOME',
-        'export FLASK_APP="%s"' % get_file_path("application.py"),
-        'export FLASK_DEBUG="%s"' % ("1" if debug else ""),
-        'export ROV_DEBUG="%s"' % ("1" if debug else ""),
-        'exec "${@:-$SHELL}"'
+        'export VIRTUAL_ENV="%s"' % get_file_path(V_DIR), # venv root dir
+        'export PATH="$VIRTUAL_ENV/bin:$PATH"', # add venv/bin to path
+        'unset PYTHON_HOME', # unset so doesn't conflict with new path
+        'export FLASK_APP="%s"' % get_file_path("application.py"), # For running flask app
+        'export FLASK_DEBUG="%s"' % ("1" if debug else ""), # enable flask debug if --debug
+        'export ROV_DEBUG="%s"' % ("1" if debug else ""), # enable rov debug if --debug
+        'exec "${@:-$SHELL}"' #exec the users shell, with these variables set
     ]
 
+    # Concat all the commands with ; and run as one command
     os.system("; ".join(commands))
 
     print_color("Exiting virtual env shell")
 
 def test(args):
+    """ Run testing framework
+    """
 
+    # Use the virtual env
     start_venv()
 
     test_all = (len(args) == 0)
 
+    # hold list of failed tests
     failed = []
 
     if test_all or '--pep8' in args:
         print_color("Running pep8 linter:\n")
         pep8_command = "pep8 --max-line-length=110 "
 
-        pep_failed = False
-        if os.system(pep8_command + get_file_path("application.py")) != 0:
-            pep_failed = True
+        # check if either of these commands failed
 
-        if os.system(pep8_command + get_file_path("rov") + "/*/*.py") != 0:
-            pep_failed = True
-
-        if pep_failed:
+        if (os.system(pep8_command + get_file_path("application.py")) or
+            os.system(pep8_command + get_file_path("rov") + "/*/*.py")):
+            # A test failed
             failed.append("pep8 conformity")
 
+    # Print out list of failed tests, and exit with non-zero value if failed
     if len(failed) > 0:
         print_color("\nDetected %d failed test(s):" % len(failed), color="red")
         for failure in failed:
@@ -237,6 +277,9 @@ def test(args):
 
 
 def usage(args):
+    """ Prints the help and usage information
+    """
+
     print "scotty install [--pi, --dev]"
     print "   Installs required files. Autodetects install type"
     print "   --pi:    Install as if this is a Pi"
@@ -249,6 +292,7 @@ def usage(args):
     print ""
     print "scotty shell [--debug]"
     print "   Runs a new shell, with the activated venv. Exit to leave venv"
+    print "   --debug: Set FLASK_DEBUG and ROV_DEBUG"
     print ""
     print "scotty test [--pep8]"
     print "   Runs the full testing framework"
@@ -259,6 +303,11 @@ def usage(args):
 
 
 def main():
+    """ List of available commands. The first arugment is checked against
+    these and is mapped to a function to execute. If a command is passed that
+    isn't here, then exit
+    """
+
     availabe_commands = {
         "install": install,
         "run": run,
@@ -268,6 +317,7 @@ def main():
         "--help": usage,
     }
 
+    # No command present
     if len(sys.argv) < 2:
         usage([])
         sys.exit(1)
@@ -279,6 +329,7 @@ def main():
         usage([])
         sys.exit(1)
 
+    # execute the method for the command
     availabe_commands[command](sys.argv[2:])
 
 
