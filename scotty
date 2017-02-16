@@ -125,12 +125,12 @@ def install(args):
     commands_to_run = []
 
     commands_to_run.append(
-        "pip install -r %s" % get_file_path("requirements.txt")
+        "pip install -r %s" % get_file_path("install/requirements.txt")
     )
 
     if is_ras_pi:
         commands_to_run.append(
-            "pip install -r %s" % get_file_path("requirements-hw.txt")
+            "pip install -r %s" % get_file_path("install/requirements-hw.txt")
         )
 
     run_commands(commands_to_run)
