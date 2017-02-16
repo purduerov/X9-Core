@@ -1,0 +1,4 @@
+before_install:
+- sudo ./scotty install --dev
+script:
+- scotty test
