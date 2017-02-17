@@ -1,4 +1,6 @@
 from time import time, sleep
+
+
 from threading import Lock
 import copy
 import numpy as np
@@ -13,7 +15,10 @@ from camera.cam import Camera
 class ROV(object):
 
     def __init__(self):
-        self._data = {}
+        self._data = {
+                "dearclient": { "thrusters": {} },
+                "dearflask": { "thrusters": {}, "force": {} }
+            }
         self.last_update = time()
 
         self.simple_sensors = {
@@ -57,13 +62,16 @@ class ROV(object):
 
             # Update all thrusters and at the end push motors:
             #
-            actives = list()
-            for a in self._data['dearflask']["thrusters"]["actives"]:
-                actives.append([a])
-            force = self._data['dearflask']["thrusters"]["force"]
-            thrust = self.mapper.generate_thrust_map(np.array(actives), np.array(force))
-            self.thrusters.push_pi_motors(thrust, actives)
-            self._data['dearclient']["thrusters"]["thrusters"] = self.thrusters.get_data()
+            try:
+                actives = list()
+                for t in self._data['dearflask']["thrusters"]:
+                    actives.append([t["active"]])
+                force = self._data['dearflask']["force"]
+                thrust = self.mapper.generate_thrust_map(np.array(actives), np.array(force))
+                self.thrusters.push_pi_motors(thrust, actives)
+                self._data['dearclient']["thrusters"]["thrusters"] = self.thrusters.get_data()
+            except:
+                print("ERROR: _data malformed, client may not be connected or transmitting.")
 
             # Our last update
             self.last_update = time()
