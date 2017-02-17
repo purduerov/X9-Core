@@ -67,10 +67,11 @@ def recieve_controls(data):
     # print('received message: ' + str(data))
     send_packet()
     
-    if rov._data != last_rov:
+    if data != last_rov:
       last_rov = rov.data
       rov._data["dearflask"] = json.loads(data)
       print rov._data
+      print data
 
 
 @socketio.on('connect')
