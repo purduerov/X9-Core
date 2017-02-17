@@ -100,12 +100,6 @@ def error_handler(e):
 
 # HELPER METHODS:
 
-def thrusters_scale(IMU):
-    for key in IMU:
-        IMU[key] = int(83 * IMU[key])
-    
-    return IMU
-
 def send_packet():
 
     packet = build_dearclient()
@@ -117,7 +111,7 @@ def send_packet():
 
 def build_dearclient():
 
-    return rov.data
+    return rov.data()
 # def start_sio():
     # socketio.run(app, host="127.0.0.1")
 

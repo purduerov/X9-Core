@@ -21,7 +21,7 @@
                     <GpInfo :data="gpinfo"></GpInfo>
                 </Card>
                 <Card class="half-width half-height">
-                    <IMU :data="packet.IMU"></IMU>
+                    <Thruster :data="packet.Thrusters"></Thruster>
                 </Card>
             </div>
         </div>
@@ -36,6 +36,7 @@ var DataView = require("./DataView.vue")
 var Card = require("./Card.vue")
 var Press_Temp = require("./Pressure.vue")
 var GpInfo = require("./GpInfo.vue")
+var Thruster = require("./Thrusters.vue")
 
 export default {
     components: {
@@ -45,7 +46,8 @@ export default {
         Card,
         DataView,
         Press_Temp,
-        GpInfo
+        GpInfo,
+        Thruster
     },
     data: function() {
         return {
@@ -63,14 +65,14 @@ export default {
                     temperature: 4
                 },
                 Thrusters: {
-                    t0 : { power: "0"},
-                    t1 : { power: "0"},
-                    t2 : { power: "0"},
-                    t3 : { power: "0"},
-                    t4 : { power: "0"},
-                    t5 : { power: "0"},
-                    t6 : { power: "0"},
-                    t7 : { power: "0"}
+                    t0 : { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
+                    t1 : { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
+                    t2 : { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
+                    t3 : { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
+                    t4 : { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
+                    t5 : { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
+                    t6 : { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
+                    t7 : { active: 0, target: 0.0, current: 0.0, pwm_actual: 0}
                 }
             },
             gpinfo: {
@@ -117,7 +119,7 @@ export default {
 
         var app_refresh = setInterval(function() {
             if(gp.ready) {
-                socket.emit("dearflask", JSON.stringify({buttons: gp.buttons, axes: gp.axes}));
+                socket.emit("dearflask", JSON.stringify(controls));
             }
         }, 50);
         socket.on("dearclient", function(status) {

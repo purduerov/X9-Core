@@ -1,5 +1,5 @@
 var controls = {
-    IMU: {
+    force: {
         x: 0,     //considered 'front or back'  (front & back, left joystick)
         y: 0,     //considered 'right or left'  (right & left, left joystick)
         z: 0,     //considered 'up or down'     (up or down, directional pad)
@@ -11,14 +11,16 @@ var controls = {
         // pressure: 0,
         // temperature: 0
     // },
-    Thrusters: {
-        t0 : { power: "0"},
-        t1 : { power: "0"},
-        t2 : { power: "0"},
-        t3 : { power: "0"},
-        t4 : { power: "0"},
-        t5 : { power: "0"},
-        t6 : { power: "0"},
-        t7 : { power: "0"}
-    }
+    thrusters: {
+        t0 : { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
+        t1 : { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
+        t2 : { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
+        t3 : { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
+        t4 : { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
+        t5 : { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
+        t6 : { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
+        t7 : { active: 0, target: 0.0, current: 0.0, pwm_actual: 0}
+    },
+    buttons: gp.buttons,
+    axes: gp.axes
 };
