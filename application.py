@@ -69,7 +69,7 @@ def recieve_controls(data):
     
     if rov._data != last_rov:
       last_rov = rov.data
-      rov._data["dearflask"] = data
+      rov._data["dearflask"] = json.loads(data)
       print rov._data
 
 

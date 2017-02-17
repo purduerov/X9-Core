@@ -12,14 +12,14 @@ var controls = {
         // temperature: 0
     // },
     thrusters: {
-        t0 : { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
-        t1 : { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
-        t2 : { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
-        t3 : { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
-        t4 : { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
-        t5 : { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
-        t6 : { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
-        t7 : { active: 0, target: 0.0, current: 0.0, pwm_actual: 0}
+        t0 : { active: 1, target: 0.0, current: 0.0, pwm_actual: 0},
+        t1 : { active: 1, target: 0.0, current: 0.0, pwm_actual: 0},
+        t2 : { active: 1, target: 0.0, current: 0.0, pwm_actual: 0},
+        t3 : { active: 1, target: 0.0, current: 0.0, pwm_actual: 0},
+        t4 : { active: 1, target: 0.0, current: 0.0, pwm_actual: 0},
+        t5 : { active: 1, target: 0.0, current: 0.0, pwm_actual: 0},
+        t6 : { active: 1, target: 0.0, current: 0.0, pwm_actual: 0},
+        t7 : { active: 1, target: 0.0, current: 0.0, pwm_actual: 0}
     },
     buttons: gp.buttons,
     axes: gp.axes
