@@ -25,7 +25,6 @@ socketio = SocketIO(app, async_mode='threading')
 
 rov = ROV()
 
-last_controller = ""
 last_rov = {}
 
 
@@ -68,16 +67,10 @@ def recieve_controls(data):
     # print('received message: ' + str(data))
     send_packet()
     
-    # if data != last_controller:
-      # last_controller = data
-      # controller = json.loads(data)
-      # print controller['buttons']['a']
-      
-    """
-    if rov.data != last_rov:
+    if rov._data != last_rov:
       last_rov = rov.data
-      print rov.data
-    """
+      rov._data["dearflask"] = data
+      print rov._data
 
 
 @socketio.on('connect')
@@ -111,7 +104,7 @@ def send_packet():
 
 def build_dearclient():
 
-    return rov.data()
+    return rov.data()["dearflask"]
 # def start_sio():
     # socketio.run(app, host="127.0.0.1")
 

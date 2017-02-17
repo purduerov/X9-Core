@@ -67,4 +67,10 @@ All of X9's core software for the 2016-2017 Purdue ROV team.
  i2cdetect -y 1
 
 ###To install node and Vue:
-... Ian?
+1. it looks like npm needs a library provided by adafruit, so run: _curl -sLS https://apt.adafruit.com/add | sudo bash_
+
+2. The vue we're using is a node module, so just run: _sudo apt-get install nodejs npm_
+
+3. now, navigate to _X9-Core/frontend/_ and run _npm install_
+
+4. once that's done, just run _npm run build_ to condense the files for the webpage
