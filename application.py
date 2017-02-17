@@ -26,7 +26,6 @@ socketio = SocketIO(app, async_mode=None)
 
 rov = ROV()
 
-last_controller = ""
 last_rov = {}
 
 
@@ -68,10 +67,6 @@ def recieve_controls(data):
     # print("controls: " + str(json))
     # print('received message: ' + str(data))
     send_packet()
-    if data != last_controller:
-      last_controller = data
-      controller = json.loads(data)
-      print controller['buttons']['a']
 
     if rov.data != last_rov:
       last_rov = rov.data
