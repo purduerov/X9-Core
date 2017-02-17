@@ -70,6 +70,7 @@ def recieve_controls(data):
 
     if rov.data != last_rov:
       last_rov = rov.data
+      rov.data["dearflask"] = data
       print rov.data
 
 
@@ -104,7 +105,7 @@ def send_packet():
 
 def build_dearclient():
 
-    return rov.data
+    return rov.data["dearflask"]
 
 
 if __name__ == '__main__':
