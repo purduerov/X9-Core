@@ -7,6 +7,7 @@ import numpy as np
 from sensors import Pressure, IMU
 from thrusters import Thrusters
 from thrust_mapper import ThrustMapper
+from camera.cam import Camera
 
 
 class ROV(object):
@@ -24,6 +25,8 @@ class ROV(object):
 
         self.mapper = ThrustMapper()
         self.thrusters = Thrusters()
+
+        self.camera1 = Camera()
 
         self._data_lock = Lock()
 
