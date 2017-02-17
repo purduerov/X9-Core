@@ -64,7 +64,7 @@ def run_commands(commands):
     for com in commands:
         print_color("\nRunning: %s \n" % com, color="cyan")
         if os.system(com) != 0:
-            print_color("\n Non-zero error code running: \nStopping install." % com, color="red")
+            print_color("\n Non-zero error code running: %s\nStopping install." % com, color="red")
             sys.exit()
 
 
