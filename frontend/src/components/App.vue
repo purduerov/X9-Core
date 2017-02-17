@@ -117,7 +117,7 @@ export default {
 
         var app_refresh = setInterval(function() {
             if(gp.ready) {
-                socket.emit("dearflask", JSON.stringify(controls.IMU));
+                socket.emit("dearflask", JSON.stringify({buttons: gp.buttons, axes: gp.axes}));
             }
         }, 50);
         socket.on("dearclient", function(status) {
