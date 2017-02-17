@@ -71,13 +71,13 @@ bind = {
     up: {
       press: {
         func: function() {
-          controls.IMU.z = gp.buttons.up.val / 2;
+          controls.force.z = gp.buttons.up.val / 2;
         },  
       },
       release: {
         func: function() {
-          if(controls.IMU.z > 0) {
-            controls.IMU.z = 0;
+          if(controls.force.z > 0) {
+            controls.force.z = 0;
           }
         },
       },
@@ -85,13 +85,13 @@ bind = {
     down: {
       press: {
         func: function() {
-          controls.IMU.z = -gp.buttons.down.val / 2;
+          controls.force.z = -gp.buttons.down.val / 2;
         }, 
       },
       release: {
         func: function() {
-          if(controls.IMU.z < 0) {
-            controls.IMU.z = 0;
+          if(controls.force.z < 0) {
+            controls.force.z = 0;
           }
         }, 
       },
@@ -101,8 +101,8 @@ bind = {
     left: {
       cartesian: {
         func: function() {
-          controls.IMU.y = gp.axes.left.x;
-          controls.IMU.x = gp.axes.left.y;
+          controls.force.y = gp.axes.left.x;
+          controls.force.x = gp.axes.left.y;
           vue_app.gpinfo.axes.left.x = gp.axes.left.x;
           vue_app.gpinfo.axes.left.y = gp.axes.left.y;
         },
@@ -111,8 +111,8 @@ bind = {
     right: {
       cartesian: {
         func: function() {
-          controls.IMU.pitch = gp.axes.right.y;
-          controls.IMU.roll = gp.axes.right.x;
+          controls.force.pitch = gp.axes.right.y;
+          controls.force.roll = gp.axes.right.x;
           vue_app.gpinfo.axes.right.x = gp.axes.right.x;
           vue_app.gpinfo.axes.right.y = gp.axes.right.y;
         },
