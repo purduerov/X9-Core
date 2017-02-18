@@ -41,9 +41,37 @@
 bind = {
   btn: {
     a: {
+      change: {
+        func: function() {
+          vue_app.gpinfo.buttons.a = gp.buttons.a.val;
+        } 
+      },
+    },
+    b: {
+      change: {
+        func: function() {
+          vue_app.gpinfo.buttons.b = gp.buttons.b.val;
+        }
+      },
+    },
+    x: {
+      change: {
+        func: function() {
+          vue_app.gpinfo.buttons.x = gp.buttons.x.val;
+        }
+      },
+    },
+    y: {
+      change: {
+        func: function() {
+          vue_app.gpinfo.buttons.y = gp.buttons.y.val;
+        }
+      },
+    },
+    up: {
       press: {
         func: function() {
-          controls.IMU.z = gp.buttons.a.val;
+          controls.IMU.z = gp.buttons.up.val / 2;
         },  
       },
       release: {
@@ -54,10 +82,10 @@ bind = {
         },
       },
     },
-    b: {
+    down: {
       press: {
         func: function() {
-          controls.IMU.z = -gp.buttons.b.val;
+          controls.IMU.z = -gp.buttons.down.val / 2;
         }, 
       },
       release: {
@@ -67,36 +95,7 @@ bind = {
           }
         }, 
       },
-    },
-    lb: {
-      press: {
-        func: function() {
-          controls.IMU.roll = -gp.buttons.lb.val;
-        },  
-      },
-      release: {
-        func: function() {
-          if(controls.IMU.roll < 0) {
-            controls.IMU.roll = 0;
-          }
-        },
-      },
-    },
-    rb: {
-      press: {
-        func: function() {
-          controls.IMU.roll = gp.buttons.rb.val;
-        }, 
-      },
-      release: {
-        func: function() {
-          if(controls.IMU.roll > 0) {
-            controls.IMU.roll = 0;
-          }
-        }, 
-      },
-    },
-    
+    }
   },
   ax: {
     left: {
@@ -104,6 +103,8 @@ bind = {
         func: function() {
           controls.IMU.y = gp.axes.left.x;
           controls.IMU.x = gp.axes.left.y;
+          vue_app.gpinfo.axes.left.x = gp.axes.left.x;
+          vue_app.gpinfo.axes.left.y = gp.axes.left.y;
         },
       },
     },
@@ -111,7 +112,9 @@ bind = {
       cartesian: {
         func: function() {
           controls.IMU.pitch = gp.axes.right.y;
-          controls.IMU.yaw = gp.axes.right.x;
+          controls.IMU.roll = gp.axes.right.x;
+          vue_app.gpinfo.axes.right.x = gp.axes.right.x;
+          vue_app.gpinfo.axes.right.y = gp.axes.right.y;
         },
       },
     },
