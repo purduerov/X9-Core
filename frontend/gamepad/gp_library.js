@@ -259,8 +259,6 @@ function Gamepad() {
         var which = "";
         gp.a_len = layouts[key].axes.length;
         for(var i = 0; i < gp.a_len; i++) {
-          console.log(i);
-          console.log(layouts[key].axes[i].name)
           name = layouts[key].axes[i].name;
           which = layouts[key].axes[i].which;
           cur_index = layouts[key].axes[i].index;
