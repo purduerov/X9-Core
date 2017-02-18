@@ -259,13 +259,13 @@ def test(args):
 
     if test_all or '--pep8' in args:
         print_color("Running pep8 test:\n")
-        pep8_command = "pep8 --max-line-length=110 --ignore=E261 "
+        pep8_command = "pep8 --max-line-length=110 --ignore=E261"
 
         # Keep track of if any of these commands failed
         pep8_failed = False
-        pep8_failed = os.system(pep8_command + get_file_path("application.py")) or pep8_failed
-        pep8_failed = os.system(pep8_command + get_file_path("rov") + "/*/*.py") or pep8_failed
-        pep8_failed = os.system(pep8_command + get_file_path("scotty")) or pep8_failed
+        pep8_failed = os.system("%s %s" % (pep8_command, get_file_path("application.py"))) or pep8_failed
+        pep8_failed = os.system("%s %s" % (pep8_command, get_file_path("rov/*/*.py"))) or pep8_failed
+        pep8_failed = os.system("%s %s" % (pep8_command, get_file_path("scotty"))) or pep8_failed
 
         if pep8_failed:
             failed.append("pep8 conformity")
