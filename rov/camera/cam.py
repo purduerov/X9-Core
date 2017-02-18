@@ -36,7 +36,7 @@ class Camera:
         # LD_LIBRARY_PATH isn't necessary because the files are all in the default PATH anyway.
         #my_env = os.environ.copy()
         #my_env["LD_LIBRARY_PATH"] = '/home/bmaxfie/ROV/mjpg-streamer/mjpg-streamer-experimental'
-        self.switch = subprocess.Popen(['mjpg_streamer', '-i', self.inp, '-o', self.out]) #, env=my_env)
+        self.switch = subprocess.Popen(['mjpg_streamer', '-i', self.inp, '-o', self.out], stdout=subprocess.PIPE) #, env=my_env)
 
     # closes video feed for an instance of Camera: each instance of Camera must be killed
     # using this method
