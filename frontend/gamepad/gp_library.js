@@ -289,9 +289,9 @@ function Gamepad() {
           cur_index = layouts[gp.layout].buttons[i].index;
           gp.setButtonLast(name);
           if(where == "buttons") {
-            gp.buttons[name].val = (read.buttons[cur_index].value == layouts[gp.layout].buttons[i].match)? 1 : 0;
+            gp.buttons[name].val = (read[where][cur_index].value == layouts[gp.layout].buttons[i].match)? 1 : 0;
           } else if (where == "axes") {
-            gp.buttons[name].val = (read.buttons[cur_index] == layouts[gp.layout].buttons[i].match)? 1 : 0;
+            gp.buttons[name].val = (read[where][cur_index] == layouts[gp.layout].buttons[i].match)? 1 : 0;
           } else {
             console.log("Error: "+where+" presented instead of 'buttons' or 'axes' for get_current in gp_library.js")
           }
