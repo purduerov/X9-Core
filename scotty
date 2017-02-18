@@ -4,12 +4,12 @@ import sys
 import os
 import platform
 
+from install.config import Config
+
 
 # where the script is located, which is the project repo root dir
 CORE_DIR = os.path.dirname(os.path.realpath(__file__))
-
-# install venv to here
-V_DIR = "venv"
+Config = Config(CORE_DIR)
 
 
 def get_platform():
@@ -64,7 +64,7 @@ def run_commands(commands):
     for com in commands:
         print_color("\nRunning: %s \n" % com, color="cyan")
         if os.system(com) != 0:
-            print_color("\n Non-zero error code running: %s\nStopping install." % com, color="red")
+            print_color("\nNon-zero error code running: %s\nStopping install." % com, color="red")
             sys.exit()
 
 
@@ -72,13 +72,13 @@ def create_venv():
     """ Create a virtual env if it doesn't exist already
     """
 
-    venv_real_dir = get_file_path(V_DIR)
+    venv_real_dir = get_file_path(Config.get("venv"))
 
     if not os.path.isdir(venv_real_dir):
-        print_color("\nCreating virtual env in %s..." % V_DIR)
+        print_color("\nCreating virtual env in %s..." % Config.get("venv"))
         run_commands(["virtualenv %s" % venv_real_dir])
     else:
-        print_color("\nVirtual env in %s already exists" % V_DIR)
+        print_color("\nVirtual env in %s already exists" % Config.get("venv"))
 
 
 def start_venv():
@@ -86,11 +86,11 @@ def start_venv():
     or run files and tests with it enabled
     """
 
-    venv_real_dir = get_file_path(V_DIR)
+    venv_real_dir = get_file_path(Config.get("venv"))
 
     # exit the virtual env isn't created
     if not os.path.isdir(venv_real_dir):
-        print_color("\nVirual env does not exist in %s. Have you ran install?" % V_DIR)
+        print_color("\nVirual env does not exist in %s. Have you ran install?" % Config.get("venv"))
         sys.exit(1)
 
     # Activate the virtual env
@@ -106,6 +106,20 @@ def start_venv():
         sys.exit(1)
 
 
+def basic_test(command, files):
+    """ Run a basic with a command of list of files If command returns
+    non-zero value, then the test will fail
+    """
+    # Keep track of if any of these commands failed
+    test_failed = False
+
+    for f in files:
+        if os.system("%s %s" % (command, get_file_path(f))):
+            test_failed = False
+
+    return test_failed
+
+
 def install(args):
     """ Install things
     """
@@ -118,12 +132,12 @@ def install(args):
 
     # Otherwise autodetect
     else:
-        platform = get_platform()
-        if platform not in ['linux', 'raspberry-pi']:
+        plat = get_platform()
+        if plat not in ['linux', 'raspberry-pi']:
             print_color("\nInstalls on non linux systems are not supported yet! :(", color="red")
             sys.exit()
 
-        is_ras_pi = (platform == 'raspberry-pi')
+        is_ras_pi = (plat == 'raspberry-pi')
 
     if is_ras_pi:
         print_color("\nInstalling components for Raspberry Pi")
@@ -138,15 +152,11 @@ def install(args):
     install_items = []
 
     # install basic things
-    with open(get_file_path("install/apt-get.txt")) as f:
-        basic_install_items = f.read().split("\n")[:-1]
-        install_items.extend(basic_install_items)
+    install_items.extend(Config.get("aptget"))
 
     # install ras pi things
     if is_ras_pi:
-        with open(get_file_path("install/apt-get-hw.txt")) as f:
-            pi_install_items = f.read().split("\n")[:-1]
-            install_items.extend(pi_install_items)
+        install_items.extend(Config.get("aptget-hw"))
 
     install_command = [
         "apt-get install -y " + " ".join(install_items),
@@ -163,12 +173,12 @@ def install(args):
     commands_to_run = []
 
     commands_to_run.append(
-        "pip install -r %s" % get_file_path("install/requirements.txt")
+        "pip install -r %s" % get_file_path(Config.get("requirements"))
     )
 
     if is_ras_pi:
         commands_to_run.append(
-            "pip install -r %s" % get_file_path("install/requirements-hw.txt")
+            "pip install -r %s" % get_file_path(Config.get("requirements-hw"))
         )
 
     run_commands(commands_to_run)
@@ -176,7 +186,7 @@ def install(args):
     if os.environ['SUDO_USER']:
         print_color("\nRunning with sudo, so chown the virtual env dir to the sudo user.")
         command = "chown -R {user}:{user} {dir}".format(user=os.environ['SUDO_USER'],
-                                                        dir=get_file_path(V_DIR))
+                                                        dir=get_file_path(Config.get("venv")))
         run_commands([command])
 
     if is_ras_pi:
@@ -184,9 +194,9 @@ def install(args):
         if i2c_enabled != 0:
             print_color("\ni2c is not enabled. Will run raspi-config to enable the device.")
             print_color("Enable in Advanced Options > i2c")
-            print_color("\nEnter n to skip, or any other key to continue and launch raspi-config [Y/n]:")
+            print_color("\nEnter Y/y to continue and launch raspi-config or any other key to skip [y/N]:")
 
-            if raw_input().lower() != 'n':
+            if raw_input().lower() == 'y':
                 run_commands(["raspi-config"])
                 print_color("\nYou may have to reboot to fully enable i2c")
 
@@ -230,7 +240,7 @@ def shell(args):
     debug = ('--debug' in args)
 
     commands = [
-        'export VIRTUAL_ENV="%s"' % get_file_path(V_DIR), # venv root dir
+        'export VIRTUAL_ENV="%s"' % get_file_path(Config.get("venv")), # venv root dir
         'export PATH="$VIRTUAL_ENV/bin:$PATH"', # add venv/bin to path
         'unset PYTHON_HOME', # unset so doesn't conflict with new path
         'export FLASK_APP="%s"' % get_file_path("application.py"), # For running flask app
@@ -259,16 +269,20 @@ def test(args):
 
     if test_all or '--pep8' in args:
         print_color("Running pep8 test:\n")
-        pep8_command = "pep8 --max-line-length=110 --ignore=E261"
 
-        # Keep track of if any of these commands failed
-        pep8_failed = False
-        pep8_failed = os.system("%s %s" % (pep8_command, get_file_path("application.py"))) or pep8_failed
-        pep8_failed = os.system("%s %s" % (pep8_command, get_file_path("rov/*/*.py"))) or pep8_failed
-        pep8_failed = os.system("%s %s" % (pep8_command, get_file_path("scotty"))) or pep8_failed
+        command = "pep8 --max-line-length={lineLength} --ignore={ignore}".format(
+            lineLength=Config.get("pep8").get("line-length"),
+            ignore=",".join(Config.get("pep8").get("ignore-errors"))
+        )
 
-        if pep8_failed:
+        if not basic_test(command, Config.get("testfiles")):
             failed.append("pep8 conformity")
+
+    if test_all or '--pylint' in args:
+        print_color("Running pylint test:\n")
+
+        if not basic_test("pylint", Config.get("testfiles")):
+            failed.append("pylint test")
 
     # Print out list of failed tests, and exit with non-zero value if failed
     if len(failed) > 0:
@@ -279,27 +293,28 @@ def test(args):
         sys.exit(1)
 
 
-def usage(args):
+def usage(args=None):
     """ Prints the help and usage information
     """
 
     print "scotty install [--pi, --dev]"
     print "   Installs required files. Autodetects install type"
-    print "   --pi:    Install as if this is a Pi"
-    print "   --dev:   Install as if this is a dev machine"
+    print "   --pi:     Install as if this is a Pi"
+    print "   --dev:    Install as if this is a dev machine"
     print ""
     print "scotty run [--rov] [--debug]"
     print "   Runs the full ROV stack"
-    print "   --rov:   Just test the ROV main loop"
-    print "   --debug: Set FLASK_DEBUG and ROV_DEBUG"
+    print "   --rov:    Just test the ROV main loop"
+    print "   --debug:  Set FLASK_DEBUG and ROV_DEBUG"
     print ""
     print "scotty shell [--debug]"
     print "   Runs a new shell, with the activated venv. Exit to leave venv"
-    print "   --debug: Set FLASK_DEBUG and ROV_DEBUG"
+    print "   --debug:  Set FLASK_DEBUG and ROV_DEBUG"
     print ""
-    print "scotty test [--pep8]"
+    print "scotty test [--pep8] [--pylint]"
     print "   Runs the full testing framework"
-    print "   --pep8:  Run pep8 test"
+    print "   --pep8:   Run pep8 test"
+    print "   --pylint: Run pylint test"
     print ""
     print "scotty [-h] [--help]"
     print "   Display this help information"
@@ -322,14 +337,14 @@ def main():
 
     # No command present
     if len(sys.argv) < 2:
-        usage([])
+        usage()
         sys.exit(1)
 
     command = sys.argv[1]
 
     if command not in availabe_commands:
         print_color("'%s' is not an available command\n" % command, color="red")
-        usage([])
+        usage()
         sys.exit(1)
 
     # execute the method for the command

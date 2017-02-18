@@ -1,3 +1,0 @@
-python-smbus
-libffi-dev
-i2c-tools
