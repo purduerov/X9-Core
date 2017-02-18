@@ -109,12 +109,12 @@ def build_dearclient():
 # def start_sio():
     # socketio.run(app, host="127.0.0.1")
 
-    
+
 if __name__ == 'application':
     rov_run = threading.Thread(target=rov.run)
     rov_run.daemon = True
     rov_run.start()
-    
+
     # socket_run = threading.Thread(target=start_sio)
     # socket_run.daemon = True
     # socket_run.start()
