@@ -45,5 +45,39 @@ var layouts = {
       length: 4
     }
   },
+  linbox: {
+      id: "Microsoft Controller (Vendor: 045e Product: 02d1)",
+    buttons: {
+      a:      0,
+      b:      1,
+      x:      2,
+      y:      3,
+      lb:     4,
+      rb:     5,
+      slct:   6,
+      strt:   7,
+      xbutt:  8,
+      lpress: 9,
+      rpress: 10,
+      lt:     ax-2,
+      rt:     ax-5,
+      up:     ax(-7),
+      down:   ax(+7),
+      left:   ax(-6),
+      right:  ax(+6),
+      length: 16
+    },
+    axes: {
+      left: {
+        x:    0,
+        y:    1
+      },
+      right: {
+        x:    3,
+        y:    4
+      },
+      length: 4
+    }
+  },
   length: 1
 }
