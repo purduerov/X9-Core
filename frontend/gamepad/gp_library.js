@@ -48,7 +48,9 @@ function Gamepad() {
   this.id = String;
   this.layout = String;
   this.buttons = new Object;
-  this.axes = new Object;
+  this.axes = {left: {}, right: {}};
+  this.b_len = 0;
+  this.a_len = 0;
   this.ready = false;
   this.i_use = undefined;
   var buttons_last = new Object;
@@ -242,29 +244,33 @@ function Gamepad() {
     Object.keys(layouts).forEach(function(key, i) {
       if(id == layouts[key].id) {
         gp.layout = key;
-        Object.keys(layouts[key].buttons).forEach(function(key_b, i) {
-          if(key_b != "length") {
-            gp.setButtonLast(key_b, true);
-            gp.buttons[key_b] = {val: 0, pressed: 0, released: 0};
-            if(but_func[key_b] == undefined) {
-              but_func[key_b] = {val_func: null, change_func: null, press_func: null, release_func: null};
-            }
-          } else {
-            gp.buttons[key_b] = layouts[key].buttons[key_b];
+        gp.b_len = layouts[key].buttons.length;
+        var name = "";
+        for(var i = 0; i < gp.b_len; i++) {
+          name = layouts[key].buttons[i].name;
+          gp.setButtonLast(name, true);
+          gp.buttons[name] = {val: 0, pressed: 0, released: 0};
+          if(but_func[name] == undefined) {
+            but_func[name] = {val_func: null, change_func: null, press_func: null, release_func: null};
           }
-        });
+        }
         var arrays = navigator.getGamepads()[gp.i_use].axes;
-        Object.keys(layouts[key].axes).forEach(function(key_a, i) {
-          if(key_a != "length") {
-            gp.setDisplace(key_a, arrays[layouts[gp.layout].axes[key_a].x], arrays[layouts[gp.layout].axes[key_a].y]);
-            gp.axes[key_a] = {x: 0, y: 0, theta: 0, r: 0};
-            if(ax_func[key_a] == undefined) {
-              ax_func[key_a] = {polar_func: null, cartes_func: null};
-            }
-          } else {
-            gp.axes[key_a] = layouts[key].axes[key_a];
+        var cur_index = -1;
+        var which = "";
+        gp.a_len = layouts[key].axes.length;
+        for(var i = 0; i < gp.a_len; i++) {
+          console.log(i);
+          console.log(layouts[key].axes[i].name)
+          name = layouts[key].axes[i].name;
+          which = layouts[key].axes[i].which;
+          cur_index = layouts[key].axes[i].index;
+          gp.axes[which][name] = arrays[cur_index];
+          if(ax_func[name] == undefined) {
+            ax_func[name] = {polar_func: null, cartes_func: null};
           }
-        });
+        }
+        gp.setDisplace("left", gp.axes.left.x, gp.axes.left.y);
+        gp.setDisplace("right", gp.axes.right.x, gp.axes.right.y);
         gp.ready = true;
       }
     });
@@ -276,61 +282,64 @@ function Gamepad() {
   this.get_current = function(message) {
     read = navigator.getGamepads()[gp.i_use];
     if(read != undefined && gp.i_use != undefined) {
-      Object.keys(gp.buttons) .forEach(function(key_b, i) {
-        if(key_b != "length"){
-          gp.setButtonLast(key_b);
-          gp.buttons[key_b].val = read.buttons[layouts[gp.layout].buttons[key_b]].value;
-          gp.setStatusChange(key_b);
+      var name = "";
+      for(var i = 0; i < gp.b_len; i++) {
+          name = layouts[gp.layout].buttons[i].name;
+          gp.setButtonLast(name);
+          gp.buttons[name].val = (read.buttons[layouts[gp.layout].buttons[i].index].value == layouts[gp.layout].buttons[i].match)? 1 : 0;
+          gp.setStatusChange(name);
           
-          if(but_func[key_b].change_func != null) {
-            but_func[key_b].change_func();
+          if(but_func[name].change_func != null) {
+            but_func[name].change_func();
           }
           
-          if(but_func[key_b].val_func != null) {
-            but_func[key_b].val_func();
+          if(but_func[name].val_func != null) {
+            but_func[name].val_func();
           }
           
-          if(but_func[key_b].press_func != null) {
-            but_func[key_b].press_func();
+          if(but_func[name].press_func != null) {
+            but_func[name].press_func();
           }
           
-          if(but_func[key_b].release_func != null) {
-            but_func[key_b].release_func();
+          if(but_func[name].release_func != null) {
+            but_func[name].release_func();
           }
-          //console.log("Buttons: "+gp.buttons[key_b].press+" "+key_b);
-        }
-      });
+          //console.log("Buttons: "+gp.buttons[name].press+" "+name);
+      }
 //console.log(gp.buttons.down.val+" "+gp.buttons.down.released);
+      var temp_axes = {left: {x: 0, y: 0}, right: {x: 0, y: 0}};
+      for(var i = 0; i < gp.a_len; i++) {
+          name = layouts[gp.layout].axes[i].name;
+          which = layouts[gp.layout].axes[i].which;
+          cur_index = layouts[gp.layout].axes[i].index;
+          
+          temp_axes[which][name] = read.axes[cur_index];
+      }
+        
       Object.keys(gp.axes).forEach(function(key_a, i) {
-        if(key_a != "length"){
-          gp.axes[key_a] = gp.axesAdjust(key_a, read.axes[layouts[gp.layout].axes[key_a].x], read.axes[layouts[gp.layout].axes[key_a].y]);
-          if(ax_func[key_a].polar_func != null) {
-            ax_func[key_a].polar_func();
+          gp.axes[key_a] = gp.axesAdjust(key_a, temp_axes[key_a].x, temp_axes[key_a].y);
+          if(ax_func[name].polar_func != null) {
+            ax_func[name].polar_func();
           }
           
-          if(ax_func[key_a].cartes_func != null) {
-            ax_func[key_a].cartes_func();
+          if(ax_func[name].cartes_func != null) {
+            ax_func[name].cartes_func();
           }
-          //console.log("Axes: "+gp.axes[key_a].pos+" "+key_a);
-        }
+          //console.log("Axes: "+gp.axes[name].pos+" "+name);
       });
       
     } else {
-      Object.keys(gp.buttons) .forEach(function(key_b, i) {
-        if(key_b != "length"){
+      Object.keys(gp.buttons).forEach(function(key_b, i) {
           Object.keys(gp.buttons[key_b]).forEach(function(butn_bit, j) {
             gp.buttons[key_b][butn_bit] = 0;            //let go of all buttons
           });
           //console.log("Buttons: "+gp.buttons[key_b].press+" "+key_b);
-        }
       });
       Object.keys(gp.axes).forEach(function(key_a, i) {
-        if(key_a != "length"){
           Object.keys(gp.axes[key_a]).forEach(function(ax_bit, j) {
             gp.axes[key_a][ax_bit] = 0;               //don't want to run the ROV into a wall if the gamepad disconnects
           });
           //console.log("Axes: "+gp.axes[key_a].pos+" "+key_a);
-        }
       });
       gp.ready = false;                       //gp is no longer ready **can be used in outer loop for a marker**
       gp.i_use = undefined;                   //to reconnect, we'll have to re-assign where the valid gamepad is
