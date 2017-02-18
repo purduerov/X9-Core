@@ -283,11 +283,20 @@ function Gamepad() {
     read = navigator.getGamepads()[gp.i_use];
     if(read != undefined && gp.i_use != undefined) {
       var name = "";
+      var where = "";
+      var cur_index = -1;
       for(var i = 0; i < gp.b_len; i++) {
           name = layouts[gp.layout].buttons[i].name;
           where = layouts[gp.layout].buttons[i].where;
+          cur_index = layouts[gp.layout].buttons[i].index;
           gp.setButtonLast(name);
-          gp.buttons[name].val = (read.buttons[layouts[gp.layout][where][i].index].value == layouts[gp.layout].buttons[i].match)? 1 : 0;
+          if(where == "buttons") {
+            gp.buttons[name].val = (read.buttons[cur_index].value == layouts[gp.layout].buttons[i].match)? 1 : 0;
+          } else if (where == "axes") {
+            gp.buttons[name].val = (read.buttons[cur_index] == layouts[gp.layout].buttons[i].match)? 1 : 0;
+          } else {
+            console.log("Error: "+where+" presented instead of 'buttons' or 'axes' for get_current in gp_library.js")
+          }
           gp.setStatusChange(name);
           
           if(but_func[name].change_func != null) {
