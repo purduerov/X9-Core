@@ -84,7 +84,7 @@ class MutatorMatrix(object):
         for i in range(0, 8):
             if self.thrusterStatus[i] == 0:
                 self.m[:, i] = 0
-
+    
     def setThrusterStatus(self, enabledThrusters):
         # checks to see if the thrusters have changed state and if a new matrix needs to be generated
         self.thrusterStatus = enabledThrusters
@@ -93,7 +93,7 @@ class MutatorMatrix(object):
 if __name__ == "__main__":
     matrix = MutatorMatrix()
     mutatorMatrix = matrix.generateMatrix()
-    for i in range(0,8):
-        print "[%f,\t%f,\t%f,\t%f,\t%f,\t%f]," % (mutatorMatrix[i,0], mutatorMatrix[i,1], mutatorMatrix[i,2], mutatorMatrix[i,3], mutatorMatrix[i,4], mutatorMatrix[i,5])
+    for i in range(0, 8):
+        print "[%f,\t%f,\t%f,\t%f,\t%f,\t%f]," % (mutatorMatrix[i, 0], mutatorMatrix[i, 1], mutatorMatrix[i, 2], mutatorMatrix[i, 3], mutatorMatrix[i, 4], mutatorMatrix[i, 5])
     # print matrix.generateMatrix()
 

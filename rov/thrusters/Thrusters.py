@@ -103,7 +103,7 @@ class Thrusters:
                 self.thrusters[t].setPWMActual(self.ZERO_POWER)
                 self.thrusters[t].setCurrent(0)
 
-                pwm.set_pwm(self.pins[t], 0, thrusters[t].getPWMActual)
+                #pwm.set_pwm(self.pins[t], 0, thrusters[t].getPWMActual)
                 continue
 
             # Otherwise active:
@@ -112,16 +112,16 @@ class Thrusters:
             self.thrusters[t].setPWMActual(self.ZERO_POWER + int(self.thrusters[t].getTarget() * (self.POS_MAX_POWER - self.ZERO_POWER)))
             self.thrusters[t].setCurrent(self.thrusters[t].getTarget())
 
-            pwm.set_pwm(self.pins[t], 0, self.thrusters[t].getPWMActual())
+            #pwm.set_pwm(self.pins[t], 0, self.thrusters[t].getPWMActual())
 
 
     def stop(self):
         for t in range(0, self.NUM_THRUSTERS):
             self.thrusters[t].setPWMActual(self.ZERO_POWER)
             self.thrusters[t].setCurrent(0)
-            pwm.set_pwm(self.pins[t], 0, self.ZERO_POWER)
+            #pwm.set_pwm(self.pins[t], 0, self.ZERO_POWER)
         print("EMERGENCY STOP CALLED: Thrusters have been stopped!")
-        pwm.set_all_pwm(0, self.ZERO_POWER)
+        #pwm.set_all_pwm(0, self.ZERO_POWER)
 
 
     def _ramp(self):
