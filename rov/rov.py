@@ -31,8 +31,8 @@ class ROV(object):
         self.mapper = ThrustMapper()
         self.thrusters = Thrusters()
 
-        self.camera1 = Camera()
-        self.camera1.on()
+        #self.camera1 = Camera()
+        #self.camera1.on()
 
         self._data_lock = Lock()
 
@@ -59,9 +59,6 @@ class ROV(object):
             #
             # * Control Tools
 
-            out, err = self.camera1.switch.communicate()
-            print "out: " + out
-            print "err: " + err
             # Update all thrusters and at the end push motors:
             #
             try:
@@ -73,8 +70,7 @@ class ROV(object):
                 self.thrusters.push_pi_motors(thrust, actives)
                 self._data['dearclient']["thrusters"]["thrusters"] = self.thrusters.get_data()
             except:
-                #print("ERROR: _data malformed, client may not be connected or transmitting.")
-                pass
+                print("ERROR: _data malformed, client may not be connected or transmitting.")
 
             # Our last update
             self.last_update = time()
