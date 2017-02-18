@@ -9,11 +9,9 @@ from sklearn.ensemble import GradientBoostingClassifier
 import numpy as np
 import operator
 import random
-import test2
 
 
-
-#=========================================================
+#==========================================================
 #                    Build Dataset
 #==========================================================
 with open('slothOut.json') as slothLabels:
@@ -22,7 +20,7 @@ with open('slothOut.json') as slothLabels:
 #Annnnnd this is a memory hog :)
 dataset=[]
 
-#Create dataset from training images
+#Create data set from training images
 for imageAnnotation in imageAnnotations:
     imgFilename = imageAnnotation["filename"]
     img = cv.imread(imgFilename)

@@ -1530,7 +1530,7 @@
             }
         ],
         "class": "image",
-        "filename": "ProcessedImages\\GOPR0032.jpg"
+        "filename": "ProcessedImages/GOPR0032.jpg"
     },
     {
         "annotations": [
@@ -1831,7 +1831,7 @@
             }
         ],
         "class": "image",
-        "filename": "ProcessedImages\\GOPR0033.jpg"
+        "filename": "ProcessedImages/GOPR0033.jpg"
     },
     {
         "annotations": [
@@ -2252,16 +2252,16 @@
             }
         ],
         "class": "image",
-        "filename": "ProcessedImages\\GOPR0034.jpg"
+        "filename": "ProcessedImages/GOPR0034.jpg"
     },
     {
         "annotations": [],
         "class": "image",
-        "filename": "ProcessedImages\\GOPR0035.jpg"
+        "filename": "ProcessedImages/GOPR0035.jpg"
     },
     {
         "annotations": [],
         "class": "image",
-        "filename": "ProcessedImages\\GOPR0036.jpg"
+        "filename": "ProcessedImages/GOPR0036.jpg"
     }
 ]
