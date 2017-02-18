@@ -32,6 +32,7 @@ class ROV(object):
         self.thrusters = Thrusters()
 
         self.camera1 = Camera()
+        self.camera1.on()
 
         self._data_lock = Lock()
 
@@ -47,7 +48,7 @@ class ROV(object):
     def update(self):
         with self._data_lock:
 
-            print "Update! last update was: %.5f s ago" % (time() - self.last_update)
+            #print "Update! last update was: %.5f s ago" % (time() - self.last_update)
 
             # Update all simple sensor data and stuff it in data
             for sensor in self.simple_sensors.keys():
@@ -56,10 +57,11 @@ class ROV(object):
 
             # Read controller data
             #
-            # * Make thruster's force vector
             # * Control Tools
 
-
+            out, err = self.camera1.switch.communicate()
+            print "out: " + out
+            print "err: " + err
             # Update all thrusters and at the end push motors:
             #
             try:
@@ -71,7 +73,8 @@ class ROV(object):
                 self.thrusters.push_pi_motors(thrust, actives)
                 self._data['dearclient']["thrusters"]["thrusters"] = self.thrusters.get_data()
             except:
-                print("ERROR: _data malformed, client may not be connected or transmitting.")
+                #print("ERROR: _data malformed, client may not be connected or transmitting.")
+                pass
 
             # Our last update
             self.last_update = time()
