@@ -285,8 +285,9 @@ function Gamepad() {
       var name = "";
       for(var i = 0; i < gp.b_len; i++) {
           name = layouts[gp.layout].buttons[i].name;
+          where = layouts[gp.layout].buttons[i].where;
           gp.setButtonLast(name);
-          gp.buttons[name].val = (read.buttons[layouts[gp.layout].buttons[i].index].value == layouts[gp.layout].buttons[i].match)? 1 : 0;
+          gp.buttons[name].val = (read.buttons[layouts[gp.layout][where][i].index].value == layouts[gp.layout].buttons[i].match)? 1 : 0;
           gp.setStatusChange(name);
           
           if(but_func[name].change_func != null) {
