@@ -8,7 +8,7 @@ import numpy as np
 
 from sensors import Pressure, IMU
 from thrusters import Thrusters
-from thrust_mapper import ThrustMapper
+from thrusters import ThrustMapper
 from camera.cam import Camera
 
 

@@ -1,5 +1,6 @@
 from Adafruit_PCA9685 import PCA9685
-import time, pprint     # For Testing code
+import time
+import pprint     # For Testing code
 import numpy            # For Compliance with thrust_mapping outputs
 
 # using PCA9685 object:
@@ -124,31 +125,31 @@ class Thrusters:
 
 
     def _ramp(self):
-	pass
+        pass
         #for t in range(0, self.NUM_THRUSTERS):
 
-	#    if (self.thrusters[t].getActive() == 1):
-	#	self.thrusters.getTarget()
-	#	_ramp = self.thrusters.setCurrent()
+            # if (self.thrusters[t].getActive() == 1):
+                # self.thrusters.getTarget()
+                # _ramp = self.thrusters.setCurrent()
 
-		# convert percentage before or after incriment or decrement?
+                # # convert percentage before or after incriment or decrement?
 
-	#	if (self.thrusters.getTarget != _ramp):
-	#	    if (self.thrusters.getTarget > _ramp):
-			#increment
-			#loop to increase by 3 then by 1
+                # if (self.thrusters.getTarget != _ramp):
+                    # #if (self.thrusters.getTarget > _ramp):
+                    # #increment
+                    # #loop to increase by 3 then by 1
 
-	#if (self.thrusters.getTarget < _ramp):
-			#decrement
-			#loop to increase by 3 then by 1
+                # if (self.thrusters.getTarget < _ramp):
+                    # #decrement
+                    # #loop to increase by 3 then by 1
 
-		    #set to pwm_actual
+                    # #set to pwm_actual
 
-	#	else:
-		    #not ramped
+                # else:
+                    # #not ramped
 
-	#   else:
-	#	self.thrusters.stop()
+            # else:
+                # self.thrusters.stop()
 
 
     def get_data(self):

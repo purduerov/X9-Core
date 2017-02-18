@@ -66,7 +66,7 @@ def recieve_controls(data):
     # print("controls: " + str(json))
     # print('received message: ' + str(data))
     send_packet()
-    
+
     if rov._data != last_rov:
       last_rov = rov.data
       rov._data["dearflask"] = json.loads(data)
@@ -108,12 +108,12 @@ def build_dearclient():
 # def start_sio():
     # socketio.run(app, host="127.0.0.1")
 
-    
+
 if __name__ == 'application':
     rov_run = threading.Thread(target=rov.run)
     rov_run.daemon = True
     rov_run.start()
-    
+
     # socket_run = threading.Thread(target=start_sio)
     # socket_run.daemon = True
     # socket_run.start()
