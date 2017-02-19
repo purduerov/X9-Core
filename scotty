@@ -220,7 +220,7 @@ def install(args):
     if is_ras_pi or '--cam' in args:
         install_cam = [
             "apt-get install -y " + " ".join(Config.get("aptget-cam")),
-            "ln -s /usr/include/linux/videodev2.h /usr/include/linux/videodev.h",
+            "ln -sf /usr/include/linux/videodev2.h /usr/include/linux/videodev.h",
             "make -C %s" % get_file_path("install/mjpg-streamer"),
             "make install -C %s" % get_file_path("install/mjpg-streamer"),
             "chmod 777 /usr/local/lib/mjpg-streamer -R"
