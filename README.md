@@ -1,76 +1,69 @@
 # X9-Core
 All of X9's core software for the 2016-2017 Purdue ROV team.
 
-###To install python and Flask app:
-1. install core packages and dependencies:
- sudo apt-get install gcc-4.7 python python-dev python-pip virtualenv python-smbus libffi-dev
+## Scotty:
+scotty is our favorite [cheif engineer](http://www.ex-astris-scientia.org/inconsistencies/movies/underwater-scotty-stid.jpg) that install the dependencies, runs the software, and runs tests.
 
-2. install virtualenv (again?)
- sudo pip install virtualenv
+### Using Scotty to Install Dependencies:
+```
+scotty install [--pi] [--dev [--cam]]
+   Installs required files. Autodetects install type
+   --pi:     Install as if this is a Pi
+   --dev:    Install as if this is a dev machine
+   --cam:    Also install mjpg streamer for dev
+ ```
+ `sudo ./scotty install` will auto detect if you're on a Raspberry Pi or not, and install all the needed items. This includes:
+ - PIP
+ - `install/requirements.txt` and `install/requirements-hw.txt`
+ - `mjpg-streamer`
+ - configure I2C
 
-3. create new virtualenv to manage python packages (creates folder 'venv'):
- virtualenv venv
+If you aren't on a Raspberry Pi, it will not install the hardware items or mjpg streamer. If auto detect fails, you can pass in `--pi` or `--dev`. If you're installing on dev machine and want mjpg streamer, pass in `--cam`.
 
-4. activate virtual environment:
- . venv/bin/activate
+Installs should be idempotent, which means you can rerun them with no adverse effects. If requirements ever get updated, just rerun the install. 
 
-5. install python packages:
- pip install -r requirements.txt
+Note: `sudo` is needed, because some dependencies need to be installed via `apt-get`
 
-6. apply sudo to pip installation if any fail due to permissions
+### Running the App:
+```
+scotty run [--rov] [--debug]
+   Runs the full ROV stack
+   --rov:    Just test the ROV main loop
+   --debug:  Set FLASK_DEBUG and ROV_DEBUG
+```
+If you want to run the full ROV program, run `./scotty run`. This starts the flask application. If you want to just test the ROV main loop, run `./scotty run --rov`. This starts the rov for tests, without the flask app. Passing in `--debug` sets the environmental variables configured in `environment.debug` in `install/config.json`. By default, it will set the `FLASK_DEBUG` to true, as well as `ROV_DEBUG`, which can be used to optionally turn things on and off in debug:
+```python
+if os.environ['ROV_DEBUG']
+    print "This only prints with --debug!"
+```
 
-7. make sure all packages are installed and flask runs with:
- export FLASK_APP=application.py
- flask run --host=0.0.0.0
+### Shell/Virtualenv:
+```
+scotty shell [--debug]
+   Runs a new shell, with the activated venv. Exit to leave venv
+   --debug:  Set FLASK_DEBUG and ROV_DEBUG
+```
+`./scotty shell` will start a new version of your current shell, with the appropriate environmental variables set. This lets you run `flask run`, and `mjpg_streamer`, as they will be added to your paths. The virtualenv is also added to your path, so dependencies will be installed there. If you pass in `--debug`, the `environment.debug` variables in `install/config.json` will be set as well.
 
-8. stop using virtual environment with:
- deactivate
+### Test:
+```
+scotty test [files...] [--pep8] [--pylint]
+   Runs the full testing framework
+   files:    optional list of files to test
+   --pep8:   Run pep8 test
+   --pylint: Run pylint test
+```
+Scotty will run linting tests to check for things like unused variables, bad imports, bad spacing, etc. Think of it like a compiler. This helps to catch errors that will not show up until runtime. Right now there are two tests:
+- pep8: tests against [pep8 style guide](https://www.python.org/dev/peps/pep-0008/)
+- pylint: tests for undeclared variables, bad whitespace, misspelled items
 
-###To install mjpg-streamer:
-1. install dependencies with
- sudo apt-get install libjpeg8-dev imagemagick libv4l-dev cmake
+Will hope to add more tests that can test our modules individually
 
-2. create symbolic link of video.h with
- sudo ln -s /usr/include/linux/videodev2.h /usr/include/linux/videodev.h
+### To install node and Vue:
+1. it looks like npm needs a library provided by adafruit, so run: `curl -sLS https://apt.adafruit.com/add | sudo bash`
 
-3. inside mjpg-streamer run
- sudo make
- AND
- sudo make install
+2. The vue we're using is a node module, so just run: `sudo apt-get install nodejs npm`
 
-4. create environment variable to installed .so files (could insert it into .bashrc):
- export LD_LIBRARY_PATH=/usr/local/lib/
+3. now, navigate to `X9-Core/frontend/` and run `npm install`
 
-5. If problems persist, make .so files in /usr/local/lib have all permissions:
- sudo chmod 777 *.so (when in /usr/local/lib/mjpg-streamer/ directory)
-
-6. Stick an iframe in html: <iframe src="http://10.42.0.?:8080/?action=stream" width="1024" height="768" scrolling="no" frameborder="no" marginheight="0px" position"absolute" css="right=0; top=0;"></iframe>
-
-###To install i2c for Pi:
-1. install dependencies with
- sudo apt-get install python-smbus i2c-tools
-
-2. edit /boot/config.txt (may need sudo) adding the line (if not already there and uncommented):
- device_tree_param=i2c_arm=on
-
-3. edit /boot/cmdline.txt (may need sudo) adding the line (if not already there and uncommented):
- bcm2708.vc_i2c_override=1
-
-4. edit /etc/modules-load.d/raspberrypi.conf (may need sudo) adding the lines (if not already there and uncommented):
- i2c-bcm2708
- i2c-dev
-
-5. reboot Pi with:
- sudo reboot
-
-6. test with (should print out i2c addresses of devices attached to the i2c line):
- i2cdetect -y 1
-
-###To install node and Vue:
-1. it looks like npm needs a library provided by adafruit, so run: _curl -sLS https://apt.adafruit.com/add | sudo bash_
-
-2. The vue we're using is a node module, so just run: _sudo apt-get install nodejs npm_
-
-3. now, navigate to _X9-Core/frontend/_ and run _npm install_
-
-4. once that's done, just run _npm run build_ to condense the files for the webpage
+4. once that's done, just run `npm run build` to condense the files for the webpage
