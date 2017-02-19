@@ -20,7 +20,7 @@ This file handles the primary functions of the webapp. Handles:
 """
 
 # GLOBALS:
-app = Flask(__name__, static_url_path="", static_folder="frontend")
+app = Flask(__name__, static_url_path="", static_folder="frontend/src")
 socketio = SocketIO(app, async_mode='threading')
 
 rov = ROV()
@@ -31,32 +31,7 @@ last_rov = {}
 # ROUTING:
 @app.route('/')
 def index():
-    print "Send index.html"
     return app.send_static_file('index.html')
-
-@app.route('/UI/')
-def index_front():
-    print "Send /src/index2.html & co."
-    return app.send_static_file('src/index2.html')
-
-@app.route('/UI/fonts/<path:path>')
-def send_font_files(path):
-#    print "front file"
-#    print path
-    return send_from_directory('frontend/src/', path)
-
-@app.route('/UI/gp/<path:path>')
-def send_UI_files(path):
-#    print "UI file"
-#    print path
-#    print os.path.dirname(os.path.realpath(__file__))
-    return send_from_directory('frontend/gamepad/', path)
-
-@app.route('/UI/pg2/<path:path>')
-def send_index2_page_files(path):
-#    print "Page file"
-#    print path
-    return app.send_static_file('src/'+path)
 
 # SOCKET-IO:
 @socketio.on('dearflask')
@@ -105,14 +80,16 @@ def send_packet():
 def build_dearclient():
 
     return rov.data()["dearflask"]
+
 # def start_sio():
     # socketio.run(app, host="127.0.0.1")
 
 
 if __name__ == 'application':
-    rov_run = threading.Thread(target=rov.run)
-    rov_run.daemon = True
-    rov_run.start()
+    pass
+    # rov_run = threading.Thread(target=rov.run)
+    # rov_run.daemon = True
+    # rov_run.start()
 
     # socket_run = threading.Thread(target=start_sio)
     # socket_run.daemon = True

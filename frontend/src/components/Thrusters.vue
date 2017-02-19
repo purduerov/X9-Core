@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>IMU:</h1>
+        <h5>Thrusters:</h5>
         <hr>
         <ul v-for="(value, key) in data">
             <li>{{key}}: </br>

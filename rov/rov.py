@@ -70,7 +70,8 @@ class ROV(object):
                 self.thrusters.push_pi_motors(thrust, actives)
                 self._data['dearclient']["thrusters"]["thrusters"] = self.thrusters.get_data()
             except:
-                print("ERROR: _data malformed, client may not be connected or transmitting.")
+                #print("ERROR: _data malformed, client may not be connected or transmitting.")
+                pass
 
             # Our last update
             self.last_update = time()

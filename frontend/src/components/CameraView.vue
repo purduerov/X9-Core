@@ -1,6 +1,6 @@
 <template>
     <div id="camera-view">
-        <iframe src="http://10.42.0.62:8080/?action=stream"></iframe>
+        <img src="http://10.10.1.125:8080/?action=stream">
     </div>
 </template>
 
@@ -11,9 +11,10 @@ export default {
 </script>
 
 <style scoped>
-iframe{
-  height: 100%;
-  width: 100%;
+img {
+  max-height: 100%;
+  max-width: 100%;
+  margin: 0 auto;
 }
 
 #camera-view {

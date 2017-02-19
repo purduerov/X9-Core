@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>{{title}}</h1>
+        <h5>{{title}}</h5>
         <hr>
         <ul v-for="(value, key) in data">
             <li>{{key}}: {{value}}</li>

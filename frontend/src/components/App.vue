@@ -12,9 +12,6 @@
                     <IMU :data="packet.IMU"></IMU>
                 </Card>
                 <Card class="half-width half-height">
-                    <Press_Temp :data="packet.PRESSURE"></Press_Temp>
-                </Card>
-                <Card class="half-width half-height">
                     <DataView title="Pressure:" :data="packet.pressure"></DataView>
                 </Card>
                 <Card class="half-width half-height">
@@ -34,7 +31,6 @@ var CameraView = require("./CameraView.vue")
 var IMU = require("./IMU.vue")
 var DataView = require("./DataView.vue")
 var Card = require("./Card.vue")
-var Press_Temp = require("./Pressure.vue")
 var GpInfo = require("./GpInfo.vue")
 var Thruster = require("./Thrusters.vue")
 
@@ -45,7 +41,6 @@ export default {
         IMU,
         Card,
         DataView,
-        Press_Temp,
         GpInfo,
         Thruster
     },
@@ -97,9 +92,9 @@ export default {
     },
     mounted: function() {
         var vm = this;
-        
+
         vue_app = vm;
-        
+
         var go1 = -1;
         var go2 = -1;
         var send = {};
@@ -130,7 +125,7 @@ export default {
                 //console.log(vm.packet);
             //}, 10);
         });
-        
+
         console.log(vm.gpinfo);
     }
 }
