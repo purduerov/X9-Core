@@ -13,7 +13,7 @@ scotty install [--pi] [--dev [--cam]]
    --cam:    Also install mjpg streamer for dev
  ```
  `sudo ./scotty install` will auto detect if you're on a Raspberry Pi or not, and install all the needed items. This includes:
- - PIP
+ - `pip`
  - `install/requirements.txt` and `install/requirements-hw.txt`
  - `mjpg-streamer`
  - configure I2C
