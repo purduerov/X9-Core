@@ -12,6 +12,12 @@
         "libffi-dev",
         "i2c-tools"
     ],
+    "aptget-cam": [
+        "libjpeg8-dev",
+        "imagemagick",
+        "libv4l-dev",
+        "cmake"
+    ],
     "venv": "venv",
     "testfiles": [
         "application.py",
@@ -26,5 +32,18 @@
     },
     "pylint": {
         "rcfile": ".pylintrc"
+    },
+    "environment": {
+        "base": {
+            "LD_LIBRARY_PATH": "/usr/local/lib",
+            "PATH": "${CORE_DIR}/install/mjpeg_streamer",
+            "FLASK_APP": "${CORE_DIR}/application.py",
+            "FLASK_DEBUG": "0",
+            "ROV_DEBUG": "0"
+        },
+        "debug": {
+            "FLASK_DEBUG": "1",
+            "ROV_DEBUG": "1"
+        }
     }
 }

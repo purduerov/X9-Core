@@ -2,4 +2,4 @@ language: python
 before_install:
 - sudo ./scotty install --dev
 script:
-- ./scotty test
+- ./scotty test scotty
