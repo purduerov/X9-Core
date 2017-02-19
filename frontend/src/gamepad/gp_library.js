@@ -2,26 +2,26 @@
 **************************************************************************************************
   This file creates a gp object -- the 'gamepad' -- and provides
   the library necessrily to fill it.
-  
+
   Please include gp_layouts.js before gp_library.js in the html script tags.
-  
+
 --------------------------------------------------------------------------------------------------
   To set the gamepad/gp, use:
     gp.set();
     --note, you can pass an html 'message' element into this function to write
       its instructional messages to.
-  
+
 --------------------------------------------------------------------------------------------------
   To map the identified gp, use:
     gp.map();
-    
+
     --The gp.map() function is called by gp.set(), although
       you are able to call it if you want to re-map gp.
-      
+
 --------------------------------------------------------------------------------------------------
   To get the status of the gp, once identified and mapped, use:
     gp.get_current();
-  
+
     --for best performance, I recommend this should be used inside of the master loop so
       there are no issues with asynchronous behavior.
 
@@ -30,14 +30,14 @@
   type references to the gamepad like so:
     A: gp.buttons.a.val            <- a 1/0 value for whether it's pressed or not
        gp.buttons.a.pressed        <- a 1/0 value for if the button was just pressed or not
-       gp.buttons.a.released       <- a 1/0 value for if the button was just released or not 
-    
+       gp.buttons.a.released       <- a 1/0 value for if the button was just released or not
+
     left stick: gp.axes.left.x     <- the position of the left joystick, x axis
                 gp.axes.left.y     <- the position of the left joystick, y axis
                 gp.axes.left.r     <- the radius, or hypotenus of the triangle x and y make.
                 gp.axes.left.theta <- the angle of the hypotenus from the y-axis (NOT x-axis)
                     --this functions the same as if you'd flipped the unit circle around the line y=x on the xy-plane
-                
+
     --to see what button lables are available, you can either look at gp_layouts.js, or 'inspect' your
       webpage and just type 'gp' in the command prompt there--it should show you the gp object, which you
       can click through to see its structure.
@@ -55,23 +55,23 @@ function Gamepad() {
   var axes_off = new Object;
   var but_func = new Object;
   var ax_func = new Object;
-  
+
   this.butfuncexist = function(key) {
     return but_func[key] != undefined;
   };
-  
+
   this.butfuncreturn = function() {
     return but_func;
   };
-  
+
   this.axfuncexist = function(key) {
     return ax_func[key] != undefined;
   };
-  
+
   this.axfuncreturn = function() {
     return ax_func;
   };
-  
+
   //these are for identifying if a button has just been pressed or released
   this.setButtonLast = function(key, init = false) { //is called right before updating buttons
     if(init) {                                       //init = true when gamepad is being mapped out; user shouldn't worry about it
@@ -80,11 +80,11 @@ function Gamepad() {
       buttons_last[key].val = this.buttons[key].val;
     }
   };
-  
+
   this.getButtonLastPress = function(key) { //allows for user to see/operate off of last press, if desired
     return buttons_last[key].val;
   };
-  
+
   this.setStatusChange = function(key) { //this sets the pressed and released characteristics for each button
     if(this.buttons[key].val && !buttons_last[key].val) {
       this.buttons[key].pressed = 1;
@@ -97,15 +97,15 @@ function Gamepad() {
       this.buttons[key].released = 0;
     }
   };
-  
+
   this.setDisplace = function(key, x, y) { //the initial value of the joysticks are considered their 'error'
     axes_off[key] = {"x": x, "y": y};
   };
-  
+
   this.getDisplace = function() { //allows user to see what the displacement values are, if desired
     return axes_off;
   }
-  
+
   this.axesAdjust = function(key, x, y) { //calculates the polar coordinates, and scales the axes based off of displacement
     var theta = 0;                        //because of the range of the joystick's possible error, the first 10% of movement
     var r = 0;                            //has been canceled out for now.
@@ -114,29 +114,29 @@ function Gamepad() {
     } else {
       x = (x - axes_off[key].x) / (1 + axes_off[key].x);
     }
-    
+
     if(y > 0) {
       y = -(y - axes_off[key].y) / (1 - axes_off[key].y);
     } else {
       y = -(y - axes_off[key].y) / (1 + axes_off[key].y);
     }
-    
+
     theta = Math.atan2(x,y) * 180 / Math.PI;
     if(Math.abs(x) < .1 && Math.abs(y) < .1) {
       x = 0;
       y = 0;
       theta = 0;
     }
-    
+
     r = Math.sqrt(x*x + y*y);
-    
+
     if(r > 1) {
       r = 1;
     }
-    
+
     return {"x": x, "y": y, "theta": theta, "r": r};
   }
-  
+
   //string for btn and trigger, and function for func; i.e. this.btn_bind("a", "change", function() {kill_all_humans} );
   //btn is the button key property of buttons, trigger can be 'value', 'change', 'press', or 'release'
   //------value = while it's being pressed, press = first instant it gets pressed
@@ -174,13 +174,13 @@ function Gamepad() {
         }
       };
     }
-    
+
     if(bf_full != null && bfunc_key != null) {
       but_func[btn][bfunc_key] = bf_full;
       //console.log(but_func[btn][bfunc_key]);
     }
   }
-  
+
   //string for side and trigger, and function for func; i.e. this.ax_bind("left", "polar", function() {kill_all_humans} );
   //side is the button key property of buttons, trigger can be 'polar' or 'cartesian'
   //arg is an object that holds the parameter
@@ -189,12 +189,12 @@ function Gamepad() {
     var afunc_key = null;
     if(trigger == "polar") {
       afunc_key = "polar_func";
-      
+
     } else if(trigger == "cartesian") {
       afunc_key = "cartes_func";
-      
+
     }
-    
+
     if(afunc_key != null) {
       ax_func[side][afunc_key] = function() {
         func(arg);
@@ -202,8 +202,8 @@ function Gamepad() {
       //console.log(ax_func[side][afunc_key]);
     }
   }
-  
-  
+
+
   //these are for selecting the gamepad, mapping it from the library, and then updating the current status
   this.set = function(message) { //waits until it sees a gamepad with a button pressed, and sets it as the desired controller
     if(message) {
@@ -228,7 +228,7 @@ function Gamepad() {
             }
           }
         }
-      
+
         if(gp.ready) {                      //if gamepad matches a known layout, accept the chosen gamepad
           window.clearInterval(monitor);
           //console.log("gamepad accepted");
@@ -281,19 +281,19 @@ function Gamepad() {
           gp.setButtonLast(key_b);
           gp.buttons[key_b].val = read.buttons[layouts[gp.layout].buttons[key_b]].value;
           gp.setStatusChange(key_b);
-          
+
           if(but_func[key_b].change_func != null) {
             but_func[key_b].change_func();
           }
-          
+
           if(but_func[key_b].val_func != null) {
             but_func[key_b].val_func();
           }
-          
+
           if(but_func[key_b].press_func != null) {
             but_func[key_b].press_func();
           }
-          
+
           if(but_func[key_b].release_func != null) {
             but_func[key_b].release_func();
           }
@@ -307,14 +307,14 @@ function Gamepad() {
           if(ax_func[key_a].polar_func != null) {
             ax_func[key_a].polar_func();
           }
-          
+
           if(ax_func[key_a].cartes_func != null) {
             ax_func[key_a].cartes_func();
           }
           //console.log("Axes: "+gp.axes[key_a].pos+" "+key_a);
         }
       });
-      
+
     } else {
       Object.keys(gp.buttons) .forEach(function(key_b, i) {
         if(key_b != "length"){

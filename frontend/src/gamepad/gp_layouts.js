@@ -2,10 +2,10 @@
   Please include this file before gp_library.js. The layouts
   need to be defined before the controller library object can
   function.
-  
+
   Any additions must follow the format of the xbox object
   (it was the first in this file)
-  
+
   Please ask the Basestation team if you would like to add
   any controllers to the list, or if you're having issues
   using one that should be implimented.
