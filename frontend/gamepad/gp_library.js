@@ -56,7 +56,7 @@ function Gamepad() {
   var buttons_last = new Object;
   var axes_off = new Object;
   var but_func = new Object;
-  var ax_func = new Object;
+  var ax_func = {left: null, right: null};
   
   this.butfuncexist = function(key) {
     return but_func[key] != undefined;
@@ -194,10 +194,10 @@ function Gamepad() {
       
     } else if(trigger == "cartesian") {
       afunc_key = "cartes_func";
-      
     }
     
     if(afunc_key != null) {
+      //console.log("Binding: "+side+" "+afunc_key);
       ax_func[side][afunc_key] = function() {
         func(arg);
       }
@@ -264,7 +264,7 @@ function Gamepad() {
           cur_index = layouts[key].axes[i].index;
           gp.axes[which][name] = arrays[cur_index];
           if(ax_func[name] == undefined) {
-            ax_func[name] = {polar_func: null, cartes_func: null};
+            ax_func[which] = {polar_func: null, cartes_func: null};
           }
         }
         gp.setDisplace("left", gp.axes.left.x, gp.axes.left.y);
@@ -326,14 +326,14 @@ function Gamepad() {
         
       Object.keys(gp.axes).forEach(function(key_a, i) {
           gp.axes[key_a] = gp.axesAdjust(key_a, temp_axes[key_a].x, temp_axes[key_a].y);
-          if(ax_func[name].polar_func != null) {
-            ax_func[name].polar_func();
+          if(ax_func[key_a].polar_func != null) {
+            ax_func[key_a].polar_func();
           }
           
-          if(ax_func[name].cartes_func != null) {
-            ax_func[name].cartes_func();
+          if(ax_func[key_a].cartes_func != null) {
+            ax_func[key_a].cartes_func();
           }
-          //console.log("Axes: "+gp.axes[name].pos+" "+name);
+          //console.log("Axes: "+gp.axes[key_a].pos+" "+key_a);
       });
       
     } else {
