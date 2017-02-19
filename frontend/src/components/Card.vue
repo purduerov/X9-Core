@@ -3,7 +3,9 @@
         <div id="card">
             <div id="main-container" :style="{backgroundColor: color}">
                 <div id="padding">
-                    <slot></slot>
+                    <div id="slot">
+                        <slot></slot>
+                    </div>
                 </div>
             </div>
         </div>
@@ -41,6 +43,22 @@
     padding: 10px;
     width: 100%;
     height: 100%;
-    overflow: hidden;
+}
+
+#slot {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+    width: 12px;  /* remove scrollbar space */
+    background: #282828;  /* optional: just make scrollbar invisible */
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb {
+    background: #222222;
+    border-radius: 4px;
 }
 </style>

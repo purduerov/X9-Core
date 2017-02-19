@@ -2,16 +2,16 @@
     <div>
         <h5>Thrusters:</h5>
         <hr>
-        <ul v-for="(value, key) in data">
-            <li>{{key}}: </br>
-                <p class="thruster_data">
-                   Active: {{value.active}}</br>
-                   Target: {{value.target}}</br>
-                   Current: {{value.current}}</br>
-                   PWM: {{value.pwm_actual}}</p>
-            </li>
+        <div v-for="(t,i) in data">
+            <ul>
+                <li>Thruster: {{i+1}}</li>
+                <li>Active: {{t.active}}</li>
+                <li>Target: {{t.target}}</li>
+                <li>Current: {{t.current}}</li>
+                <li>PWM: {{t.pwm_actual}}</li>
+            </ul>
             <hr>
-        </ul>
+        </div>
     </div>
 </template>
 
@@ -22,10 +22,6 @@
 </script>
 
 <style scoped>
-.thruster_data {
-  padding-left: 8px;
-}
-
 h1 {
     font-weight: 400;
 }

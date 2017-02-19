@@ -7,18 +7,18 @@
             <Card class="camera-width full-height">
                 <CameraView></CameraView>
             </Card>
-            <div style="width: calc(100% - 800px); height: 100%; float: left">
+            <div class="information-components">
                 <Card class="half-width half-height">
-                    <IMU :data="packet.IMU"></IMU>
+                    <IMU :data="packet.imu"></IMU>
                 </Card>
                 <Card class="half-width half-height">
                     <DataView title="Pressure:" :data="packet.pressure"></DataView>
                 </Card>
                 <Card class="half-width half-height">
-                    <GpInfo :data="gpinfo"></GpInfo>
+                    <GpInfo :data="gamepad"></GpInfo>
                 </Card>
                 <Card class="half-width half-height">
-                    <Thruster :data="packet.Thrusters"></Thruster>
+                    <Thruster :data="packet.thrusters"></Thruster>
                 </Card>
             </div>
         </div>
@@ -47,7 +47,7 @@ export default {
     data: function() {
         return {
             packet: {
-                IMU: {
+                imu: {
                     x: 3,
                     y: 4,
                     z: 2,
@@ -55,22 +55,22 @@ export default {
                     roll: -4,
                     yaw: .243
                 },
-                PRESSURE: {
+                pressure: {
                     pressure: 7,
                     temperature: 4
                 },
-                Thrusters: {
-                    t0 : { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
-                    t1 : { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
-                    t2 : { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
-                    t3 : { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
-                    t4 : { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
-                    t5 : { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
-                    t6 : { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
-                    t7 : { active: 0, target: 0.0, current: 0.0, pwm_actual: 0}
-                }
+                thrusters: [
+                    { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
+                    { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
+                    { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
+                    { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
+                    { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
+                    { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
+                    { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
+                    { active: 0, target: 0.0, current: 0.0, pwm_actual: 0}
+                ]
             },
-            gpinfo: {
+            gamepad: {
                 buttons: {
                     a: 0,
                     b: 0,
@@ -170,5 +170,10 @@ export default {
 
 .camera-width {
     width: 800px;
+}
+.information-components {
+    width: calc(100% - 800px); /* 100% - camera-width */
+    height: 100%;
+    float: left;
 }
 </style>
