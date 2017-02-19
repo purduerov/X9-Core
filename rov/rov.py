@@ -31,7 +31,8 @@ class ROV(object):
         self.mapper = ThrustMapper()
         self.thrusters = Thrusters()
 
-        self.camera1 = Camera()
+        #self.camera1 = Camera()
+        #self.camera1.on()
 
         self._data_lock = Lock()
 
@@ -47,7 +48,7 @@ class ROV(object):
     def update(self):
         with self._data_lock:
 
-            print "Update! last update was: %.5f s ago" % (time() - self.last_update)
+            #print "Update! last update was: %.5f s ago" % (time() - self.last_update)
 
             # Update all simple sensor data and stuff it in data
             for sensor in self.simple_sensors.keys():
@@ -56,9 +57,7 @@ class ROV(object):
 
             # Read controller data
             #
-            # * Make thruster's force vector
             # * Control Tools
-
 
             # Update all thrusters and at the end push motors:
             #
