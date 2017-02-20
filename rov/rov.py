@@ -4,14 +4,13 @@ from time import time, sleep
 from threading import Lock
 import copy
 import os
-import numpy as np
 
 
 from sensors import Pressure, IMU
 # from thrusters import Thrusters
 # from thrusters import ThrustMapper
 from thrusters import AltThrusters
-from camera.cam import Camera
+# from camera.cam import Camera
 
 
 class ROV(object):
@@ -19,6 +18,8 @@ class ROV(object):
     def __init__(self):
         self._data = {}
         self._control_data = {}
+        self._new_data = False
+        self._last_packet = time() - 1
 
         self.last_update = time()
         self.last_print = time()
@@ -33,8 +34,8 @@ class ROV(object):
         # self.mapper = ThrustMapper()
         # self.thrusters = Thrusters()
 
-        #self.camera1 = Camera()
-        #self.camera1.on()
+        # self.camera1 = Camera()
+        # self.camera1.on()
 
         self._data_lock = Lock()
 
@@ -61,6 +62,8 @@ class ROV(object):
     def control_data(self, val):
         with self._control_data_lock:
             self._control_data = copy.deepcopy(val)
+            self._new_data = True
+            self._last_packet = time()
 
     def debug_print(self):
         if time() - self.last_print > 0.4:
@@ -78,15 +81,22 @@ class ROV(object):
             control_data = self.control_data
 
             # Update all simple sensor data and stuff it in data
-            for sensor in self.simple_sensors.keys():
+            for sensor in self.simple_sensors:
                 self.simple_sensors[sensor].update()
                 self._data[sensor] = self.simple_sensors[sensor].data
 
             if self.debug:
                 self.debug_print()
 
-            if control_data != {}:
-                self._data['thrusters'] = self.thrusters.calculate_and_set(control_data['gamepad'])
+            if self._new_data:
+                try:
+                    self._data['thrusters'] = self.thrusters.calculate_and_set(control_data['gamepad'])
+                except Exception as e:
+                    print e.message
+                self._new_data = False
+            elif time() - self._last_packet > 0.5:
+                print 'stop the thrusters'
+                self.thrusters.stop()
 
             # Our last update
             self.last_update = time()
@@ -96,7 +106,10 @@ class ROV(object):
             while time() - self.last_update < 0.01:
                 sleep(0.005)
 
-            self.update()
+            try:
+                self.update()
+            except Exception as e:
+                print e.message
 
 if __name__ == "__main__":
     r = ROV()

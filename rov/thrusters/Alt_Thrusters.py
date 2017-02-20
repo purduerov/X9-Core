@@ -36,26 +36,25 @@ class Thrusters(object):
         else:
             return self.range_map(val, -1.0, 1.0, self.NEG_MAX_POWER, self.POS_MAX_POWER)
 
-
     def calculate(self, gamepad):
-        #Calculate Thruster Values
+        # Calculate Thruster Values
 
-        #Y (Ascend and descend)
+        # Y (Ascend and descend)
         velY = (gamepad['buttons']['rt']['val'] - gamepad['buttons']['lt']['val'])
 
-        #X (Strafe left and right)
+        # X (Strafe left and right)
         velX = (gamepad['buttons']['rb']['val'] - gamepad['buttons']['lb']['val'])
 
-        #Z (forward and backword)
+        # Z (forward and backword)
         velZ = gamepad['axes']['left']['y']
 
-        #Yaw (rotate clockwise and counter-clockwise)
+        # Yaw (rotate clockwise and counter-clockwise)
         yaw = gamepad['axes']['left']['x'] * -1
 
-        #Pitch (rotate forward and backward)
+        # Pitch (rotate forward and backward)
         pitch = gamepad['axes']['right']['y']
 
-        #Roll (rotate left to right)
+        # Roll (rotate left to right)
         roll = gamepad['axes']['right']['x']
 
         # velY = velY * 0.5;
@@ -66,38 +65,38 @@ class Thrusters(object):
         # pitch = pitch * 0.4;
         # roll = roll * 0.4;
 
-        horizontalThrusters = [0,0,0,0]
-        verticalThrusters = [0,0,0,0]
+        horizontalThrusters = [0, 0, 0, 0]
+        verticalThrusters = [0, 0, 0, 0]
 
-        horizontalThrusters[0] += velX;
-        horizontalThrusters[1] -= velX;
-        horizontalThrusters[2] += velX;
-        horizontalThrusters[3] -= velX;
+        horizontalThrusters[0] += velX
+        horizontalThrusters[1] -= velX
+        horizontalThrusters[2] += velX
+        horizontalThrusters[3] -= velX
 
-        verticalThrusters[0] += velY;
-        verticalThrusters[1] += velY;
-        verticalThrusters[2] += velY;
-        verticalThrusters[3] += velY;
+        verticalThrusters[0] += velY
+        verticalThrusters[1] += velY
+        verticalThrusters[2] += velY
+        verticalThrusters[3] += velY
 
-        horizontalThrusters[0] += velZ;
-        horizontalThrusters[1] += velZ;
-        horizontalThrusters[2] -= velZ;
-        horizontalThrusters[3] -= velZ;
+        horizontalThrusters[0] += velZ
+        horizontalThrusters[1] += velZ
+        horizontalThrusters[2] -= velZ
+        horizontalThrusters[3] -= velZ
 
-        verticalThrusters[0] += pitch;
-        verticalThrusters[1] += pitch;
-        verticalThrusters[2] -= pitch;
-        verticalThrusters[3] -= pitch;
+        verticalThrusters[0] += pitch
+        verticalThrusters[1] += pitch
+        verticalThrusters[2] -= pitch
+        verticalThrusters[3] -= pitch
 
-        horizontalThrusters[0] -= yaw;
-        horizontalThrusters[1] += yaw;
-        horizontalThrusters[2] += yaw;
-        horizontalThrusters[3] -= yaw;
+        horizontalThrusters[0] -= yaw
+        horizontalThrusters[1] += yaw
+        horizontalThrusters[2] += yaw
+        horizontalThrusters[3] -= yaw
 
-        verticalThrusters[0] += roll;
-        verticalThrusters[1] -= roll;
-        verticalThrusters[2] += roll;
-        verticalThrusters[3] -= roll;
+        verticalThrusters[0] += roll
+        verticalThrusters[1] -= roll
+        verticalThrusters[2] += roll
+        verticalThrusters[3] -= roll
 
         horizontalThrusters = self.normalize(horizontalThrusters)
         verticalThrusters = self.normalize(verticalThrusters)
@@ -108,7 +107,7 @@ class Thrusters(object):
         max_val = max([abs(x) for x in values])
 
         if max_val > 1.0:
-            values = [x/max_val for x in values]
+            values = [x / max_val for x in values]
 
         return values
 
@@ -126,4 +125,8 @@ class Thrusters(object):
         thruster_vals = self.calculate(gamepad)
         self.set(thruster_vals)
         return [self.toPWM(x) for x in thruster_vals]
-        #return thruster_vals
+        # return thruster_vals
+
+    def stop(self):
+        for i in range(0, self.NUM_THRUSTERS):
+            self.pwm.set_pwm(self.pin_layout[i], 0, self.ZERO_POWER)

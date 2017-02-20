@@ -1,8 +1,6 @@
-import json
-import os
 import threading
 
-from flask import Flask, send_from_directory
+from flask import Flask
 from flask_socketio import SocketIO
 
 from rov.rov import ROV
@@ -13,6 +11,7 @@ socketio = SocketIO(app)
 
 rov = ROV()
 
+
 @app.route('/')
 def index():
     return app.send_static_file('index.html')
@@ -20,12 +19,12 @@ def index():
 
 @socketio.on('connect')
 def on_connect():
-    print("Client Connected!")
+    print "Client Connected!"
 
 
 @socketio.on('disconnect')
 def on_disconnect():
-    print("Client Disconnected!")
+    print "Client Disconnected!"
 
 
 @socketio.on('control-data')
