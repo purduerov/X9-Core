@@ -111,8 +111,8 @@ export default {
             }
         }, 5);
 
-        var socket = io.connect('http://10.10.1.125:5000', {transports: ['websocket']});
-        //var socket = io.connect('http://' + document.domain + ':' + location.port);
+        var socket = io.connect(`http://${document.domain}:${location.port}`, {transports: ['websocket']});
+        //var socket = io.connect('http://10.10.1.125:5000', {transports: ['websocket']});
 
 
         setInterval(function() {

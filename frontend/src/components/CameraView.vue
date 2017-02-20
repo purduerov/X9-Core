@@ -1,12 +1,17 @@
 <template>
     <div id="camera-view">
-        <img src="http://10.10.1.125:8080/?action=stream">
+        <img :src="ip">
     </div>
 </template>
 
 <script>
 export default {
     name: 'camera-view',
+    data: function() {
+        return {
+            ip: `http://${document.domain}:8080/?action=stream`
+        }
+    }
 }
 </script>
 
