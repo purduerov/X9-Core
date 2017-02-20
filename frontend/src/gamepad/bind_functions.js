@@ -43,28 +43,28 @@ bind = {
     a: {
       change: {
         func: function() {
-          vue_app.gpinfo.buttons.a = gp.buttons.a.val;
+          vue_app.gamepad.buttons.a = gp.buttons.a.val;
         }
       },
     },
     b: {
       change: {
         func: function() {
-          vue_app.gpinfo.buttons.b = gp.buttons.b.val;
+          vue_app.gamepad.buttons.b = gp.buttons.b.val;
         }
       },
     },
     x: {
       change: {
         func: function() {
-          vue_app.gpinfo.buttons.x = gp.buttons.x.val;
+          vue_app.gamepad.buttons.x = gp.buttons.x.val;
         }
       },
     },
     y: {
       change: {
         func: function() {
-          vue_app.gpinfo.buttons.y = gp.buttons.y.val;
+          vue_app.gamepad.buttons.y = gp.buttons.y.val;
         }
       },
     },
@@ -103,8 +103,8 @@ bind = {
         func: function() {
           controls.force.y = gp.axes.left.x;
           controls.force.x = gp.axes.left.y;
-          vue_app.gpinfo.axes.left.x = gp.axes.left.x;
-          vue_app.gpinfo.axes.left.y = gp.axes.left.y;
+          vue_app.gamepad.axes.left.x = gp.axes.left.x;
+          vue_app.gamepad.axes.left.y = gp.axes.left.y;
         },
       },
     },
@@ -113,8 +113,8 @@ bind = {
         func: function() {
           controls.force.pitch = gp.axes.right.y;
           controls.force.roll = gp.axes.right.x;
-          vue_app.gpinfo.axes.right.x = gp.axes.right.x;
-          vue_app.gpinfo.axes.right.y = gp.axes.right.y;
+          vue_app.gamepad.axes.right.x = gp.axes.right.x;
+          vue_app.gamepad.axes.right.y = gp.axes.right.y;
         },
       },
     },
