@@ -5,10 +5,11 @@
         <div v-for="(t,i) in data">
             <ul>
                 <li>Thruster: {{i+1}}</li>
-                <li>Active: {{t.active}}</li>
-                <li>Target: {{t.target}}</li>
-                <li>Current: {{t.current}}</li>
-                <li>PWM: {{t.pwm_actual}}</li>
+                <li>Val: {{t}}</li>
+                <!--<li>Active: {{t.active}}</li>-->
+                <!--<li>Target: {{t.target}}</li>-->
+                <!--<li>Current: {{t.current}}</li>-->
+                <!--<li>PWM: {{t.pwm_actual}}</li>-->
             </ul>
             <hr>
         </div>

@@ -9,16 +9,16 @@
             </Card>
             <div class="information-components">
                 <Card class="half-width half-height">
-                    <IMU :data="packet.imu"></IMU>
+                    <IMU :data="rov.imu"></IMU>
                 </Card>
                 <Card class="half-width half-height">
-                    <DataView title="Pressure:" :data="packet.pressure"></DataView>
+                    <DataView title="Pressure:" :data="rov.pressure"></DataView>
                 </Card>
                 <Card class="half-width half-height">
                     <GpInfo :data="gamepad"></GpInfo>
                 </Card>
                 <Card class="half-width half-height">
-                    <Thruster :data="packet.thrusters"></Thruster>
+                    <Thruster :data="rov.thrusters"></Thruster>
                 </Card>
             </div>
         </div>
@@ -70,6 +70,7 @@ export default {
                     { active: 0, target: 0.0, current: 0.0, pwm_actual: 0}
                 ]
             },
+            rov: {},
             gamepad: {
                 buttons: {
                     a: 0,
@@ -108,25 +109,30 @@ export default {
                   gp.get_current();
                 });
             }
-        });
+        }, 5);
 
-        var socket = io.connect('http://' + document.domain + ':' + location.port);
+        var socket = io.connect('http://10.10.1.125:5000', {transports: ['websocket']});
+        //var socket = io.connect('http://' + document.domain + ':' + location.port);
 
-        var app_refresh = setInterval(function() {
-            if(gp.ready) {
-                socket.emit("dearflask", JSON.stringify(controls));
-            }
-        }, 50);
-        socket.on("dearclient", function(status) {
-            Object.keys(status).forEach(function(key, i) {
-                vm.packet[key] = status[key];
+
+        setInterval(function() {
+            socket.emit("control-data", {
+                gamepad: controls,
+                thrusters: [
+                    true,true,true,true,
+                    true,true,true,true
+                ]
             });
-            //setTimeout(function() {
-                //console.log(vm.packet);
-            //}, 10);
-        });
+        }, 50);
 
-        console.log(vm.gpinfo);
+
+        setInterval(function() {
+            socket.emit("ask-rov-data");
+        }, 60);
+
+        socket.on("rov-data", function(data) {
+            vm.rov = data
+        });
     }
 }
 </script>
