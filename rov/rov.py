@@ -78,18 +78,15 @@ class ROV(object):
     def update(self):
         with self._data_lock:
 
-            control_data = self.control_data
 
             # Update all simple sensor data and stuff it in data
             for sensor in self.simple_sensors:
                 self.simple_sensors[sensor].update()
                 self._data[sensor] = self.simple_sensors[sensor].data
 
-            if self.debug:
-                self.debug_print()
-
             if self._new_data:
                 try:
+                    control_data = self.control_data
                     self._data['thrusters'] = self.thrusters.calculate_and_set(control_data['gamepad'])
                 except Exception as e:
                     print e.message
@@ -100,6 +97,10 @@ class ROV(object):
 
             # Our last update
             self.last_update = time()
+
+            if self.debug:
+                self.debug_print()
+
 
     def run(self):
         while self._running:
