@@ -3,23 +3,25 @@ from time import time, sleep
 
 from threading import Lock
 import copy
+import os
 import numpy as np
 
 
 from sensors import Pressure, IMU
-from thrusters import Thrusters
-from thrusters import ThrustMapper
+# from thrusters import Thrusters
+# from thrusters import ThrustMapper
+from thrusters import AltThrusters
 from camera.cam import Camera
 
 
 class ROV(object):
 
     def __init__(self):
-        self._data = {
-                "dearclient": { "thrusters": {} },
-                "dearflask": { "thrusters": {}, "force": {} }
-            }
+        self._data = {}
+        self._control_data = {}
+
         self.last_update = time()
+        self.last_print = time()
 
         self.simple_sensors = {
             "imu": IMU(),
@@ -28,50 +30,63 @@ class ROV(object):
 
         self._running = True
 
-        self.mapper = ThrustMapper()
-        self.thrusters = Thrusters()
+        # self.mapper = ThrustMapper()
+        # self.thrusters = Thrusters()
 
         #self.camera1 = Camera()
         #self.camera1.on()
 
         self._data_lock = Lock()
 
+        self._control_data_lock = Lock()
+
+        self.debug = (os.environ.get("ROV_DEBUG") == "1")
+
+        self.thrusters = AltThrusters(
+            [True, True, True, True, True, True, True, True],
+            [6, 1, 4, 3, 5, 12, 8, 9]
+        )
+
     @property
     def data(self):
         with self._data_lock:
-            self._data['dearclient']['last_update'] = self.last_update
-            self._data['dearflask']['last_update'] = self.last_update
-            ret = copy.deepcopy(self._data)
+            return copy.deepcopy(self._data)
 
-            return ret
+    @property
+    def control_data(self):
+        with self._control_data_lock:
+            return self._control_data
+
+    @control_data.setter
+    def control_data(self, val):
+        with self._control_data_lock:
+            self._control_data = copy.deepcopy(val)
+
+    def debug_print(self):
+        if time() - self.last_print > 0.4:
+            print '\n\nControl Data: '
+            print self.control_data
+
+            print '\n\nROV Data: '
+            print self._data
+
+            self.last_print = time()
 
     def update(self):
         with self._data_lock:
 
-            #print "Update! last update was: %.5f s ago" % (time() - self.last_update)
+            control_data = self.control_data
 
             # Update all simple sensor data and stuff it in data
             for sensor in self.simple_sensors.keys():
                 self.simple_sensors[sensor].update()
-                self._data['dearclient'][sensor] = self.simple_sensors[sensor].data
+                self._data[sensor] = self.simple_sensors[sensor].data
 
-            # Read controller data
-            #
-            # * Control Tools
+            if self.debug:
+                self.debug_print()
 
-            # Update all thrusters and at the end push motors:
-            #
-            try:
-                actives = list()
-                for t in self._data['dearflask']["thrusters"]:
-                    actives.append([t["active"]])
-                force = self._data['dearflask']["force"]
-                thrust = self.mapper.generate_thrust_map(np.array(actives), np.array(force))
-                self.thrusters.push_pi_motors(thrust, actives)
-                self._data['dearclient']["thrusters"]["thrusters"] = self.thrusters.get_data()
-            except:
-                #print("ERROR: _data malformed, client may not be connected or transmitting.")
-                pass
+            if control_data != {}:
+                self._data['thrusters'] = self.thrusters.calculate_and_set(control_data['gamepad'])
 
             # Our last update
             self.last_update = time()
@@ -85,8 +100,4 @@ class ROV(object):
 
 if __name__ == "__main__":
     r = ROV()
-    r._data["dearclient"]["thrusters"] = { "actives": [], "force": [], "thrusters": {} }
-    r._data["dearclient"]["thrusters"]["actives"] = [1,1,1,1,1,1,1,1]
-    r._data["dearclient"]["thrusters"]["force"] = [[1],[0],[0],[0],[0],[0]]
     r.run()
-    # add print statement after self.update() in r.run()

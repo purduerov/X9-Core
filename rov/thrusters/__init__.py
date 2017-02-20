@@ -14,3 +14,14 @@ def Thrusters():
         print "Using Mock Thrusters"
         from Thrusters_Mock import Thrusters as Thrusters_Mock
         return Thrusters_Mock()
+
+def AltThrusters(*args):
+    try:
+        from Alt_Thrusters import Thrusters as Thrusters_Alt
+        return Thrusters_Alt(*args)
+    except Exception as e:
+        print "Failed to Initialize Alt Thrusters"
+        print "Error: %s" % e.message
+        print "Using Mock Thrusters"
+        from Thrusters_Mock import Thrusters as Thrusters_Mock
+        return Thrusters_Mock()

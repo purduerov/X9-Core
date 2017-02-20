@@ -112,7 +112,7 @@ class Thrusters:
             self.thrusters[t].setPWMActual(self.ZERO_POWER + int(self.thrusters[t].getTarget() * (self.POS_MAX_POWER - self.ZERO_POWER)))
             self.thrusters[t].setCurrent(self.thrusters[t].getTarget())
 
-            #pwm.set_pwm(self.pins[t], 0, self.thrusters[t].getPWMActual())
+            pwm.set_pwm(self.pins[t], 0, self.thrusters[t].getPWMActual())
 
 
     def stop(self):
