@@ -37,7 +37,7 @@
         "base": {
             "LD_LIBRARY_PATH": "/usr/local/lib",
             "PATH": "${CORE_DIR}/install/mjpeg_streamer",
-            "FLASK_APP": "${CORE_DIR}/application.py",
+            "FLASK_APP": "application.py",
             "FLASK_DEBUG": "0",
             "ROV_DEBUG": "0"
         },
