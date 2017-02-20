@@ -60,9 +60,9 @@ Scotty will run linting tests to check for things like unused variables, bad imp
 Will hope to add more tests that can test our modules individually
 
 ### To install node and Vue:
-1. it looks like npm needs a library provided by adafruit, so run: `curl -sLS https://apt.adafruit.com/add | sudo bash`
+1. `curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -`
 
-2. The vue we're using is a node module, so just run: `sudo apt-get install nodejs npm`
+2. `sudo apt-get install nodejs`
 
 3. now, navigate to `X9-Core/frontend/` and run `npm install`
 
