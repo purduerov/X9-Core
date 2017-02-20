@@ -1,4 +1,4 @@
-from thrust_mapper import ThrustMapper
+#from thrust_mapper import ThrustMapper
 
 # Attemps to initialize the hardware thrustesr
 # If it fails on init, then use the mock thrusters
