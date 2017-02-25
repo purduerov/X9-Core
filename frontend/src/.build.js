@@ -1,4 +1,136 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+var Vue // late bind
+var map = window.__VUE_HOT_MAP__ = Object.create(null)
+var installed = false
+var isBrowserify = false
+var initHookName = 'beforeCreate'
+
+exports.install = function (vue, browserify) {
+  if (installed) return
+  installed = true
+
+  Vue = vue
+  isBrowserify = browserify
+
+  // compat with < 2.0.0-alpha.7
+  if (Vue.config._lifecycleHooks.indexOf('init') > -1) {
+    initHookName = 'init'
+  }
+
+  exports.compatible = Number(Vue.version.split('.')[0]) >= 2
+  if (!exports.compatible) {
+    console.warn(
+      '[HMR] You are using a version of vue-hot-reload-api that is ' +
+      'only compatible with Vue.js core ^2.0.0.'
+    )
+    return
+  }
+}
+
+/**
+ * Create a record for a hot module, which keeps track of its constructor
+ * and instances
+ *
+ * @param {String} id
+ * @param {Object} options
+ */
+
+exports.createRecord = function (id, options) {
+  var Ctor = null
+  if (typeof options === 'function') {
+    Ctor = options
+    options = Ctor.options
+  }
+  makeOptionsHot(id, options)
+  map[id] = {
+    Ctor: Vue.extend(options),
+    instances: []
+  }
+}
+
+/**
+ * Make a Component options object hot.
+ *
+ * @param {String} id
+ * @param {Object} options
+ */
+
+function makeOptionsHot (id, options) {
+  injectHook(options, initHookName, function () {
+    map[id].instances.push(this)
+  })
+  injectHook(options, 'beforeDestroy', function () {
+    var instances = map[id].instances
+    instances.splice(instances.indexOf(this), 1)
+  })
+}
+
+/**
+ * Inject a hook to a hot reloadable component so that
+ * we can keep track of it.
+ *
+ * @param {Object} options
+ * @param {String} name
+ * @param {Function} hook
+ */
+
+function injectHook (options, name, hook) {
+  var existing = options[name]
+  options[name] = existing
+    ? Array.isArray(existing)
+      ? existing.concat(hook)
+      : [existing, hook]
+    : [hook]
+}
+
+function tryWrap (fn) {
+  return function (id, arg) {
+    try { fn(id, arg) } catch (e) {
+      console.error(e)
+      console.warn('Something went wrong during Vue component hot-reload. Full reload required.')
+    }
+  }
+}
+
+exports.rerender = tryWrap(function (id, options) {
+  var record = map[id]
+  if (typeof options === 'function') {
+    options = options.options
+  }
+  record.Ctor.options.render = options.render
+  record.Ctor.options.staticRenderFns = options.staticRenderFns
+  record.instances.slice().forEach(function (instance) {
+    instance.$options.render = options.render
+    instance.$options.staticRenderFns = options.staticRenderFns
+    instance._staticTrees = [] // reset static trees
+    instance.$forceUpdate()
+  })
+})
+
+exports.reload = tryWrap(function (id, options) {
+  if (typeof options === 'function') {
+    options = options.options
+  }
+  makeOptionsHot(id, options)
+  var record = map[id]
+  record.Ctor.extendOptions = options
+  var newCtor = Vue.extend(options)
+  record.Ctor.options = newCtor.options
+  record.Ctor.cid = newCtor.cid
+  if (newCtor.release) {
+    // temporary global mixin strategy used in < 2.0.0-alpha.6
+    newCtor.release()
+  }
+  record.instances.slice().forEach(function (instance) {
+    if (instance.$vnode && instance.$vnode.context) {
+      instance.$vnode.context.$forceUpdate()
+    } else {
+      console.warn('Root or manually mounted instance modified. Full reload required.')
+    }
+  })
+})
+
+},{}],2:[function(require,module,exports){
 (function (global){
 /*!
  * Vue.js v2.1.10
@@ -251,7 +383,7 @@ var config = {
   /**
    * Whether to enable devtools
    */
-  devtools: "production" !== 'production',
+  devtools: "development" !== 'production',
 
   /**
    * Error handler for watcher errors
@@ -515,7 +647,7 @@ if (typeof Set !== 'undefined' && isNative(Set)) {
 var warn = noop;
 var formatComponentName;
 
-if ("production" !== 'production') {
+if ("development" !== 'production') {
   var hasConsole = typeof console !== 'undefined';
 
   warn = function (msg, vm) {
@@ -800,7 +932,7 @@ function defineReactive$$1 (
         return
       }
       /* eslint-enable no-self-compare */
-      if ("production" !== 'production' && customSetter) {
+      if ("development" !== 'production' && customSetter) {
         customSetter();
       }
       if (setter) {
@@ -831,7 +963,7 @@ function set$1 (obj, key, val) {
   }
   var ob = obj.__ob__;
   if (obj._isVue || (ob && ob.vmCount)) {
-    "production" !== 'production' && warn(
+    "development" !== 'production' && warn(
       'Avoid adding reactive properties to a Vue instance or its root $data ' +
       'at runtime - declare it upfront in the data option.'
     );
@@ -852,7 +984,7 @@ function set$1 (obj, key, val) {
 function del (obj, key) {
   var ob = obj.__ob__;
   if (obj._isVue || (ob && ob.vmCount)) {
-    "production" !== 'production' && warn(
+    "development" !== 'production' && warn(
       'Avoid deleting properties on a Vue instance or its root $data ' +
       '- just set it to null.'
     );
@@ -894,7 +1026,7 @@ var strats = config.optionMergeStrategies;
 /**
  * Options with restrictions
  */
-if ("production" !== 'production') {
+if ("development" !== 'production') {
   strats.el = strats.propsData = function (parent, child, vm, key) {
     if (!vm) {
       warn(
@@ -940,7 +1072,7 @@ strats.data = function (
       return parentVal
     }
     if (typeof childVal !== 'function') {
-      "production" !== 'production' && warn(
+      "development" !== 'production' && warn(
         'The "data" option should be a function ' +
         'that returns a per-instance value in component ' +
         'definitions.',
@@ -1097,7 +1229,7 @@ function normalizeProps (options) {
       if (typeof val === 'string') {
         name = camelize(val);
         res[name] = { type: null };
-      } else if ("production" !== 'production') {
+      } else if ("development" !== 'production') {
         warn('props must be strings when using array syntax.');
       }
     }
@@ -1137,7 +1269,7 @@ function mergeOptions (
   child,
   vm
 ) {
-  if ("production" !== 'production') {
+  if ("development" !== 'production') {
     checkComponents(child);
   }
   normalizeProps(child);
@@ -1198,7 +1330,7 @@ function resolveAsset (
   if (hasOwn(assets, PascalCaseId)) { return assets[PascalCaseId] }
   // fallback to prototype chain
   var res = assets[id] || assets[camelizedId] || assets[PascalCaseId];
-  if ("production" !== 'production' && warnMissing && !res) {
+  if ("development" !== 'production' && warnMissing && !res) {
     warn(
       'Failed to resolve ' + type.slice(0, -1) + ': ' + id,
       options
@@ -1236,7 +1368,7 @@ function validateProp (
     observe(value);
     observerState.shouldConvert = prevShouldConvert;
   }
-  if ("production" !== 'production') {
+  if ("development" !== 'production') {
     assertProp(prop, key, value, vm, absent);
   }
   return value
@@ -1253,7 +1385,7 @@ function getPropDefaultValue (vm, prop, key) {
   var def = prop.default;
   // warn against non-factory defaults for Object & Array
   if (isObject(def)) {
-    "production" !== 'production' && warn(
+    "development" !== 'production' && warn(
       'Invalid default value for prop "' + key + '": ' +
       'Props with type Object/Array must use a factory function ' +
       'to return the default value.',
@@ -1429,7 +1561,7 @@ var util = Object.freeze({
 
 var initProxy;
 
-if ("production" !== 'production') {
+if ("development" !== 'production') {
   var allowedGlobals = makeMap(
     'Infinity,undefined,NaN,isFinite,isNaN,' +
     'parseFloat,parseInt,decodeURI,decodeURIComponent,encodeURI,encodeURIComponent,' +
@@ -1602,7 +1734,7 @@ function createComponent (
   }
 
   if (typeof Ctor !== 'function') {
-    if ("production" !== 'production') {
+    if ("development" !== 'production') {
       warn(("Invalid Component definition: " + (String(Ctor))), context);
     }
     return
@@ -1812,7 +1944,7 @@ function resolveAsyncComponent (
     };
 
     var reject = function (reason) {
-      "production" !== 'production' && warn(
+      "development" !== 'production' && warn(
         "Failed to resolve async component: " + (String(factory)) +
         (reason ? ("\nReason: " + reason) : '')
       );
@@ -1963,7 +2095,7 @@ function updateListeners (
     old = oldOn[name];
     event = normalizeEvent(name);
     if (!cur) {
-      "production" !== 'production' && warn(
+      "development" !== 'production' && warn(
         "Invalid handler for event \"" + (event.name) + "\": got " + String(cur),
         vm
       );
@@ -2090,7 +2222,7 @@ function _createElement (
   normalizationType
 ) {
   if (data && data.__ob__) {
-    "production" !== 'production' && warn(
+    "development" !== 'production' && warn(
       "Avoid using observed data object as vnode data: " + (JSON.stringify(data)) + "\n" +
       'Always create fresh vnode data objects in each render!',
       context
@@ -2221,7 +2353,7 @@ function renderMixin (Vue) {
       if (config.errorHandler) {
         config.errorHandler.call(null, e, vm);
       } else {
-        if ("production" !== 'production') {
+        if ("development" !== 'production') {
           warn(("Error when rendering " + (formatComponentName(vm)) + ":"));
         }
         throw e
@@ -2231,7 +2363,7 @@ function renderMixin (Vue) {
     }
     // return empty vnode in case the render function errored out
     if (!(vnode instanceof VNode)) {
-      if ("production" !== 'production' && Array.isArray(vnode)) {
+      if ("development" !== 'production' && Array.isArray(vnode)) {
         warn(
           'Multiple root nodes returned from render function. Render function ' +
           'should return a single root node.',
@@ -2354,7 +2486,7 @@ function renderMixin (Vue) {
     } else {
       var slotNodes = this.$slots[name];
       // warn duplicate slot usage
-      if (slotNodes && "production" !== 'production') {
+      if (slotNodes && "development" !== 'production') {
         slotNodes._rendered && warn(
           "Duplicate presence of slot \"" + name + "\" found in the same render tree " +
           "- this will likely cause render errors.",
@@ -2375,7 +2507,7 @@ function renderMixin (Vue) {
   ) {
     if (value) {
       if (!isObject(value)) {
-        "production" !== 'production' && warn(
+        "development" !== 'production' && warn(
           'v-bind without argument expects an Object or Array value',
           this
         );
@@ -2589,7 +2721,7 @@ function lifecycleMixin (Vue) {
     vm.$el = el;
     if (!vm.$options.render) {
       vm.$options.render = createEmptyVNode;
-      if ("production" !== 'production') {
+      if ("development" !== 'production') {
         /* istanbul ignore if */
         if (vm.$options.template && vm.$options.template.charAt(0) !== '#') {
           warn(
@@ -2676,7 +2808,7 @@ function lifecycleMixin (Vue) {
     // update props
     if (propsData && vm.$options.props) {
       observerState.shouldConvert = false;
-      if ("production" !== 'production') {
+      if ("development" !== 'production') {
         observerState.isSettingProps = true;
       }
       var propKeys = vm.$options._propKeys || [];
@@ -2685,7 +2817,7 @@ function lifecycleMixin (Vue) {
         vm[key] = validateProp(key, vm.$options.props, propsData, vm);
       }
       observerState.shouldConvert = true;
-      if ("production" !== 'production') {
+      if ("development" !== 'production') {
         observerState.isSettingProps = false;
       }
       vm.$options.propsData = propsData;
@@ -2777,7 +2909,7 @@ var index = 0;
 function resetSchedulerState () {
   queue.length = 0;
   has$1 = {};
-  if ("production" !== 'production') {
+  if ("development" !== 'production') {
     circular = {};
   }
   waiting = flushing = false;
@@ -2808,7 +2940,7 @@ function flushSchedulerQueue () {
     has$1[id] = null;
     watcher.run();
     // in dev build, check and stop circular updates.
-    if ("production" !== 'production' && has$1[id] != null) {
+    if ("development" !== 'production' && has$1[id] != null) {
       circular[id] = (circular[id] || 0) + 1;
       if (circular[id] > config._maxUpdateCount) {
         warn(
@@ -2905,7 +3037,7 @@ var Watcher = function Watcher (
   this.newDeps = [];
   this.depIds = new _Set();
   this.newDepIds = new _Set();
-  this.expression = "production" !== 'production'
+  this.expression = "development" !== 'production'
     ? expOrFn.toString()
     : '';
   // parse expression for getter
@@ -2915,7 +3047,7 @@ var Watcher = function Watcher (
     this.getter = parsePath(expOrFn);
     if (!this.getter) {
       this.getter = function () {};
-      "production" !== 'production' && warn(
+      "development" !== 'production' && warn(
         "Failed watching path: \"" + expOrFn + "\" " +
         'Watcher only accepts simple dot-delimited paths. ' +
         'For full control, use a function instead.',
@@ -3022,7 +3154,7 @@ Watcher.prototype.run = function run () {
           if (config.errorHandler) {
             config.errorHandler.call(null, e, this.vm);
           } else {
-            "production" !== 'production' && warn(
+            "development" !== 'production' && warn(
               ("Error in watcher \"" + (this.expression) + "\""),
               this.vm
             );
@@ -3139,7 +3271,7 @@ function initProps (vm, props) {
   var loop = function ( i ) {
     var key = keys[i];
     /* istanbul ignore else */
-    if ("production" !== 'production') {
+    if ("development" !== 'production') {
       if (isReservedProp[key]) {
         warn(
           ("\"" + key + "\" is a reserved attribute and cannot be used as component prop."),
@@ -3173,7 +3305,7 @@ function initData (vm) {
     : data || {};
   if (!isPlainObject(data)) {
     data = {};
-    "production" !== 'production' && warn(
+    "development" !== 'production' && warn(
       'data functions should return an object:\n' +
       'https://vuejs.org/v2/guide/components.html#data-Must-Be-a-Function',
       vm
@@ -3185,7 +3317,7 @@ function initData (vm) {
   var i = keys.length;
   while (i--) {
     if (props && hasOwn(props, keys[i])) {
-      "production" !== 'production' && warn(
+      "development" !== 'production' && warn(
         "The data property \"" + (keys[i]) + "\" is already declared as a prop. " +
         "Use prop default value instead.",
         vm
@@ -3208,7 +3340,7 @@ var computedSharedDefinition = {
 function initComputed (vm, computed) {
   for (var key in computed) {
     /* istanbul ignore if */
-    if ("production" !== 'production' && key in vm) {
+    if ("development" !== 'production' && key in vm) {
       warn(
         "existing instance property \"" + key + "\" will be " +
         "overwritten by a computed property with the same name.",
@@ -3251,7 +3383,7 @@ function makeComputedGetter (getter, owner) {
 function initMethods (vm, methods) {
   for (var key in methods) {
     vm[key] = methods[key] == null ? noop : bind$1(methods[key], vm);
-    if ("production" !== 'production' && methods[key] == null) {
+    if ("development" !== 'production' && methods[key] == null) {
       warn(
         "method \"" + key + "\" has an undefined value in the component definition. " +
         "Did you reference the function correctly?",
@@ -3294,7 +3426,7 @@ function stateMixin (Vue) {
   dataDef.get = function () {
     return this._data
   };
-  if ("production" !== 'production') {
+  if ("development" !== 'production') {
     dataDef.set = function (newData) {
       warn(
         'Avoid replacing instance root $data. ' +
@@ -3366,7 +3498,7 @@ function initMixin (Vue) {
       );
     }
     /* istanbul ignore else */
-    if ("production" !== 'production') {
+    if ("development" !== 'production') {
       initProxy(vm);
     } else {
       vm._renderProxy = vm;
@@ -3424,7 +3556,7 @@ function resolveConstructorOptions (Ctor) {
 }
 
 function Vue$2 (options) {
-  if ("production" !== 'production' &&
+  if ("development" !== 'production' &&
     !(this instanceof Vue$2)) {
     warn('Vue is a constructor and should be called with the `new` keyword');
   }
@@ -3489,7 +3621,7 @@ function initExtend (Vue) {
       return cachedCtors[SuperId]
     }
     var name = extendOptions.name || Super.options.name;
-    if ("production" !== 'production') {
+    if ("development" !== 'production') {
       if (!/^[a-zA-Z][\w-]*$/.test(name)) {
         warn(
           'Invalid component name: "' + name + '". Component names ' +
@@ -3548,7 +3680,7 @@ function initAssetRegisters (Vue) {
         return this.options[type + 's'][id]
       } else {
         /* istanbul ignore if */
-        if ("production" !== 'production') {
+        if ("development" !== 'production') {
           if (type === 'component' && config.isReservedTag(id)) {
             warn(
               'Do not use built-in or reserved HTML elements as component ' +
@@ -3676,7 +3808,7 @@ function initGlobalAPI (Vue) {
   // config
   var configDef = {};
   configDef.get = function () { return config; };
-  if ("production" !== 'production') {
+  if ("development" !== 'production') {
     configDef.set = function () {
       warn(
         'Do not replace the Vue.config object, set individual fields instead.'
@@ -3907,7 +4039,7 @@ function query (el) {
     var selector = el;
     el = document.querySelector(el);
     if (!el) {
-      "production" !== 'production' && warn(
+      "development" !== 'production' && warn(
         'Cannot find element: ' + selector
       );
       return document.createElement('div')
@@ -4124,7 +4256,7 @@ function createPatchFunction (backend) {
     var children = vnode.children;
     var tag = vnode.tag;
     if (isDef(tag)) {
-      if ("production" !== 'production') {
+      if ("development" !== 'production') {
         if (data && data.pre) {
           inPre++;
         }
@@ -4156,7 +4288,7 @@ function createPatchFunction (backend) {
         insert(parentElm, vnode.elm, refElm);
       }
 
-      if ("production" !== 'production' && data && data.pre) {
+      if ("development" !== 'production' && data && data.pre) {
         inPre--;
       }
     } else if (vnode.isComment) {
@@ -4391,7 +4523,7 @@ function createPatchFunction (backend) {
         } else {
           elmToMove = oldCh[idxInOld];
           /* istanbul ignore if */
-          if ("production" !== 'production' && !elmToMove) {
+          if ("development" !== 'production' && !elmToMove) {
             warn(
               'It seems there are duplicate keys that is causing an update error. ' +
               'Make sure each v-for item has a unique key.'
@@ -4485,7 +4617,7 @@ function createPatchFunction (backend) {
 
   // Note: this is a browser-only function so we can assume elms are DOM nodes.
   function hydrate (elm, vnode, insertedVnodeQueue) {
-    if ("production" !== 'production') {
+    if ("development" !== 'production') {
       if (!assertNodeMatch(elm, vnode)) {
         return false
       }
@@ -4520,7 +4652,7 @@ function createPatchFunction (backend) {
           // if childNode is not null, it means the actual childNodes list is
           // longer than the virtual children list.
           if (!childrenMatch || childNode) {
-            if ("production" !== 'production' &&
+            if ("development" !== 'production' &&
                 typeof console !== 'undefined' &&
                 !bailed) {
               bailed = true;
@@ -4587,7 +4719,7 @@ function createPatchFunction (backend) {
             if (hydrate(oldVnode, vnode, insertedVnodeQueue)) {
               invokeInsertHook(vnode, insertedVnodeQueue, true);
               return oldVnode
-            } else if ("production" !== 'production') {
+            } else if ("development" !== 'production') {
               warn(
                 'The client-side rendered virtual DOM tree is not matching ' +
                 'server-rendered content. This is likely caused by incorrect ' +
@@ -5638,7 +5770,7 @@ if (isIE9) {
 
 var model = {
   inserted: function inserted (el, binding, vnode) {
-    if ("production" !== 'production') {
+    if ("development" !== 'production') {
       if (!modelableTagRE.test(vnode.tag)) {
         warn(
           "v-model is not supported on element type: <" + (vnode.tag) + ">. " +
@@ -5692,7 +5824,7 @@ function setSelected (el, binding, vm) {
   var value = binding.value;
   var isMultiple = el.multiple;
   if (isMultiple && !Array.isArray(value)) {
-    "production" !== 'production' && warn(
+    "development" !== 'production' && warn(
       "<select multiple v-model=\"" + (binding.expression) + "\"> " +
       "expects an Array value for its binding, but got " + (Object.prototype.toString.call(value).slice(8, -1)),
       vm
@@ -5908,7 +6040,7 @@ var Transition = {
     }
 
     // warn multiple elements
-    if ("production" !== 'production' && children.length > 1) {
+    if ("development" !== 'production' && children.length > 1) {
       warn(
         '<transition> can only be used on a single element. Use ' +
         '<transition-group> for lists.',
@@ -5919,7 +6051,7 @@ var Transition = {
     var mode = this.mode;
 
     // warn invalid mode
-    if ("production" !== 'production' &&
+    if ("development" !== 'production' &&
         mode && mode !== 'in-out' && mode !== 'out-in') {
       warn(
         'invalid <transition> mode: ' + mode,
@@ -6032,7 +6164,7 @@ var TransitionGroup = {
           children.push(c);
           map[c.key] = c
           ;(c.data || (c.data = {})).transition = transitionData;
-        } else if ("production" !== 'production') {
+        } else if ("development" !== 'production') {
           var opts = c.componentOptions;
           var name = opts
             ? (opts.Ctor.options.name || opts.tag)
@@ -6180,7 +6312,7 @@ Vue$2.prototype.$mount = function (
   return this._mount(el, hydrating)
 };
 
-if ("production" !== 'production' &&
+if ("development" !== 'production' &&
     inBrowser && typeof console !== 'undefined') {
   console[console.info ? 'info' : 'log'](
     "You are running Vue in development mode.\n" +
@@ -6196,7 +6328,7 @@ setTimeout(function () {
     if (devtools) {
       devtools.emit('init', Vue$2);
     } else if (
-      "production" !== 'production' &&
+      "development" !== 'production' &&
       inBrowser && !isEdge && /Chrome\/\d+/.test(window.navigator.userAgent)
     ) {
       console[console.info ? 'info' : 'log'](
@@ -6210,7 +6342,7 @@ setTimeout(function () {
 module.exports = Vue$2;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],2:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 ;(function(){
 "use strict";
 
@@ -6317,11 +6449,21 @@ exports.default = {
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
+if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
 __vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{attrs:{"id":"app"}},[_c('div',{attrs:{"id":"navbar"}},[_c('Navbar',{attrs:{"title":"Purdue ROV - BattleStation"}})],1),_vm._v(" "),_c('div',{attrs:{"id":"main-container"}},[_c('Card',{staticClass:"camera-width full-height"},[_c('CameraView')],1),_vm._v(" "),_c('div',{staticClass:"information-components"},[_c('Card',{staticClass:"half-width half-height"},[_c('IMU',{attrs:{"data":_vm.rov.imu}})],1),_vm._v(" "),_c('Card',{staticClass:"half-width half-height"},[_c('DataView',{attrs:{"title":"Pressure:","data":_vm.rov.pressure}})],1),_vm._v(" "),_c('Card',{staticClass:"half-width half-height"},[_c('GpInfo',{attrs:{"data":_vm.gamepad}})],1),_vm._v(" "),_c('Card',{staticClass:"half-width half-height"},[_c('Thruster',{attrs:{"data":_vm.rov.thrusters}})],1)],1)],1)])}
 __vue__options__.staticRenderFns = []
-__vue__options__._scopeId = "data-v-74f9aa36"
-
-},{"./CameraView.vue":3,"./Card.vue":4,"./DataView.vue":5,"./GpInfo.vue":6,"./IMU.vue":7,"./Navbar.vue":8,"./Thrusters.vue":9}],3:[function(require,module,exports){
+__vue__options__._scopeId = "data-v-b81813d8"
+if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-b81813d8", __vue__options__)
+  } else {
+    hotAPI.reload("data-v-b81813d8", __vue__options__)
+  }
+})()}
+},{"./CameraView.vue":4,"./Card.vue":5,"./DataView.vue":6,"./GpInfo.vue":7,"./IMU.vue":8,"./Navbar.vue":9,"./Thrusters.vue":10,"vue":2,"vue-hot-reload-api":1}],4:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -6339,11 +6481,21 @@ exports.default = {
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
+if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
 __vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{attrs:{"id":"camera-view"}},[_c('img',{attrs:{"src":_vm.ip}})])}
 __vue__options__.staticRenderFns = []
-__vue__options__._scopeId = "data-v-07bdb4d6"
-
-},{}],4:[function(require,module,exports){
+__vue__options__._scopeId = "data-v-a78c7272"
+if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-a78c7272", __vue__options__)
+  } else {
+    hotAPI.reload("data-v-a78c7272", __vue__options__)
+  }
+})()}
+},{"vue":2,"vue-hot-reload-api":1}],5:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -6356,11 +6508,21 @@ exports.default = {
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
+if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
 __vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{attrs:{"id":"card"}},[_c('div',{style:({backgroundColor: _vm.color}),attrs:{"id":"main-container"}},[_c('div',{attrs:{"id":"padding"}},[_c('div',{attrs:{"id":"slot"}},[_vm._t("default")],2)])])])])}
 __vue__options__.staticRenderFns = []
-__vue__options__._scopeId = "data-v-b12df708"
-
-},{}],5:[function(require,module,exports){
+__vue__options__._scopeId = "data-v-d1dcc1a6"
+if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-d1dcc1a6", __vue__options__)
+  } else {
+    hotAPI.reload("data-v-d1dcc1a6", __vue__options__)
+  }
+})()}
+},{"vue":2,"vue-hot-reload-api":1}],6:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -6373,11 +6535,21 @@ exports.default = {
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
+if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
 __vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('h5',[_vm._v(_vm._s(_vm.title))]),_vm._v(" "),_c('hr'),_vm._v(" "),_vm._l((_vm.data),function(value,key){return _c('ul',[_c('li',[_vm._v(_vm._s(key)+": "+_vm._s(value))]),_vm._v(" "),_c('hr')])})],2)}
 __vue__options__.staticRenderFns = []
-__vue__options__._scopeId = "data-v-a2531d4a"
-
-},{}],6:[function(require,module,exports){
+__vue__options__._scopeId = "data-v-0e604b8c"
+if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-0e604b8c", __vue__options__)
+  } else {
+    hotAPI.reload("data-v-0e604b8c", __vue__options__)
+  }
+})()}
+},{"vue":2,"vue-hot-reload-api":1}],7:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -6390,11 +6562,21 @@ exports.default = {
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
+if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
 __vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{attrs:{"id":"Gamepad"}},[_c('h5',[_vm._v("Gamepad:")]),_vm._v(" "),_c('hr'),_vm._v(" "),_c('h6',[_vm._v("Buttons:")]),_vm._v(" "),_vm._l((_vm.data.buttons),function(value,key){return _c('ul',[_c('li',[_vm._v(_vm._s(key)+": "+_vm._s(value))])])}),_vm._v(" "),_c('hr'),_vm._v(" "),_c('h6',[_vm._v("Left:")]),_vm._v(" "),_vm._l((_vm.data.axes.left),function(value,key){return _c('ul',[_c('li',[_vm._v(_vm._s(key)+": "+_vm._s(value))])])}),_vm._v(" "),_c('hr'),_vm._v(" "),_c('h6',[_vm._v("Right:")]),_vm._v(" "),_vm._l((_vm.data.axes.right),function(value,key){return _c('ul',[_c('li',[_vm._v(_vm._s(key)+": "+_vm._s(value))])])})],2)}
 __vue__options__.staticRenderFns = []
-__vue__options__._scopeId = "data-v-8145fbba"
-
-},{}],7:[function(require,module,exports){
+__vue__options__._scopeId = "data-v-6749b494"
+if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-6749b494", __vue__options__)
+  } else {
+    hotAPI.reload("data-v-6749b494", __vue__options__)
+  }
+})()}
+},{"vue":2,"vue-hot-reload-api":1}],8:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -6407,11 +6589,21 @@ exports.default = {
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
+if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
 __vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('h5',[_vm._v("IMU:")]),_vm._v(" "),_c('hr'),_vm._v(" "),_vm._l((_vm.data),function(value,key){return _c('ul',[_c('li',[_vm._v(_vm._s(key)+": "+_vm._s(value))]),_vm._v(" "),_c('hr')])})],2)}
 __vue__options__.staticRenderFns = []
-__vue__options__._scopeId = "data-v-2f7eec95"
-
-},{}],8:[function(require,module,exports){
+__vue__options__._scopeId = "data-v-0defb7c4"
+if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-0defb7c4", __vue__options__)
+  } else {
+    hotAPI.reload("data-v-0defb7c4", __vue__options__)
+  }
+})()}
+},{"vue":2,"vue-hot-reload-api":1}],9:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -6425,11 +6617,21 @@ exports.default = {
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
+if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
 __vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('nav',{attrs:{"id":"navbar"}},[_c('div',{staticClass:"nav-wrapper"},[_c('a',{attrs:{"href":"#","id":"title"}},[_vm._v(_vm._s(_vm.title))])])])}
 __vue__options__.staticRenderFns = []
-__vue__options__._scopeId = "data-v-7cc8c07c"
-
-},{}],9:[function(require,module,exports){
+__vue__options__._scopeId = "data-v-24b572ed"
+if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-24b572ed", __vue__options__)
+  } else {
+    hotAPI.reload("data-v-24b572ed", __vue__options__)
+  }
+})()}
+},{"vue":2,"vue-hot-reload-api":1}],10:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -6442,11 +6644,21 @@ exports.default = {
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
+if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
 __vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('h5',[_vm._v("Thrusters:")]),_vm._v(" "),_c('hr'),_vm._v(" "),_vm._l((_vm.data),function(t,i){return _c('div',[_c('ul',[_c('li',[_vm._v("Thruster: "+_vm._s(i+1))]),_vm._v(" "),_c('li',[_vm._v("Val: "+_vm._s(t))])]),_vm._v(" "),_c('hr')])})],2)}
 __vue__options__.staticRenderFns = []
-__vue__options__._scopeId = "data-v-7387ff52"
-
-},{}],10:[function(require,module,exports){
+__vue__options__._scopeId = "data-v-05396b41"
+if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-05396b41", __vue__options__)
+  } else {
+    hotAPI.reload("data-v-05396b41", __vue__options__)
+  }
+})()}
+},{"vue":2,"vue-hot-reload-api":1}],11:[function(require,module,exports){
 var Vue = require("vue")
 var App = require("./components/App.vue")
 
@@ -6459,4 +6671,4 @@ new Vue({
 })
 
 
-},{"./components/App.vue":2,"vue":1}]},{},[10]);
+},{"./components/App.vue":3,"vue":2}]},{},[11]);

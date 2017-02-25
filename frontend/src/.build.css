@@ -1,8 +1,130 @@
-#app[data-v-74f9aa36]{font-family:Roboto,Helvetica,Arial,sans-serif;width:100%;height:100%;background-color:#1a1a1a;font-weight:100}#navbar[data-v-74f9aa36]{height:50px}#main-container[data-v-74f9aa36]{position:fixed;top:70px;left:6px;right:6px;bottom:6px;margin:0}.half-width[data-v-74f9aa36]{width:50%;float:left}.half-height[data-v-74f9aa36]{height:50%;float:left}.full-height[data-v-74f9aa36]{height:100%;float:left}.camera-width[data-v-74f9aa36]{width:800px}.information-components[data-v-74f9aa36]{width:calc(100% - 800px);height:100%;float:left}
-#navbar[data-v-7cc8c07c]{position:fixed}.nav-wrapper[data-v-7cc8c07c]{background-color:#37474f}#title[data-v-7cc8c07c]{font-weight:100;font-family:Roboto,Helvetica,Arial,sans-serif;padding-left:28px;line-height:50px;font-size:24px}
-img[data-v-07bdb4d6]{max-height:100%;max-width:100%;margin:0 auto}#camera-view[data-v-07bdb4d6]{height:100%;width:100%;display:flex;align-items:center}#camera-view>img[data-v-07bdb4d6]{max-height:100%;max-width:100%}
-h1[data-v-2f7eec95]{font-weight:400}
-h1[data-v-a2531d4a]{font-weight:400}
-#card[data-v-b12df708]{font-family:Roboto,Helvetica,Arial,sans-serif;width:100%;height:100%;position:relative;padding:10px;color:#fff;overflow:hidden}#main-container[data-v-b12df708]{width:100%;height:100%;min-height:100px;background-color:#2e2e2e;box-shadow:0 1px 3px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.24);transition:all .3s cubic-bezier(.25,.8,.25,1);border-radius:2px}#padding[data-v-b12df708]{padding:10px;width:100%;height:100%}#slot[data-v-b12df708]{width:100%;height:100%;overflow-y:auto;overflow-x:hidden}[data-v-b12df708]::-webkit-scrollbar{width:12px;background:#282828;border-radius:4px}[data-v-b12df708]::-webkit-scrollbar-thumb{background:#222;border-radius:4px}
-h1[data-v-8145fbba]{font-weight:400}
-h1[data-v-7387ff52]{font-weight:400}
+#app[data-v-b81813d8] {
+    font-family: 'Roboto', Helvetica, Arial, sans-serif;
+    width: 100%;
+    height: 100%;
+    background-color: #1a1a1a;
+    font-weight: 100;
+}
+
+#navbar[data-v-b81813d8] {
+    height: 50px;
+}
+
+#main-container[data-v-b81813d8] {
+    position: fixed;
+    top: 70px;
+    left: 6px;
+    right: 6px;
+    bottom: 6px;
+    margin: 0;
+}
+
+.half-width[data-v-b81813d8] {
+    width: 50%;
+    float: left;
+}
+
+.half-height[data-v-b81813d8] {
+    height: 50%;
+    float: left;
+}
+
+.full-height[data-v-b81813d8] {
+    height: 100%;
+    float: left;
+}
+
+.camera-width[data-v-b81813d8] {
+    width: 800px;
+}
+.information-components[data-v-b81813d8] {
+    width: calc(100% - 800px); /* 100% - camera-width */
+    height: 100%;
+    float: left;
+}
+#navbar[data-v-24b572ed] {
+    position: fixed;
+}
+
+.nav-wrapper[data-v-24b572ed] {
+    background-color: #37474f;
+}
+
+#title[data-v-24b572ed] {
+    font-weight: 100;
+    font-family: 'Roboto', Helvetica, Arial, sans-serif;
+    padding-left: 28px;
+    line-height: 50px;
+    font-size: 24px;
+}
+img[data-v-a78c7272] {
+  max-height: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+#camera-view[data-v-a78c7272] {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+#camera-view > img[data-v-a78c7272] {
+    max-height: 100%;
+    max-width: 100%;
+}
+h1[data-v-0defb7c4] {
+    font-weight: 400;
+}
+#card[data-v-d1dcc1a6] {
+    font-family: 'Roboto', Helvetica, Arial, sans-serif;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    padding: 10px;
+    color: white;
+    overflow: hidden;
+}
+
+#main-container[data-v-d1dcc1a6] {
+    width: 100%;
+    height: 100%;
+    min-height: 100px;
+    background-color: #2e2e2e;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    border-radius: 2px;
+}
+
+#padding[data-v-d1dcc1a6] {
+    padding: 10px;
+    width: 100%;
+    height: 100%;
+}
+
+#slot[data-v-d1dcc1a6] {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+[data-v-d1dcc1a6]::-webkit-scrollbar {
+    width: 12px;  /* remove scrollbar space */
+    background: #282828;  /* optional: just make scrollbar invisible */
+    border-radius: 4px;
+}
+[data-v-d1dcc1a6]::-webkit-scrollbar-thumb {
+    background: #222222;
+    border-radius: 4px;
+}
+h1[data-v-0e604b8c] {
+    font-weight: 400;
+}
+h1[data-v-05396b41] {
+    font-weight: 400;
+}
+h1[data-v-6749b494] {
+    font-weight: 400;
+}
