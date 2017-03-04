@@ -243,9 +243,7 @@ function Gamepad() {
     gp.id = id;
     Object.keys(layouts).forEach(function(key, i) {
       if(key != "length") {
-        console.log(key)
         Object.keys(layouts[key].id).forEach(function(pads, j) {
-          console.log(layouts[key].id[pads])
           if(id == layouts[key].id[pads]) {
             gp.layout = key;
             gp.b_len = layouts[key].buttons.length;
