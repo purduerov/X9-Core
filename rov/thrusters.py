@@ -123,21 +123,23 @@ class Thrusters:
     def _ramp(self):
 		for t in range(0, self.NUM_THRUSTERS):
 			
-			if (self.thrusters[t].getActive() = 1):
+			if (self.thrusters[t].getActive() == 1):
 				self.thrusters.getTarget()
-				_ramp = self.thrusters.setCurrent()
+				_ramp = self.thrusters.getCurrent()
 				
 				# convert percentage before or after incriment or decrement?
-				
+				#incriment both simutaneosly because percentage is not the exact pwm signal (range of error)
 				if (self.thrusters.getTarget != _ramp):
 					if (self.thrusters.getTarget > _ramp):
-						#increment
-						#loop to increase by 3 then by 1
-						
+						if (self.thrusters.getTarget - _ramp > 2):
+							_ramp = _ramp + 3
+						else:
+							_ramp = _ramp + 1
 					if (self.thrusters.getTarget < _ramp):
-						#decrement
-						#loop to increase by 3 then by 1
-						
+						if (_ramp - self.thrusters.getTarget > 2):
+							_ramp = _ramp - 3
+						else:
+							_ramp = _ramp - 1
 				#set to pwm_actual
 					
 				else:
