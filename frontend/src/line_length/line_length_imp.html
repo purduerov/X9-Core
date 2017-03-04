@@ -1,0 +1,91 @@
+<!-- need to add button on screen that opens a new window
+line that goes from first click to cursor after first click
+take input in inches that represents the length of the first line, to calculate
+the length of the second line in inches. Also, find a way to just delete single
+lines? Not sure how that's going to work. I also don't really know how many
+lines they want, that'd require creating canvases in a looping structure.-->
+<html>
+  <head>
+  <head/>
+  <body>
+    <div style="position:relative; width:500px; height:500px">
+        <canvas id="layer1" width="500px" height="500px"></canvas>
+        <canvas id="dataLayer" width="500px" height="500px" style="position:absolute; left:0px; top:0px;"></canvas>
+        <canvas id="layer2" width="500px" height="500px" style="position:absolute; left:0px; top:0px;"></canvas>
+    </div>
+        <!--<form>  this is the form that's going to take the inch input-->
+      <!--<input id="length" class="qty" type="text" placeholder="length"/>
+    </form> -->
+    <script>
+
+var clicks = 0;
+var lineStruc = {fx: 0, fy: 0, sx: 0, sy: 0};
+var mouseX = 0;
+var mouseY = 0;
+
+document.addEventListener('keypress', clear, false);
+document.addEventListener('click', record_pos, false);
+
+function clear(e) {
+    var k = String.fromCharCode(e.keyCode || e.charCode);
+    if (k == 'c') {
+        context1 = layer1.getContext('2d');
+        context2 = layer2.getContext("2d");
+        context1.clearRect(0, 0, layer1.width, layer1.height);
+        context2.clearRect(0, 0, layer2.width, layer2.height);
+        clicks = 0;
+    }
+}
+
+function setMousePosition(e) {
+
+	var canvasPos = getPosition(layer1);
+	var i;
+	var px_loc;
+	mouseX = e.clientX;
+	mouseY = e.clientY;
+	context1 = layer1.getContext('2d');
+	while(clicks % 2 != 0) {
+ 		ji = 0;
+		px_loc = 0;
+		context1.clearRect(0, 0, layer1.width, layer1,height);
+		while(i < clicks / 2) {
+			context1.beginPath();
+  			context1.moveTo(???, ???); //this needs to use complex data structure
+  			context1.lineTo(mouseX, mouseY, 6);
+  			context1.strokeStyle = '#000000';
+  			context1.stroke();
+
+	 	}
+	}
+}
+
+
+function getPosition(el) {
+    var xPos = 0;
+    var yPos = 0;
+
+    while (el) {
+        xPos += (el.offsetLeft - el.scrollLeft + el.clientLeft);
+        yPos += (el.offsetTop - el.scrollTop + el.clientTop);
+        el = el.offsetParent;
+    }
+    return {
+        x: xPos,
+        y: yPos
+    };
+}
+
+function record_pos(e) {
+  var x;
+  var y;
+
+  if (e.pageX != undefined && e.pageY != undefined) {
+    x = e.pageX - this.offsetLeft;
+    y = e.pageY - this.offsetTop;
+  }
+  else {
+    x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft - this.offsetLeft;
+    y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop - this.offsetTop;
+  }
+}
