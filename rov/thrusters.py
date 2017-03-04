@@ -128,10 +128,10 @@ class Thrusters:
 				ramp = self.thrusters[t].getCurrent()
 				ramp_actual = self.thrusters[t].getPWMActual()
 				
-				ramp_percent_diff = 5
-				ramp_actual_diff = ((NEG_MAX_POWER - POS_MAX_POWER) / 2) * 0.05
+				ramp_percent_diff = 5 #(% from 0 to +/- 100)
+				ramp_actual_diff = ((NEG_MAX_POWER - POS_MAX_POWER) / 2) * 0.05 #equal to 4.15 (5% of zero to max pos/neg)
 				
-				#percentage incriment/decrement 
+				#percentage incriment/decrement (-100 to 100)
 				while (self.thrusters[t].getTarget != ramp):
 					if (self.thrusters[t].getTarget > ramp):
 						if (self.thrusters[t].getTarget - ramp > ramp_percent_diff - 1):
@@ -144,23 +144,27 @@ class Thrusters:
 						else:
 							ramp = ramp - 1
 					
-					self.thrusters[t].setCurrent(self, _ramp)
+					self.thrusters[t].setCurrent(self, ramp)
 				
-				#value increment/decrement
-				while (self.thrusters[t].getTarget != ramp):
-					if (self.thrusters[t].getTarget > ramp):
-						if (self.thrusters[t].getTarget - ramp > ramp_percent_diff - 1):
-							ramp = ramp + ramp_percent_diff
+				#value increment/decrement (393 to 227)	
+				while (self.thrusters[t].getTargetActual != ramp_actual):
+					if (self.thrusters[t].getTargetActual > ramp_actual):
+						if (self.thrusters[t].getTargetActual - ramp_actual > ramp_actual_diff - 1):
+							ramp_actual = ramp_actual + ramp_actual_diff
 						else:
-							ramp = ramp + 1
-					if (self.thrusters[t].getTarget < ramp):
-						if (ramp - self.thrusters[t].getTarget > ramp_percent_diff - 1):
-							ramp = ramp - ramp_percent_diff
+							ramp_actual = ramp_actual + 1
+					if (self.thrusters[t].getTargetActual < ramp_actual):
+						if (ramp_actual - self.thrusters[t].getTargetActual > ramp_actual_diff - 1):
+							ramp_actual = ramp_actual - ramp_actual_diff
 						else:
-							ramp = ramp - 1
+							ramp_actual = ramp_actual - 1
+							
+					self.thrusters[t].setPWMActual(self, ramp_actual)
+					
 					
 				if (self.thrusters[t].getTarget == ramp):
 					self.thrusters[t].setCurrent(self.thrusters[t].getTarget())
+					self.thrusters[t].setPWMActual(self.thrusters[t].getTargetActual())
 			
 			else:
 				self.thrusters[t].stop()
@@ -198,6 +202,10 @@ class Thruster:
 
     def getTarget(self):
         return self.data["target"]
+	
+	def getTargetActual(self):
+		#convert getTarget % value to actual value 
+        return self.data["target_actual"]
 
     def getCurrent(self):
         return self.data["current"]
