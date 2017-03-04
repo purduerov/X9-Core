@@ -125,24 +125,41 @@ class Thrusters:
 			
 			if (self.thrusters[t].getActive() == 1):
 				
-				_ramp = self.thrusters[t].getCurrent()
-				_ramp_actual = self.thrusters[t].getPWMActual()
+				ramp = self.thrusters[t].getCurrent()
+				ramp_actual = self.thrusters[t].getPWMActual()
 				
-				if (self.thrusters[t].getTarget != _ramp):
-					if (self.thrusters[t].getTarget > _ramp):
-						if (self.thrusters[t].getTarget - _ramp > 2):
-							_ramp = _ramp + 3
+				ramp_percent_diff = 5
+				ramp_actual_diff = ((NEG_MAX_POWER - POS_MAX_POWER) / 2) * 0.05
+				
+				#percentage incriment/decrement 
+				while (self.thrusters[t].getTarget != ramp):
+					if (self.thrusters[t].getTarget > ramp):
+						if (self.thrusters[t].getTarget - ramp > ramp_percent_diff - 1):
+							ramp = ramp + ramp_percent_diff
 						else:
-							_ramp = _ramp + 1
-					if (self.thrusters[t].getTarget < _ramp):
-						if (_ramp - self.thrusters[t].getTarget > 2):
-							_ramp = _ramp - 3
+							ramp = ramp + 1
+					if (self.thrusters[t].getTarget < ramp):
+						if (ramp - self.thrusters[t].getTarget > ramp_percent_diff - 1):
+							ramp = ramp - ramp_percent_diff
 						else:
-							_ramp = _ramp - 1
+							ramp = ramp - 1
 					
-				self.thrusters[t].setCurrent(_ramp)
+					self.thrusters[t].setCurrent(self, _ramp)
+				
+				#value increment/decrement
+				while (self.thrusters[t].getTarget != ramp):
+					if (self.thrusters[t].getTarget > ramp):
+						if (self.thrusters[t].getTarget - ramp > ramp_percent_diff - 1):
+							ramp = ramp + ramp_percent_diff
+						else:
+							ramp = ramp + 1
+					if (self.thrusters[t].getTarget < ramp):
+						if (ramp - self.thrusters[t].getTarget > ramp_percent_diff - 1):
+							ramp = ramp - ramp_percent_diff
+						else:
+							ramp = ramp - 1
 					
-				else:
+				if (self.thrusters[t].getTarget == ramp):
 					self.thrusters[t].setCurrent(self.thrusters[t].getTarget())
 			
 			else:
