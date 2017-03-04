@@ -242,37 +242,41 @@ function Gamepad() {
   this.map = function(id, message) { //maps the gamepad, and the related functions unless they've been defined for the button before
     gp.id = id;
     Object.keys(layouts).forEach(function(key, i) {
-      Object.keys(layouts[key].id).forEach(function(id, j) {
-      if(id == layouts[key][id]) {
-        gp.layout = key;
-        gp.b_len = layouts[key].buttons.length;
-        var name = "";
-        for(var i = 0; i < gp.b_len; i++) {
-          name = layouts[key].buttons[i].name;
-          gp.setButtonLast(name, true);
-          gp.buttons[name] = {val: 0, pressed: 0, released: 0};
-          if(but_func[name] == undefined) {
-            but_func[name] = {val_func: null, change_func: null, press_func: null, release_func: null};
+      if(key != "length") {
+        console.log(key)
+        Object.keys(layouts[key].id).forEach(function(pads, j) {
+          console.log(layouts[key].id[pads])
+          if(id == layouts[key].id[pads]) {
+            gp.layout = key;
+            gp.b_len = layouts[key].buttons.length;
+            var name = "";
+            for(var i = 0; i < gp.b_len; i++) {
+              name = layouts[key].buttons[i].name;
+              gp.setButtonLast(name, true);
+              gp.buttons[name] = {val: 0, pressed: 0, released: 0};
+              if(but_func[name] == undefined) {
+                but_func[name] = {val_func: null, change_func: null, press_func: null, release_func: null};
+              }
+            }
+            var arrays = navigator.getGamepads()[gp.i_use].axes;
+            var cur_index = -1;
+            var which = "";
+            gp.a_len = layouts[key].axes.length;
+            for(var i = 0; i < gp.a_len; i++) {
+              name = layouts[key].axes[i].name;
+              which = layouts[key].axes[i].which;
+              cur_index = layouts[key].axes[i].index;
+              gp.axes[which][name] = arrays[cur_index];
+              if(ax_func[name] == undefined) {
+                ax_func[which] = {polar_func: null, cartes_func: null};
+              }
+            }
+            gp.setDisplace("left", gp.axes.left.x, gp.axes.left.y);
+            gp.setDisplace("right", gp.axes.right.x, gp.axes.right.y);
+            gp.ready = true;
           }
-        }
-        var arrays = navigator.getGamepads()[gp.i_use].axes;
-        var cur_index = -1;
-        var which = "";
-        gp.a_len = layouts[key].axes.length;
-        for(var i = 0; i < gp.a_len; i++) {
-          name = layouts[key].axes[i].name;
-          which = layouts[key].axes[i].which;
-          cur_index = layouts[key].axes[i].index;
-          gp.axes[which][name] = arrays[cur_index];
-          if(ax_func[name] == undefined) {
-            ax_func[which] = {polar_func: null, cartes_func: null};
-          }
-        }
-        gp.setDisplace("left", gp.axes.left.x, gp.axes.left.y);
-        gp.setDisplace("right", gp.axes.right.x, gp.axes.right.y);
-        gp.ready = true;
+        });
       }
-      });
     });
     if(!gp.ready && message) {
       message.html("The chosen gamepad did not match the library.");

@@ -15,7 +15,7 @@ var layouts = {
   xbox: {
     id: {
       norm: "Xbox 360 Controller (XInput STANDARD GAMEPAD)",
-    }
+    },
     buttons: [
       {where: "buttons", name: "a", index: 0, match: 1},
       {where: "buttons", name: "b", index: 1, match: 1},
@@ -44,7 +44,7 @@ var layouts = {
   macbox: {
     id: {
       norm: "Xbox One Controller (STANDARD GAMEPAD Vendor: 02d1 Product: 045e)",
-    }
+    },
     buttons: [
       {where: "buttons", name: "a", index: 0, match: 1},
       {where: "buttons", name: "b", index: 1, match: 1},
@@ -75,7 +75,7 @@ var layouts = {
     id: {
       norm: "Microsoft Controller (Vendor: 045e Product: 02d1)",
       offbrnd: "Performance Designed Products Rock Candy Gamepad for Xbox 360 (Vendor: 0e6f Product: 011f)",
-    }
+    },
     buttons: [
       {where: "buttons", name: "a", index: 0, match: 1},
       {where: "buttons", name: "b", index: 1, match: 1},
@@ -102,5 +102,5 @@ var layouts = {
       {where: "axes", which: "right", name: "y", index: 4},
     ]
   },
-  length: 2
+  length: 3
 }
