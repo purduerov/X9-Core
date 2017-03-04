@@ -129,7 +129,7 @@ class Thrusters:
 				ramp_actual = self.thrusters[t].getPWMActual()
 				
 				ramp_percent_diff = 5 #(% from 0 to +/- 100)
-				ramp_actual_diff = ((NEG_MAX_POWER - POS_MAX_POWER) / 2) * 0.05 #equal to 4.15 (5% of zero to max pos/neg)
+				ramp_actual_diff = ((NEG_MAX_POWER - POS_MAX_POWER) / 2) * 0.05 #about 4 (5% of zero to max pos/neg)
 				
 				#percentage incriment/decrement (-100 to 100)
 				while (self.thrusters[t].getTarget != ramp):
@@ -169,8 +169,6 @@ class Thrusters:
 			else:
 				self.thrusters[t].stop()
 			
-			
-		
 		
 
     def get_data(self):
@@ -204,7 +202,8 @@ class Thruster:
         return self.data["target"]
 	
 	def getTargetActual(self):
-		#convert getTarget % value to actual value 
+		#convert getTarget % value to actual value
+		
         return self.data["target_actual"]
 
     def getCurrent(self):
