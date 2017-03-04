@@ -242,7 +242,8 @@ function Gamepad() {
   this.map = function(id, message) { //maps the gamepad, and the related functions unless they've been defined for the button before
     gp.id = id;
     Object.keys(layouts).forEach(function(key, i) {
-      if(id == layouts[key].id) {
+      Object.keys(layouts[key].id).forEach(function(id, j) {
+      if(id == layouts[key][id]) {
         gp.layout = key;
         gp.b_len = layouts[key].buttons.length;
         var name = "";
@@ -271,6 +272,7 @@ function Gamepad() {
         gp.setDisplace("right", gp.axes.right.x, gp.axes.right.y);
         gp.ready = true;
       }
+      });
     });
     if(!gp.ready && message) {
       message.html("The chosen gamepad did not match the library.");
