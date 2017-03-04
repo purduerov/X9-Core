@@ -91,7 +91,7 @@ class Thrusters:
             self.thrusters[t].setTarget(float(powers[t]))
 
         # Ramp the power from current to reach target
-        #_ramp()
+        _ramp()
 
         # Push calculated, ramped power to thrusters
         for t in range(0, self.NUM_THRUSTERS):
@@ -124,29 +124,29 @@ class Thrusters:
 		for t in range(0, self.NUM_THRUSTERS):
 			
 			if (self.thrusters[t].getActive() == 1):
-				self.thrusters.getTarget()
-				_ramp = self.thrusters.getCurrent()
 				
-				# convert percentage before or after incriment or decrement?
-				#incriment both simutaneosly because percentage is not the exact pwm signal (range of error)
-				if (self.thrusters.getTarget != _ramp):
-					if (self.thrusters.getTarget > _ramp):
-						if (self.thrusters.getTarget - _ramp > 2):
+				_ramp = self.thrusters[t].getCurrent()
+				_ramp_actual = self.thrusters[t].getPWMActual()
+				
+				if (self.thrusters[t].getTarget != _ramp):
+					if (self.thrusters[t].getTarget > _ramp):
+						if (self.thrusters[t].getTarget - _ramp > 2):
 							_ramp = _ramp + 3
 						else:
 							_ramp = _ramp + 1
-					if (self.thrusters.getTarget < _ramp):
-						if (_ramp - self.thrusters.getTarget > 2):
+					if (self.thrusters[t].getTarget < _ramp):
+						if (_ramp - self.thrusters[t].getTarget > 2):
 							_ramp = _ramp - 3
 						else:
 							_ramp = _ramp - 1
-				#set to pwm_actual
+					
+				self.thrusters[t].setCurrent(_ramp)
 					
 				else:
-					#not ramped
+					self.thrusters[t].setCurrent(self.thrusters[t].getTarget())
 			
 			else:
-				self.thrusters.stop()
+				self.thrusters[t].stop()
 			
 			
 		
