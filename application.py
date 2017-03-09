@@ -106,7 +106,7 @@ def send_packet():
 
 def build_dearclient():
 
-    return rov.data()["dearflask"]
+    return rov.data()["dearclient"]
 # def start_sio():
     # socketio.run(app, host="127.0.0.1")
 
