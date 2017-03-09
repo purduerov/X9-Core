@@ -20,7 +20,7 @@ This file handles the primary functions of the webapp. Handles:
 """
 
 # GLOBALS:
-app = Flask(__name__, static_url_path="", static_folder="frontend/src")
+app = Flask(__name__, static_url_path="", static_folder="frontend")
 socketio = SocketIO(app, async_mode='threading')
 
 rov = ROV()
@@ -67,7 +67,7 @@ def recieve_controls(data):
     # print("controls: " + str(json))
     # print('received message: ' + str(data))
     send_packet()
-    
+
     if data != last_rov:
         last_rov = data
         rov._data["dearflask"] = json.loads(data)
