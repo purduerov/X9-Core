@@ -62,15 +62,17 @@ def send_index2_page_files(path):
 @socketio.on('dearflask')
 def recieve_controls(data):
     global last_controller, last_rov
+    print data
     # parse json controls object into onside object.
     # print("controls: " + str(json))
     # print('received message: ' + str(data))
     send_packet()
-
-    if rov._data != last_rov:
-      last_rov = rov.data
-      rov._data["dearflask"] = json.loads(data)
-      print rov._data
+    
+    if data != last_rov:
+        last_rov = data
+        rov._data["dearflask"] = json.loads(data)
+        print rov._data
+        print data
 
 
 @socketio.on('connect')

@@ -119,11 +119,15 @@ export default {
 
         var app_refresh = setInterval(function() {
             if(gp.ready) {
-                socket.emit("dearflask", JSON.stringify(controls));
+                var send = JSON.stringify(controls);
+                //console.log(send);
+                socket.emit("dearflask", send);
             }
         }, 50);
         socket.on("dearclient", function(status) {
-            Object.keys(status).forEach(function(key, i) {
+            data = JSON.parse(status);
+            console.log(data);
+            Object.keys(data).forEach(function(key, i) {
                 vm.packet[key] = status[key];
             });
             //setTimeout(function() {
