@@ -15,9 +15,6 @@
                     <Press_Temp :data="packet.PRESSURE"></Press_Temp>
                 </Card>
                 <Card class="half-width half-height">
-                    <DataView title="Pressure:" :data="packet.pressure"></DataView>
-                </Card>
-                <Card class="half-width half-height">
                     <GpInfo :data="gpinfo"></GpInfo>
                 </Card>
                 <Card class="half-width half-height">
