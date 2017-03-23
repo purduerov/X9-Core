@@ -102,5 +102,5 @@ var layouts = {
       {where: "axes", which: "right", name: "y", index: 4},
     ]
   },
-  length: 2
+  length: 3
 }
