@@ -62,17 +62,27 @@ def send_index2_page_files(path):
 @socketio.on('dearflask')
 def recieve_controls(data):
     global last_controller, last_rov
-    print data
+    # print data
     # parse json controls object into onside object.
     # print("controls: " + str(json))
     # print('received message: ' + str(data))
+    #thruster set calc and pwm
+
+
     send_packet()
 
     if data != last_rov:
-        last_rov = data
+        on = [0, 0, 0, 0, 0, 0]
+        ind = 0
         rov._data["dearflask"] = json.loads(data)
-        print rov._data
-        print data
+        for t, thrust in rov._data["dearflask"].thrusters:
+            ind = int(t[-1:])
+            on[ind] = thrust.active
+
+        print rov.mapper.generate_thrust_map(on, rov._data["dearflask"].force)
+        last_rov = data
+        # print rov._data
+        # print data
 
 
 @socketio.on('connect')

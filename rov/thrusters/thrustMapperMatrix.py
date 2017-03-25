@@ -78,13 +78,13 @@ class MutatorMatrix(object):
 
     def turnOffThruster(self):
         """
-        turns of the appropriate thrusters when the matrix is being generated if value is 1 it is off
+        turns off the appropriate thrusters when the matrix is being generated if value is 1 it is off
         :return:
         """
         for i in range(0, 8):
             if self.thrusterStatus[i] == 0:
                 self.m[:, i] = 0
-    
+
     def setThrusterStatus(self, enabledThrusters):
         # checks to see if the thrusters have changed state and if a new matrix needs to be generated
         self.thrusterStatus = enabledThrusters
@@ -96,4 +96,3 @@ if __name__ == "__main__":
     for i in range(0, 8):
         print "[%f,\t%f,\t%f,\t%f,\t%f,\t%f]," % (mutatorMatrix[i, 0], mutatorMatrix[i, 1], mutatorMatrix[i, 2], mutatorMatrix[i, 3], mutatorMatrix[i, 4], mutatorMatrix[i, 5])
     # print matrix.generateMatrix()
-
