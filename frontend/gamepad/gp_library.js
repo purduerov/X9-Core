@@ -240,6 +240,7 @@ function Gamepad() {
   };
 
   this.map = function(id, message) { //maps the gamepad, and the related functions unless they've been defined for the button before
+    console.log("Matching...");
     gp.id = id;
     var match = false;
     Object.keys(layouts).forEach(function(key, i) {
