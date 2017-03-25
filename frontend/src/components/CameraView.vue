@@ -26,5 +26,7 @@ iframe{
 #camera-view > img {
     max-height: 100%;
     max-width: 100%;
+    -webkit-transform: rotate(180deg);
+    transform(180deg);
 }
 </style>
