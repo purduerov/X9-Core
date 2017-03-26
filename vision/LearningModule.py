@@ -2,12 +2,25 @@ import json
 import cv2 as cv
 from random import shuffle
 import math
-import sklearn.metrics as metrics
 from sklearn.ensemble import GradientBoostingClassifier
 import numpy as np
 import operator
 import random
 import glob
+
+#Processes the image before the Machine learning takes place
+def preProcessImage(img):
+    img = cv.cvtColor(img, cv.COLOR_BGR2HSV_FULL)
+    # TODO try normalizing the color ahead of time
+    # TODO The hsv color space is NOT normalized! Saturation is largest
+    img = cv.medianBlur(img, 7)
+    img = cv.blur(img, (5,5))
+    return img
+
+
+def getSample(x,y,img):
+    pass
+
 
 """ Builds the data set for the machine learning model from sloth out.json"""
 def buildDataSet():
@@ -24,12 +37,7 @@ def buildDataSet():
     for imageAnnotation in imageAnnotations:
         imgFilename = imageAnnotation["filename"]
         img = cv.imread(imgFilename)
-        img = cv.cvtColor(img, cv.COLOR_BGR2HSV_FULL)
-        # TODO try normalizing the color ahead of time
-        # TODO The hsv color space is NOT normalized! Saturation is largest
-        img = cv.medianBlur(img, 7)
-        img = cv.blur(img, (5,5))
-
+        img = preProcessImage(img)
 
         for annotation in imageAnnotation["annotations"]:
             x = int(round(annotation["y"]))
@@ -45,7 +53,8 @@ def buildDataSet():
 """
 def trainModel(data_set):
     if not data_set:
-        raise ValueError("Dataset variable is empty")
+        raise ValueError("Data set variable is empty")
+
     #Shake the data up
     shuffle(data_set, random=random.seed(a=3))
 
@@ -66,10 +75,11 @@ def trainModel(data_set):
 
     #Split out the test features
     features_test = features[len_train::]
-    labels_test   = labels[len_train::]
+    #labels_test   = labels[len_train::]
 
     assert(len(features_test) + len(features_train) == len(data_set))
 
+    # TODO: Update training method
     # CVGridSearch for best parameters possible
     # Stratified KFold training may be good
     # Pipeline with some feature processing should go here

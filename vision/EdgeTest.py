@@ -12,7 +12,6 @@ WIN_NAME         = 'CannyTest'
 WIN_HUE_NAME     = 'HuePredict'
 WIN_HUE_MSK_NAME = 'HueMasked'
 
-
 C_LOW_BAR  = 'Low thresh'
 C_HIGH_BAR = 'High thresh'
 K_GAUSS    = 'Gauss sigma'
