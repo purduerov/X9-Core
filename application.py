@@ -21,11 +21,11 @@ This file handles the primary functions of the webapp. Handles:
 
 # GLOBALS:
 app = Flask(__name__, static_url_path="", static_folder="frontend")
-socketio = SocketIO(app, async_mode='threading')
+socketio = SocketIO(app)#, async_mode='threading')
 
 rov = ROV()
 
-last_rov = {}
+last_rov = ""
 
 
 # ROUTING:
@@ -62,6 +62,7 @@ def send_index2_page_files(path):
 @socketio.on('dearflask')
 def recieve_controls(data):
     global last_controller, last_rov
+    print data(:-1)
     # print data
     # parse json controls object into onside object.
     # print("controls: " + str(json))
