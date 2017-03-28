@@ -21,12 +21,14 @@ class ThrustMapper(object):
     def __init__(self):
         self.thrustMap = np.array([0, 0, 0, 0, 0, 0])   # list for values that need to be output to the thrusters
         self.maker = mm.MutatorMatrix()
-        """self.maker = mutatormatrix.MutatorMatrix(-4.7524,0,11.2148,4.7524,0,11.2148,
-                                             -4.7524,0,-7.631,4.7524,0,-7.631,
-                                             -5.5709,5.6384,6.0419,
-                                             5.5709,5.6384,6.0419,
-                                             -5.5709,5.6384,-2.485,
-                                             5.5709,5.6384,-2.485)"""
+        """
+        self.maker = mutatormatrix.MutatorMatrix(
+            -4.7524,0,11.2148,4.7524,0,11.2148,
+            -4.7524,0,-7.631,4.7524,0,-7.631,
+            -5.5709,5.6384,6.0419,
+             5.5709,5.6384,6.0419,
+            -5.5709,5.6384,-2.485,
+             5.5709,5.6384,-2.485)"""
         # self.mutationMatrix = self.maker.generate_matrix()
         self.mutationMatrix = self.maker.generateMatrix()
 
