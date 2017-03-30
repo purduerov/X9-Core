@@ -62,7 +62,7 @@ def recieve_controls(data):
     # print("controls: " + str(json))
     # print('received message: ' + str(data))
     send_packet()
-    
+
     if data != last_rov:
         last_rov = data
         rov._data["dearflask"] = json.loads(data)

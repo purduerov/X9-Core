@@ -1,0 +1,27 @@
+# python venv helper
+venv () {
+    # Deactivate if virtual env is active and return
+    if [ -n "${VIRTUAL_ENV+set}" ]; then
+        echo "Deactivating virtual env..."
+        deactivate
+        return
+    fi
+
+    # Default to env dir for virtual env
+    V_DIR="venv"
+
+    # Argument 1 can override default dir
+    if [ -n "${1+set}" ]; then
+        V_DIR="$1"
+    fi
+
+    # If folder doesn't exist, make it
+    if [ ! -d "$V_DIR" ]; then
+        echo "Creating virtual env in \"$V_DIR\"..."
+        virtualenv "$V_DIR"
+    fi
+
+    # Activate the virtual env
+    echo "Activating virtual env..."
+    source "$V_DIR/bin/activate"
+}
