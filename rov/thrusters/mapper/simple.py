@@ -1,4 +1,7 @@
-class Mapper(object):
+from BaseMapper import BaseMapper
+
+
+class Mapper(BaseMapper):
     def __init__(self):
         self.NUM_THRUSTERS = 8
 
@@ -10,7 +13,7 @@ class Mapper(object):
 
         return values
 
-    def calulate(self, desired_thrust, disabled_thrusters=[]):
+    def calulatee(self, desired_thrust, disabled_thrusters=[]):
         # Calculate Thruster Values
 
         velX = desired_thrust[0]

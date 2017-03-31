@@ -1,7 +1,8 @@
 import numpy as np
+from BaseMapper import BaseMapper
 
 
-class Mapper(object):
+class Mapper(BaseMapper):
 
     def __init__(self):
         """ These are the locations of the thrusters given in X, Y, Z
@@ -72,6 +73,7 @@ class Mapper(object):
 
         # get second coordinate to make point on the unit sphere
         z = np.sqrt(1-.342*.342)
+
         """ These are the rotation components of each thruster given by putting
         origin on the thruster the direction is given by drawing a line from
         the origin to the point on the unit sphere (given in X, Y, Z) XYZ are
@@ -98,7 +100,7 @@ class Mapper(object):
         """ Generate the thrustMap to move to the desired vector
 
         desired_thruster: List [X, Y, Z, Roll, Pitch, Yaw]
-        disabled_thrusters: List of disabled thrusters (Values are in range [1, 8])
+        disabled_thrusters: List of disabled thrusters (Values in range [1, 8])
         """
 
         # Check the set of disabled_thrusters against the previously set set
@@ -148,6 +150,6 @@ class Mapper(object):
 
 if __name__ == "__main__":
     matrix = Mapper()
-    mutatorMatrix = matrix.generateMatrix()
+    mutatorMatrix = matrix.mutationMatrix
     for m in mutatorMatrix:
         print("[%+.5f, %+.5f, %+.5f, %+.5f, %+.5f, %+.5f]" % tuple(m.tolist()[0]))
