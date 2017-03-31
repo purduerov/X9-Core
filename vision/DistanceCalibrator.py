@@ -33,17 +33,16 @@ def getRatioPx_DistMeters(img):
 def getAnglePoolLines(img):
 
     blurred = cv.medianBlur(img, 7)
-    colorThreshed = cv.inRange(blurred, (80,40,0), (120,70,30))
+
+    #@PotentialProblem -- This tolerance may be too little
+    colorThreshed = cv.inRange(blurred, (40,40,0), (140,120,40))
     gray = cv.Canny(colorThreshed, 70, 100)
-    cv.imshow("Gray", gray)
 
     #Lines contains the [rho, theta] values for each line ordered by
     #number of votes in accumulator array (From best to worst)
     lines = cv.HoughLines(gray,1, math.pi/180,30)[0]
     if lines is None:
         raise RuntimeError("Pool lines not found")
-
-    print lines
 
     bestLine = lines[0]
     rhoBest = bestLine[1]
@@ -57,6 +56,7 @@ def getAnglePoolLines(img):
         if abs(abs(rhoBest-rhoCurr) - math.pi/2) < math.pi/4:
             perpLine = line
             break
+
 
     #TODO can I just return the direction of my best line or how do I determine the difference
     #TODO between the best line and the next best line
@@ -81,6 +81,11 @@ def getAnglePoolLines(img):
 # Run calibrators test cases
 if __name__ == "__main__":
     img = cv.imread('RDTestImages/testCircles.png')
-    print(getRatioPx_DistMeters(img)[0])
-    img2 = cv.imread('ProcessedImages/GOPR0040.jpg')
+    ratio, circles = getRatioPx_DistMeters(img)
+
+    # Debug -- circle radius locator
+    # for circle  in circles[0]:
+    #    cv.circle(img, tuple(circle[0:2]), circle[2], (0,255,0))
+
+    img2 = cv.imread('ProcessedImages/GOPR0033.jpg')
     print(getAnglePoolLines(img2))
