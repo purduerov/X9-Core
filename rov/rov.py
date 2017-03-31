@@ -8,7 +8,7 @@ from time import time, sleep
 from sensors import Pressure, IMU
 from camera.cam import Camera
 
-from hardware.MotorControl import MotorControl
+from hardware.motor_control import MotorControl
 
 from thrusters.Control import ThrusterControl
 from thrusters.hardware.PWM_Control import Thrusters
