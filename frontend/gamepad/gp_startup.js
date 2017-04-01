@@ -9,16 +9,16 @@ var set_imu = function(){
   data.imu.y = gp.axis.right.y
 }
 
-Can't make 'data' here? 
+Can't make 'data' here?
 "Uncaught ReferenceError: data is not defined at <anonymous>:1:1"
   ^is thrown to the console when I try to access 'data' on Chrome
 */
 
 var run = function(abt) {
   if(gp.ready) {
+    bind.activate();
     window.clearInterval(go1);
     go1 = -1;
-    bind.activate();
     go2 = window.setInterval(function() {
       gp.get_current();
 /*      set_imu();
@@ -35,10 +35,10 @@ var run = function(abt) {
 $(document).ready(function() {
 //  var abt = $("#titles");
   gp.set();
-  
+
   go1 = window.setInterval(function() { run(); }, 50);
-  
-  
+
+
 /*  $("#reset").click(function() {
     if(go2 != -1) {
       gp.ready = false;

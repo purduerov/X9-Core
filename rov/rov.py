@@ -82,7 +82,7 @@ def run(lock, data):
     rov = ROV(lock, data)
     while True:
         while time() - rov.last_update < 0.01:
-            print "waiting"
+#            print "waiting"
             sleep(0.005)
 
         rov.update()

@@ -112,7 +112,7 @@ def send_packet():
 
 def build_dearclient():
     print "getting 'dearclient'"
-    return data["dearclient"]
+    return dict(data["dearclient"])
 
 # def start_sio():
     #socketio.run(app, host="127.0.0.1")
