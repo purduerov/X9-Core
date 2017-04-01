@@ -245,8 +245,9 @@ function Gamepad() {
     var match = false;
     Object.keys(layouts).forEach(function(key, i) {
       if(key != "length") {
+        //console.log(key);
         Object.keys(layouts[key].id).forEach(function(i_key, j) {
-          console.log(i_key);
+          //console.log(i_key);
           if(id == layouts[key].id[i_key]) {
             match = true;
             gp.layout = key;

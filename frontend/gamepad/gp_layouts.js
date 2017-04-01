@@ -43,7 +43,7 @@ var layouts = {
   },
   macbox: {
     id: {
-      norm: "Xbox One Controller (STANDARD GAMEPAD Vendor: 02d1 Product: 045e)",
+      no: "Xbox One Controller (STANDARD GAMEPAD Vendor: 02d1 Product: 045e)",
     },
     buttons: [
       {where: "buttons", name: "a", index: 0, match: 1},
@@ -74,6 +74,7 @@ var layouts = {
   linbox1: {
     id: {
       norm: "Microsoft Controller (STANDARD GAMEPAD Vendor: 045e Product: 02d1)",
+      ben: "Holtek Controller (STANDARD GAMEPAD Vendor: 045e Product: 028e)",
     },
     buttons: [
       {where: "buttons", name: "a", index: 0, match: 1},
