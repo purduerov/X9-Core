@@ -121,34 +121,38 @@ class Thrusters:
         pwm.set_all_pwm(0, self.ZERO_POWER)
 
     def _ramp(self):
-		for t in range(0, self.NUM_THRUSTERS):
-			
-			if (self.thrusters[t].getActive() = 1):
-				self.thrusters.getTarget()
-				_ramp = self.thrusters.setCurrent()
-				
-				# convert percentage before or after incriment or decrement?
-				
-				if (self.thrusters.getTarget != _ramp):
-					if (self.thrusters.getTarget > _ramp):
-						#increment
-						#loop to increase by 3 then by 1
-						
-					if (self.thrusters.getTarget < _ramp):
-						#decrement
-						#loop to increase by 3 then by 1
-						
-				#set to pwm_actual
-					
-				else:
-					#not ramped
-			
-			else:
-				self.thrusters.stop()
-			
-			
-		
-		
+        # values for how much to step by
+        percent_change = 0.05
+        actual_change = (self.POS_MAX_POWER - self.ZERO_POWER) * percent_change
+        for x in range(0, self.NUM_THRUSTERS):
+            if self.thrusters[x].getActive() == 1:
+                # temp variables for storing the current data so there is only one call to each getter function
+                current = self.thrusters[x].getCurrent()
+                actual = self.thrusters[x].getPWMActual()
+                target = self.thrusters[x].getTarget()
+                # change the values appropriately
+                if current < target:
+                    if target - current < percent_change:
+                        current = target
+                        actual = self.ZERO_POWER + (self.POS_MAX_POWER - self.ZERO_POWER) * current
+                    else:
+                        current += percent_change
+                        actual += actual_change
+                elif current > target:
+                    if current - target < percent_change:
+                        current = target
+                        actual = self.ZERO_POWER + (self.POS_MAX_POWER - self.ZERO_POWER) * current
+                    else:
+                        current -= percent_change
+                        actual -= actual_change
+                # set the values to the new updated values
+                self.thrusters[x].setCurrent(current)
+                self.thrusters[x].setPWMActual(actual)
+            else:
+                # the thruster is off so make sure the values are set to zero
+                self.thrusters[x].setPWMActual(self.ZERO_POWER)
+                self.thrusters[x].setCurrent(0)
+                self.thrusters[x].setTarget(0)
 
     def get_data(self):
         return self._data
