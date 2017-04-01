@@ -1,13 +1,14 @@
 from flask import Flask, send_from_directory, render_template
 from flask_socketio import SocketIO
-import threading
+import multiprocessing
 import os
 import json
 
-from rov.rov import ROV
-
+import rov.rov
+import eventlet
 
 import logging
+eventlet.monkey_patch(socket=False, thread=False)
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 """
@@ -21,11 +22,15 @@ This file handles the primary functions of the webapp. Handles:
 
 # GLOBALS:
 app = Flask(__name__) #static_url_path="", static_folder="frontend/src")
-socketio = SocketIO(app, async_mode='eventlet')
-
-rov = ROV()
+socketio = SocketIO(app, async_mode="eventlet")
 
 last_rov = {}
+
+manager = multiprocessing.Manager()
+lock = manager.Lock()
+data = manager.dict()
+data["dearclient"] = {"test": "I'm HERE!"}
+data["dearflask"] = {}
 
 
 # ROUTING:
@@ -55,18 +60,20 @@ def send_index2_page_files(path):
 
 # SOCKET-IO:
 @socketio.on('dearflask')
-def recieve_controls(data):
+def recieve_controls(indata):
     global last_controller, last_rov
-    print data
+    print indata
     # parse json controls object into onside object.
     # print("controls: " + str(json))
     # print('received message: ' + str(data))
     send_packet()
 
-    if data != last_rov:
-        last_rov = data
-        rov._data["dearflask"] = json.loads(data)
-        print rov._data
+    if indata != last_rov:
+        last_rov = indata
+
+        with lock:
+            data["dearflask"] = json.loads(data)
+            print data
         print data
 
 
@@ -91,8 +98,11 @@ def error_handler(e):
 # HELPER METHODS:
 
 def send_packet():
-
+    print "at lock.acquire()"
+    lock.acquire()
+    print "acquired lock"
     packet = build_dearclient()
+    lock.release()
 
     #print "Sent:"
     #print packet
@@ -100,8 +110,8 @@ def send_packet():
     socketio.emit("dearclient", packet, json=True)
 
 def build_dearclient():
-
-    return rov.data()["dearclient"]
+    print "getting 'dearclient'"
+    return data()["dearclient"]
 
 # def start_sio():
     #socketio.run(app, host="127.0.0.1")
@@ -116,4 +126,9 @@ if __name__ == 'application':
     # socket_run.daemon = True
     # socket_run.start()
 
+    rov_proc = multiprocessing.Process(target=rov.rov.run, args=(lock, data))
+    rov_proc.start()
+    print "started ROV process"
     socketio.run(app, use_reloader=False, debug=True, host="0.0.0.0")
+    print "executed socketio.run"
+

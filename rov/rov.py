@@ -14,11 +14,11 @@ from camera.cam import Camera
 
 class ROV(object):
 
-    def __init__(self):
-        self._data = {
-                "dearclient": { "thrusters": {} },
-                "dearflask": { "thrusters": {}, "force": {} }
-            }
+    def __init__(self, lock, data):
+
+        self._data_lock = lock
+        self._data = data
+
         self.last_update = time()
 
         self.simple_sensors = {
@@ -33,8 +33,6 @@ class ROV(object):
 
         #self.camera1 = Camera()
         #self.camera1.on()
-
-        self._data_lock = Lock()
 
     @property
     def data(self):
@@ -68,7 +66,11 @@ class ROV(object):
                 force = self._data['dearflask']["force"]
                 thrust = self.mapper.generate_thrust_map(np.array(actives), np.array(force))
                 self.thrusters.push_pi_motors(thrust, actives)
+
+                self._data_lock.acquire()
                 self._data['dearclient']["thrusters"]["thrusters"] = self.thrusters.get_data()
+                self._data_lock.release()
+
             except:
                 #print("ERROR: _data malformed, client may not be connected or transmitting.")
                 pass
@@ -76,12 +78,14 @@ class ROV(object):
             # Our last update
             self.last_update = time()
 
-    def run(self):
-        while self._running:
-            while time() - self.last_update < 0.01:
-                sleep(0.005)
+def run(lock, data):
+    rov = ROV(lock, data)
+    while True:
+        while time() - rov.last_update < 0.01:
+            print "waiting"
+            sleep(0.005)
 
-            self.update()
+        rov.update()
 
 if __name__ == "__main__":
     r = ROV()
