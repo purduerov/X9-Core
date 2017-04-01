@@ -1,5 +1,5 @@
 from time import time, sleep
-
+import sys
 
 from threading import Lock
 import copy
@@ -18,6 +18,7 @@ class ROV(object):
 
         self._data_lock = lock
         self._data = data
+        self.dearclient = {"thrusters": {}}
 
         self.last_update = time()
 
@@ -37,8 +38,10 @@ class ROV(object):
     @property
     def data(self):
         with self._data_lock:
-            self._data['dearclient']['last_update'] = self.last_update
+            #self._data['dearclient']['last_update'] = self.last_update
             self._data['dearflask']['last_update'] = self.last_update
+            self.dearclient['last_update'] = self.last_update
+            self._data['dearclient'] = self.dearclient
             ret = copy.deepcopy(self._data)
 
             return ret
@@ -51,7 +54,11 @@ class ROV(object):
             # Update all simple sensor data and stuff it in data
             for sensor in self.simple_sensors.keys():
                 self.simple_sensors[sensor].update()
-                self._data['dearclient'][sensor] = self.simple_sensors[sensor].data
+                #self._data['dearclient'][sensor] = self.simple_sensors[sensor].data
+                self.dearclient[sensor] = self.simple_sensors[sensor].data
+                #print self.simple_sensors[sensor].data
+                #print self._data['dearclient']
+                #print "UPDATE!"
 
             # Read controller data
             #
@@ -61,28 +68,59 @@ class ROV(object):
             #
             try:
                 actives = list()
-                for t in self._data['dearflask']["thrusters"]:
-                    actives.append([t["active"]])
-                force = self._data['dearflask']["force"]
-                thrust = self.mapper.generate_thrust_map(np.array(actives), np.array(force))
-                self.thrusters.push_pi_motors(thrust, actives)
+                #print "flask"
+                #print self._data['dearflask']["thrusters"]#["t7"]
+                #print "client"
+                #print self._data['dearclient']["thrusters"]
+                #t = ["t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7"]
+                print "in update"
+                #print self._data['dearflask']
+                #for x in self._data['dearflask']:
+                #    print x
+                print self._data['dearflask'][u'thrusters']
+                print self._data['dearflask'][u'thrusters'][u't6']
+                print self._data['dearflask']['thrusters']['t6']['active']
+                for t in self._data['dearflask'][u'thrusters']:
+                    #print "LOOK AT ME DAMMIT I'M PRETTY"
+                    #print self._data['dearflask']["thrusters"][t+tval]
+                    print "active"
+                    print t
+                    #print t[u'active']
+                    actives.append(self._data['dearflask'][u'thrusters'][t]['active'])
+                    #print t
+                    #print tval
+                    #print t["active"]
+                    #actives.append(self._data['dearflask']['thrusters'][t+tval]["active"])
+                print "after actives"
+                force = self._data['dearflask'][u"force"]
+                print np.array(force.values())
+                thrust = self.mapper.generate_thrust_map(np.array(actives), np.array(force.values()))
+                print thrust
+                self.thrusters.push_pi_motors(thrust[0], actives)
 
-                self._data_lock.acquire()
-                self._data['dearclient']["thrusters"]["thrusters"] = self.thrusters.get_data()
-                self._data_lock.release()
+                #self._data['dearclient']["thrusters"]["thrusters"] = self.thrusters.get_data()
+                self.dearclient["thrusters"] = self.thrusters.get_data()
 
+            except TypeError as err:
+                print "Here"
+                print err
+                print "Also here"
             except:
-                #print("ERROR: _data malformed, client may not be connected or transmitting.")
+                print sys.exc_info()
+                #print sys.exc_info()
                 pass
 
             # Our last update
+            self._data['dearclient'] = self.dearclient
             self.last_update = time()
 
 def run(lock, data):
     rov = ROV(lock, data)
+    #with lock:
+    #    dearflask = {rov.thrusters.get_data(), "force": {}}
+    #    data["dearflask"] = dearflask
     while True:
         while time() - rov.last_update < 0.01:
-#            print "waiting"
             sleep(0.005)
 
         rov.update()

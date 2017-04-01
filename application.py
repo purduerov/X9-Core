@@ -3,6 +3,7 @@ from flask_socketio import SocketIO
 import multiprocessing
 import os
 import json
+import pprint
 
 import rov.rov
 import eventlet
@@ -25,11 +26,12 @@ app = Flask(__name__) #static_url_path="", static_folder="frontend/src")
 socketio = SocketIO(app, async_mode="eventlet")
 
 last_rov = {}
+pp = pprint.PrettyPrinter(indent=4)
 
 manager = multiprocessing.Manager()
 lock = manager.Lock()
 data = manager.dict()
-data["dearclient"] = {"test": "I'm HERE!"}
+data["dearclient"] = {}
 data["dearflask"] = {}
 
 
@@ -62,20 +64,25 @@ def send_index2_page_files(path):
 @socketio.on('dearflask')
 def recieve_controls(indata):
     global last_controller, last_rov
-    print indata
     # parse json controls object into onside object.
     # print("controls: " + str(json))
     # print('received message: ' + str(data))
+    #print indata
+    #print dict(indata)
+    #print json.dumps(indata)
+    print "indata"
+    #print type(str(indata))
+    #print str(indata)
+    #print json.loads(str(indata), object_hook=ascii_encode_dict)
+
     send_packet()
 
     if indata != last_rov:
         last_rov = indata
 
         with lock:
-            data["dearflask"] = json.loads(data)
-            print data
-        print data
-
+            data["dearflask"] = json.loads(indata)
+            pp.pprint(data)
 
 @socketio.on('connect')
 def on_connect():
@@ -98,12 +105,9 @@ def error_handler(e):
 # HELPER METHODS:
 
 def send_packet():
-    print "at lock.acquire()"
     lock.acquire()
-    print "acquired lock"
     packet = build_dearclient()
     lock.release()
-    print "released lock"
 
     #print "Sent:"
     #print packet
@@ -111,8 +115,10 @@ def send_packet():
     socketio.emit("dearclient", packet, json=True)
 
 def build_dearclient():
-    print "getting 'dearclient'"
-    return dict(data["dearclient"])
+    d = data._getvalue()
+    #print "dearclient: dumps"
+    #print json.dumps(d["dearclient"])
+    return json.dumps(d["dearclient"])
 
 # def start_sio():
     #socketio.run(app, host="127.0.0.1")
@@ -129,7 +135,6 @@ if __name__ == 'application':
 
     rov_proc = multiprocessing.Process(target=rov.rov.run, args=(lock, data))
     rov_proc.start()
-    print "started ROV process"
+
     socketio.run(app, use_reloader=False, debug=True, host="0.0.0.0")
-    print "executed socketio.run"
 

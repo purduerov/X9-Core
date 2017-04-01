@@ -248,7 +248,7 @@ def run(args):
     Uses the install virtual env as well.
     """
 
-    #start_venv()
+    start_venv()
 
     set_env()
 
