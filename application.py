@@ -103,6 +103,7 @@ def send_packet():
     print "acquired lock"
     packet = build_dearclient()
     lock.release()
+    print "released lock"
 
     #print "Sent:"
     #print packet
@@ -111,7 +112,7 @@ def send_packet():
 
 def build_dearclient():
     print "getting 'dearclient'"
-    return data()["dearclient"]
+    return data["dearclient"]
 
 # def start_sio():
     #socketio.run(app, host="127.0.0.1")
