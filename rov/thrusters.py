@@ -91,7 +91,7 @@ class Thrusters:
             self.thrusters[t].setTarget(float(powers[t]))
 
         # Ramp the power from current to reach target
-        #_ramp()
+        _ramp()
 
         # Push calculated, ramped power to thrusters
         for t in range(0, self.NUM_THRUSTERS):
