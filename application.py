@@ -116,8 +116,6 @@ def send_packet():
 
 def build_dearclient():
     d = data._getvalue()
-    #print "dearclient: dumps"
-    #print json.dumps(d["dearclient"])
     return json.dumps(d["dearclient"])
 
 # def start_sio():

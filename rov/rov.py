@@ -77,21 +77,15 @@ class ROV(object):
                 #print self._data['dearflask']
                 #for x in self._data['dearflask']:
                 #    print x
-                print self._data['dearflask'][u'thrusters']
-                print self._data['dearflask'][u'thrusters'][u't6']
-                print self._data['dearflask']['thrusters']['t6']['active']
                 for t in self._data['dearflask'][u'thrusters']:
                     #print "LOOK AT ME DAMMIT I'M PRETTY"
                     #print self._data['dearflask']["thrusters"][t+tval]
-                    print "active"
-                    print t
                     #print t[u'active']
                     actives.append(self._data['dearflask'][u'thrusters'][t]['active'])
                     #print t
                     #print tval
                     #print t["active"]
                     #actives.append(self._data['dearflask']['thrusters'][t+tval]["active"])
-                print "after actives"
                 force = self._data['dearflask'][u"force"]
                 print np.array(force.values())
                 thrust = self.mapper.generate_thrust_map(np.array(actives), np.array(force.values()))
@@ -102,12 +96,9 @@ class ROV(object):
                 self.dearclient["thrusters"] = self.thrusters.get_data()
 
             except TypeError as err:
-                print "Here"
                 print err
-                print "Also here"
             except:
                 print sys.exc_info()
-                #print sys.exc_info()
                 pass
 
             # Our last update
@@ -116,9 +107,6 @@ class ROV(object):
 
 def run(lock, data):
     rov = ROV(lock, data)
-    #with lock:
-    #    dearflask = {rov.thrusters.get_data(), "force": {}}
-    #    data["dearflask"] = dearflask
     while True:
         while time() - rov.last_update < 0.01:
             sleep(0.005)
