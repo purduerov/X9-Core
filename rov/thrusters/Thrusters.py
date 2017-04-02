@@ -1,7 +1,7 @@
 from Adafruit_PCA9685 import PCA9685
 import time
 import pprint     # For Testing code
-import numpy            # For Compliance with thrust_mapping outputs
+import numpy as np            # For Compliance with thrust_mapping outputs
 
 # using PCA9685 object:
 # functions:
@@ -69,18 +69,54 @@ class Thrusters:
 
         # Pi -> I2C-to-PWM variables:
         #   I2C-to-PWM Pins
-        self.pins = [2, 1, 0, 4, 6, 7, 10, 9]
+        self.pins = [2, 5, 0, 4, 6, 7, 10, 9]
         # Maelstrom thruster pins: [6, 1, 4, 3, 5, 12, 8, 9]
 
         #   I2C-to-PWM chip class:
-        pwm = PCA9685()
+        self.pwm = PCA9685()
         # pwm frequency should be 50Hz, but with chip inaccuracy, setting 50 is actually 53, so we set it to 47 to offset.
-        pwm.set_pwm_freq(47)
+        self.pwm.set_pwm_freq(47)
         # thrusters must be set to 0 before they can be set to any other value.
-        pwm.set_all_pwm(0, self.ZERO_POWER)
+        self.pwm.set_all_pwm(0, self.ZERO_POWER)
 
         # Pi -> Coprocessor variables:
 
+    def temp_move(self, powers, actives):
+        x  = np.array([1.0, 0.0, 0.0, -1.0, -1.0, 0.0, 0.0, 1.0]) * powers[0]
+        y  = np.array([-1.0, 0.0, 0.0, -1.0, 1.0, 0.0, 0.0, 1.0]) * powers[1]
+        z  = np.array([0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0]) * powers[2]
+        r  = np.array([0.0, -1.0, -1.0, 0.0, 0.0, 1.0, 1.0, 0.0]) * powers[3]
+        p  = np.array([0.0, 1.0, -1.0, 0.0, 0.0, -1.0, 1.0, 0.0]) * powers[4]
+        ya = np.array([-1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 1.0]) * powers[5]
+
+        npow = x/3 + y/3 + z/3 + r/3 + p/3 + ya/3
+
+
+        for t in range(0, self.NUM_THRUSTERS):
+            self.thrusters[t].setActive(int(actives[t]))
+            self.thrusters[t].setTarget(float(npow[t]))
+
+        # Ramp the power from current to reach target
+        #_ramp()
+
+        # Push calculated, ramped power to thrusters
+        for t in range(0, self.NUM_THRUSTERS):
+
+            # if inactive thruster:
+            if (self.thrusters[t].getActive() == 0):
+                self.thrusters[t].setPWMActual(self.ZERO_POWER)
+                self.thrusters[t].setCurrent(0)
+
+                #pwm.set_pwm(self.pins[t], 0, thrusters[t].getPWMActual)
+                continue
+
+            # Otherwise active:
+
+            # IF NOT RAMPED, direct power conversion:
+            self.thrusters[t].setPWMActual(self.ZERO_POWER + int(self.thrusters[t].getTarget() * (self.POS_MAX_POWER - self.ZERO_POWER)))
+            self.thrusters[t].setCurrent(self.thrusters[t].getTarget())
+
+            self.pwm.set_pwm(self.pins[t], 0, self.thrusters[t].getPWMActual())
 
     # BMAX:TODO: Implement pushing motors to coprocessor, which will then push motors to i2c to pwm chip.
     def push_coprocessor_motors(self):
@@ -114,7 +150,7 @@ class Thrusters:
             self.thrusters[t].setPWMActual(self.ZERO_POWER + int(self.thrusters[t].getTarget() * (self.POS_MAX_POWER - self.ZERO_POWER)))
             self.thrusters[t].setCurrent(self.thrusters[t].getTarget())
 
-            #pwm.set_pwm(self.pins[t], 0, self.thrusters[t].getPWMActual())
+            self.pwm.set_pwm(self.pins[t], 0, self.thrusters[t].getPWMActual())
 
 
     def stop(self):

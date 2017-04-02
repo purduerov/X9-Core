@@ -69,11 +69,13 @@ class ROV(object):
             #
             try:
                 actives = list()
+                force = list()
                 #print "flask"
                 #print self._data['dearflask']["thrusters"]#["t7"]
                 #print "client"
                 #print self._data['dearclient']["thrusters"]
-                #t = ["t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7"]
+                t = ["t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7"]
+                f = ["x", "y", "z", "roll", "pitch", "yaw"]
                 print "in update"
                 #print self._data['dearflask']
                 #for x in self._data['dearflask']:
@@ -86,35 +88,38 @@ class ROV(object):
                 print self._data['dearflask']['thrusters']['t6']['active']
 
                 print 'Looping over thrusters for active list'
-                for t in self._data['dearflask'][u'thrusters']:
+                for x in t:
                     #print "LOOK AT ME DAMMIT I'M PRETTY"
                     #print self._data['dearflask']["thrusters"][t+tval]
                     #print "active"
-                    #print t
+                    print x
                     #print t[u'active']
-                    actives.append(self._data['dearflask'][u'thrusters'][t]['active'])
+                    actives.append(self._data['dearflask'][u'thrusters'][x]['active'])
                     #print t
                     #print t["active"]
                     #actives.append(self._data['dearflask']['thrusters'][t+tval]["active"])
+                for z in f:
+                    force.append(self._data['dearflask']['force'][z] * .35)
                 print "finished actives"
                 print "Actives:"
                 print actives
+                #force = self._data['dearflask']['force']
                 print "Force:"
-                force = self._data['dearflask']['force']
                 print force
-                thrust = self.mapper.generate_thrust_map(np.array(actives), 0.25 * np.array(force.values()))
-                thrust = list(np.asarray(thrust)[0])
+                print 0.35 * np.array(force)
+                #thrust = self.mapper.generate_thrust_map(np.array(actives), 0.35 * np.array(force))
+                #thrust = list(np.asarray(thrust)[0])
+                #self.thrusters.push_pi_motors(thrust, actives)
+                self.thrusters.temp_move(force, actives)
                 print "Thrust:"
                 print thrust
-                self.thrusters.push_pi_motors(thrust, actives)
+                print self._data['dearflask']['thrusters']['t6']
 
                 #self._data['dearclient']["thrusters"]["thrusters"] = self.thrusters.get_data()
                 self.dearclient["thrusters"] = self.thrusters.get_data()
 
             except TypeError as err:
                 print "Here"
-                print err
-                print "Also here"
                 print err
             except:
                 i = sys.exc_info()
