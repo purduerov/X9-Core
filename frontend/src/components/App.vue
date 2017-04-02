@@ -94,9 +94,9 @@ export default {
     },
     mounted: function() {
         var vm = this;
-        
+
         vue_app = vm;
-        
+
         var go1 = -1;
         var go2 = -1;
         var send = {};
@@ -117,25 +117,25 @@ export default {
         var app_refresh = setInterval(function() {
             if(gp.ready) {
                 var send = JSON.stringify(controls);
-                console.log("dearflask");
-                console.log(send);
+                //console.log("dearflask");
+                //console.log(send);
                 socket.emit("dearflask", send);
             }
         }, 50);
         socket.on("dearclient", function(status) {
-            console.log(status);
-            data = JSON.parse(status);
-            console.log("dearclient")
-            console.log(data);
-            Object.keys(data).forEach(function(key, i) {
-                vm.packet[key] = status[key];
-            });
+            //console.log(status);
+            //data = JSON.parse(status);
+            //console.log("dearclient")
+            //console.log(data);
+            //Object.keys(data).forEach(function(key, i) {
+            //    vm.packet[key] = status[key];
+            //});
             //setTimeout(function() {
                 //console.log(vm.packet);
             //}, 10);
         });
-        
-        console.log(vm.gpinfo);
+
+        //console.log(vm.gpinfo);
     }
 }
 </script>

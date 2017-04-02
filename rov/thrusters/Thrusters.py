@@ -89,7 +89,11 @@ class Thrusters:
         p  = np.array([0.0, -1.0, 1.0, 0.0, 0.0, 1.0, -1.0, 0.0]) * powers[4]
         ya = np.array([-1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 0.0, 1.0]) * powers[5]
 
-        npow = x/3 + y/3 + z/3 + r/3 + p/3 + ya/3
+        npow = x/2 + y/3 + z/1.25 + r/3 + p/3 + ya/3
+
+        for t in range(0, self.NUM_THRUSTERS):
+            if (npow[t] > 1):
+                npow[t] = 1;
 
 
         for t in range(0, self.NUM_THRUSTERS):

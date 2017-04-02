@@ -99,7 +99,7 @@ class ROV(object):
                     #print t["active"]
                     #actives.append(self._data['dearflask']['thrusters'][t+tval]["active"])
                 for z in f:
-                    force.append(self._data['dearflask']['force'][z] * .5)
+                    force.append(self._data['dearflask']['force'][z] * .75)
                 print "finished actives"
                 print "Actives:"
                 print actives
