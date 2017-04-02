@@ -1,7 +1,7 @@
 /*
   Each button can have one of four function types {value, change, press, release}, which
   will each have a func property and a params OBJECT property to go along with it.
-  
+
   button template:
     btn: {
       value: {
@@ -10,21 +10,21 @@
       },
       change: {
         params: undefined,
-        func: null, 
+        func: null,
       },
       press: {
         params: undefined,
-        func: null, 
+        func: null,
       },
       release: {
         params: undefined,
-        func: null, 
+        func: null,
       },
     },
-    
+
   Each axes can have one of two function types {cartesian, polar}, which
   will each have a func function property and a params OBJECT property to go along with it.
-  
+
   axes template:
     side: {
       cartesian: {
@@ -44,7 +44,7 @@ bind = {
       change: {
         func: function() {
           vue_app.gpinfo.buttons.a = gp.buttons.a.val;
-        } 
+        }
       },
     },
     b: {
@@ -71,8 +71,8 @@ bind = {
     up: {
       press: {
         func: function() {
-          controls.force.z = gp.buttons.up.val / 2;
-        },  
+          controls.force.z = gp.buttons.up.val;
+        },
       },
       release: {
         func: function() {
@@ -85,17 +85,45 @@ bind = {
     down: {
       press: {
         func: function() {
-          controls.force.z = -gp.buttons.down.val / 2;
-        }, 
+          controls.force.z = -gp.buttons.down.val;
+        },
       },
       release: {
         func: function() {
           if(controls.force.z < 0) {
             controls.force.z = 0;
           }
-        }, 
+        },
       },
-    }
+    },
+    rb: {
+      press: {
+        func: function() {
+          controls.force.yaw = gp.buttons.rb.val;
+        },
+      },
+      release: {
+        func: function() {
+          if(controls.force.yaw > 0) {
+            controls.force.yaw = 0;
+          }
+        },
+      },
+    },
+    lb: {
+      press: {
+        func: function() {
+          controls.force.yaw = -gp.buttons.lb.val;
+        },
+      },
+      release: {
+        func: function() {
+          if(controls.force.yaw < 0) {
+            controls.force.yaw = 0;
+          }
+        },
+      },
+    },
   },
   ax: {
     left: {

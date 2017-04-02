@@ -33,8 +33,8 @@ class ROV(object):
         self.mapper = ThrustMapper()
         self.thrusters = Thrusters()
 
-        #self.camera1 = Camera()
-        #self.camera1.on()
+        self.camera1 = Camera()
+        self.camera1.on()
 
     @property
     def data(self):
@@ -99,14 +99,14 @@ class ROV(object):
                     #print t["active"]
                     #actives.append(self._data['dearflask']['thrusters'][t+tval]["active"])
                 for z in f:
-                    force.append(self._data['dearflask']['force'][z] * .35)
+                    force.append(self._data['dearflask']['force'][z] * .5)
                 print "finished actives"
                 print "Actives:"
                 print actives
                 #force = self._data['dearflask']['force']
                 print "Force:"
                 print force
-                print 0.35 * np.array(force)
+                print 0.25 * np.array(force)
                 #thrust = self.mapper.generate_thrust_map(np.array(actives), 0.35 * np.array(force))
                 #thrust = list(np.asarray(thrust)[0])
                 #self.thrusters.push_pi_motors(thrust, actives)
