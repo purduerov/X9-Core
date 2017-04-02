@@ -89,19 +89,19 @@ class ROV(object):
                 for t in self._data['dearflask'][u'thrusters']:
                     #print "LOOK AT ME DAMMIT I'M PRETTY"
                     #print self._data['dearflask']["thrusters"][t+tval]
-                    print "active"
-                    print t
+                    #print "active"
+                    #print t
                     #print t[u'active']
                     actives.append(self._data['dearflask'][u'thrusters'][t]['active'])
                     #print t
-                    #print tval
                     #print t["active"]
                     #actives.append(self._data['dearflask']['thrusters'][t+tval]["active"])
                 print "finished actives"
                 print "Actives:"
                 print actives
                 print "Force:"
-                force = self._data['dearflask']['force']
+                #force = self._data['dearflask']['force']
+                force = 0.25 * (self._data['dearflask']['force'])
                 print force
                 thrust = self.mapper.generate_thrust_map(np.array(actives), np.array(force.values()))
                 thrust = list(np.asarray(thrust)[0])
