@@ -49,9 +49,9 @@ class Thrusters:
 
     NUM_THRUSTERS = 8
 
-    ZERO_POWER = 310
-    POS_MAX_POWER = 227
-    NEG_MAX_POWER = 393
+    ZERO_POWER = 300
+    POS_MAX_POWER = 217
+    NEG_MAX_POWER = 383
 
     def __init__(self):
         self.t0 = Thruster()
@@ -69,7 +69,9 @@ class Thrusters:
 
         # Pi -> I2C-to-PWM variables:
         #   I2C-to-PWM Pins
-        self.pins = [6, 1, 4, 3, 5, 12, 8, 9]
+        self.pins = [2, 1, 0, 4, 6, 7, 10, 9]
+        # Maelstrom thruster pins: [6, 1, 4, 3, 5, 12, 8, 9]
+
         #   I2C-to-PWM chip class:
         pwm = PCA9685()
         # pwm frequency should be 50Hz, but with chip inaccuracy, setting 50 is actually 53, so we set it to 47 to offset.
