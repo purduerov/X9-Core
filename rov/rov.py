@@ -31,7 +31,8 @@ class ROV(object):
 
         self.mapper = ThrustMapper()
         self.thrusters = Thrusters()
-
+        self.thrusters.stop()
+ 
         #self.camera1 = Camera()
         #self.camera1.on()
 
@@ -99,6 +100,7 @@ class ROV(object):
             except TypeError as err:
                 print err
             except:
+                self.thrusters.stop()
                 print sys.exc_info()
                 pass
 
