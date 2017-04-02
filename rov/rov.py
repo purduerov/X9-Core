@@ -73,7 +73,7 @@ class ROV(object):
                 #print "client"
                 #print self._data['dearclient']["thrusters"]
                 #t = ["t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7"]
-                print "in update"
+                #print "in update"
                 #print self._data['dearflask']
                 #for x in self._data['dearflask']:
                 #    print x
@@ -87,8 +87,9 @@ class ROV(object):
                     #print t["active"]
                     #actives.append(self._data['dearflask']['thrusters'][t+tval]["active"])
                 force = self._data['dearflask'][u"force"]
-                print np.array(force.values())
-                thrust = self.mapper.generate_thrust_map(np.array(actives), np.array(force.values()))
+                #print force
+                print np.array([force['x'], force['y'], force['z'], force['roll'], force['pitch'], force['yaw']])
+                thrust = self.mapper.generate_thrust_map(np.array(actives), np.array([force['x'], force['y'], force['z'], force['roll'], force['pitch'], force['yaw']]))
                 print thrust
                 self.thrusters.push_pi_motors(thrust[0], actives)
 
