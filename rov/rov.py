@@ -1,4 +1,5 @@
 from time import time, sleep
+import traceback
 import sys
 
 from threading import Lock
@@ -77,9 +78,14 @@ class ROV(object):
                 #print self._data['dearflask']
                 #for x in self._data['dearflask']:
                 #    print x
+                print 'Thruster Data:'
                 print self._data['dearflask'][u'thrusters']
+                print 'Thruster 6:'
                 print self._data['dearflask'][u'thrusters'][u't6']
+                print 'Thruster 6 active:'
                 print self._data['dearflask']['thrusters']['t6']['active']
+
+                print 'Looping over thrusters for active list'
                 for t in self._data['dearflask'][u'thrusters']:
                     #print "LOOK AT ME DAMMIT I'M PRETTY"
                     #print self._data['dearflask']["thrusters"][t+tval]
@@ -91,12 +97,17 @@ class ROV(object):
                     #print tval
                     #print t["active"]
                     #actives.append(self._data['dearflask']['thrusters'][t+tval]["active"])
-                print "after actives"
-                force = self._data['dearflask'][u"force"]
-                print np.array(force.values())
+                print "finished actives"
+                print "Actives:"
+                print actives
+                print "Force:"
+                force = self._data['dearflask']['force']
+                print force
                 thrust = self.mapper.generate_thrust_map(np.array(actives), np.array(force.values()))
+                thrust = list(np.asarray(thrust)[0])
+                print "Thrust:"
                 print thrust
-                self.thrusters.push_pi_motors(thrust[0], actives)
+                self.thrusters.push_pi_motors(thrust, actives)
 
                 #self._data['dearclient']["thrusters"]["thrusters"] = self.thrusters.get_data()
                 self.dearclient["thrusters"] = self.thrusters.get_data()
@@ -105,10 +116,12 @@ class ROV(object):
                 print "Here"
                 print err
                 print "Also here"
+                print err
             except:
-                print sys.exc_info()
-                #print sys.exc_info()
-                pass
+                i = sys.exc_info()
+                print i[0]
+                print i[1]
+                traceback.print_tb(i[2], limit=1, file=sys.stdout)
 
             # Our last update
             self._data['dearclient'] = self.dearclient

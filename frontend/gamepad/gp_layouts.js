@@ -43,7 +43,8 @@ var layouts = {
   },
   macbox: {
     id: {
-      norm: "Xbox One Controller (STANDARD GAMEPAD Vendor: 02d1 Product: 045e)",
+        norm: "Xbox One Controller (STANDARD GAMEPAD Vendor: 02d1 Product: 045e)",
+        offbrnd: "Rock Candy Gamepad for Xbox 360 (Vendor: 0e6f Product: 011f)"
     },
     buttons: [
       {where: "buttons", name: "a", index: 0, match: 1},
