@@ -20,7 +20,7 @@ This file handles the primary functions of the webapp. Handles:
 """
 
 # GLOBALS:
-app = Flask(__name__) #static_url_path="", static_folder="frontend/src")
+app = Flask(__name__, static_url_path="", static_folder="frontend/src")
 socketio = SocketIO(app, async_mode='eventlet')
 
 rov = ROV()
@@ -31,20 +31,7 @@ last_rov = {}
 # ROUTING:
 @app.route('/')
 def index():
-    print "Send index.html"
-    return send_from_directory('frontend/src/', 'index.html')
-
-@app.route('/fonts/<path:path>')
-def send_font_files(path):
-#    print "front file"
-#    print path
-    return send_from_directory('frontend/src/', path)
-
-@app.route('/pg2/<path:path>')
-def send_index2_page_files(path):
-#    print "Page file"
-#    print path
-    return send_from_directory('frontend/src/', path)
+    return app.send_static_file('index.html')
 
 # SOCKET-IO:
 @socketio.on('dearflask')
