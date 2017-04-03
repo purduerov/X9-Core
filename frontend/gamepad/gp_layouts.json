@@ -1,0 +1,124 @@
+{
+    "linbox": {
+        "id": {
+            "norm": "Microsoft Controller (Vendor: 045e Product: 02d1)",
+            "offbrnd": "Performance Designed Products Rock Candy Gamepad for Xbox 360 (Vendor: 0e6f Product: 011f)"
+        },
+        "axes": [
+            { "index": 0, "name": "x", "where": "axes", "which": "left" },
+            { "index": 1, "name": "y", "where": "axes", "which": "left" },
+            { "index": 3, "name": "x", "where": "axes", "which": "right" },
+            { "index": 4, "name": "y", "where": "axes", "which": "right" }
+        ],
+        "buttons": [
+            { "index": 0, "match": 1, "name": "a", "where": "buttons" },
+            { "index": 1, "match": 1, "name": "b", "where": "buttons" },
+            { "index": 2, "match": 1, "name": "x", "where": "buttons" },
+            { "index": 3, "match": 1, "name": "y", "where": "buttons" },
+            { "index": 4, "match": 1, "name": "lb", "where": "buttons" },
+            { "index": 5, "match": 1, "name": "rb", "where": "buttons" },
+            { "index": 8, "match": 1, "name": "home", "where": "buttons" },
+            { "index": 2, "match": 1, "name": "lt", "where": "axes" },
+            { "index": 5, "match": 1, "name": "rt", "where": "axes" },
+            { "index": 6, "match": 1, "name": "slct", "where": "buttons" },
+            { "index": 7, "match": 1, "name": "strt", "where": "buttons" },
+            { "index": 9, "match": 1, "name": "lpress", "where": "buttons" },
+            { "index": 10, "match": 1, "name": "rpress", "where": "buttons" },
+            { "index": 7, "match": -1, "name": "up", "where": "axes" },
+            { "index": 7, "match": 1, "name": "down", "where": "axes" },
+            { "index": 6, "match": -1, "name": "left", "where": "axes" },
+            { "index": 6, "match": 1, "name": "right", "where": "axes" }
+        ]
+    },
+    "linbox1": {
+        "axes": [
+            { "index": 0, "name": "x", "where": "axes", "which": "left" },
+            { "index": 1, "name": "y", "where": "axes", "which": "left" },
+            { "index": 2, "name": "x", "where": "axes", "which": "right" },
+            { "index": 3, "name": "y", "where": "axes", "which": "right" }
+        ],
+        "buttons": [
+            { "index": 0, "match": 1, "name": "a", "where": "buttons" },
+            { "index": 1, "match": 1, "name": "b", "where": "buttons" },
+            { "index": 2, "match": 1, "name": "x", "where": "buttons" },
+            { "index": 3, "match": 1, "name": "y", "where": "buttons" },
+            { "index": 4, "match": 1, "name": "lb", "where": "buttons" },
+            { "index": 5, "match": 1, "name": "rb", "where": "buttons" },
+            { "index": 6, "match": 1, "name": "lt", "where": "buttons" },
+            { "index": 7, "match": 1, "name": "rt", "where": "buttons" },
+            { "index": 8, "match": 1, "name": "slct", "where": "buttons" },
+            { "index": 9, "match": 1, "name": "strt", "where": "buttons" },
+            { "index": 10, "match": 1, "name": "lpress", "where": "buttons" },
+            { "index": 11, "match": 1, "name": "rpress", "where": "buttons" },
+            { "index": 12, "match": 1, "name": "up", "where": "buttons" },
+            { "index": 13, "match": 1, "name": "down", "where": "buttons" },
+            { "index": 14, "match": 1, "name": "left", "where": "buttons" },
+            { "index": 15, "match": 1, "name": "right", "where": "buttons" },
+            { "index": 16, "match": 1, "name": "home", "where": "buttons" }
+        ],
+        "id": {
+            "ben": "Holtek Controller (STANDARD GAMEPAD Vendor: 045e Product: 028e)",
+            "norm": "Microsoft Controller (STANDARD GAMEPAD Vendor: 045e Product: 02d1)"
+        }
+    },
+    "macbox": {
+        "axes": [
+            { "index": 0, "name": "x", "where": "axes", "which": "left" },
+            { "index": 1, "name": "y", "where": "axes", "which": "left" },
+            { "index": 2, "name": "x", "where": "axes", "which": "right" },
+            { "index": 3, "name": "y", "where": "axes", "which": "right" }
+        ],
+        "buttons": [
+            { "index": 0, "match": 1, "name": "a", "where": "buttons" },
+            { "index": 1, "match": 1, "name": "b", "where": "buttons" },
+            { "index": 2, "match": 1, "name": "x", "where": "buttons" },
+            { "index": 3, "match": 1, "name": "y", "where": "buttons" },
+            { "index": 4, "match": 1, "name": "lb", "where": "buttons" },
+            { "index": 5, "match": 1, "name": "rb", "where": "buttons" },
+            { "index": 6, "match": 1, "name": "lt", "where": "buttons" },
+            { "index": 7, "match": 1, "name": "rt", "where": "buttons" },
+            { "index": 8, "match": 1, "name": "slct", "where": "buttons" },
+            { "index": 9, "match": 1, "name": "strt", "where": "buttons" },
+            { "index": 10, "match": 1, "name": "lpress", "where": "buttons" },
+            { "index": 11, "match": 1, "name": "rpress", "where": "buttons" },
+            { "index": 12, "match": 1, "name": "up", "where": "buttons" },
+            { "index": 13, "match": 1, "name": "down", "where": "buttons" },
+            { "index": 14, "match": 1, "name": "left", "where": "buttons" },
+            { "index": 15, "match": 1, "name": "right", "where": "buttons" },
+            { "index": 16, "match": 1, "name": "recon", "where": "buttons" }
+        ],
+        "id": {
+            "norm": "Xbox One Controller (STANDARD GAMEPAD Vendor: 02d1 Product: 045e)",
+            "offbrnd": "Rock Candy Gamepad for Xbox 360 (Vendor: 0e6f Product: 011f)"
+        }
+    },
+    "xbox": {
+        "axes": [
+            { "index": 0, "name": "x", "where": "axes", "which": "left" },
+            { "index": 1, "name": "y", "where": "axes", "which": "left" },
+            { "index": 2, "name": "x", "where": "axes", "which": "right" },
+            { "index": 3, "name": "y", "where": "axes", "which": "right" }
+        ],
+        "buttons": [
+            { "index": 0, "match": 1, "name": "a", "where": "buttons" },
+            { "index": 1, "match": 1, "name": "b", "where": "buttons" },
+            { "index": 2, "match": 1, "name": "x", "where": "buttons" },
+            { "index": 3, "match": 1, "name": "y", "where": "buttons" },
+            { "index": 4, "match": 1, "name": "lb", "where": "buttons" },
+            { "index": 5, "match": 1, "name": "rb", "where": "buttons" },
+            { "index": 6, "match": 1, "name": "lt", "where": "buttons" },
+            { "index": 7, "match": 1, "name": "rt", "where": "buttons" },
+            { "index": 8, "match": 1, "name": "slct", "where": "buttons" },
+            { "index": 9, "match": 1, "name": "strt", "where": "buttons" },
+            { "index": 10, "match": 1, "name": "lpress", "where": "buttons" },
+            { "index": 11, "match": 1, "name": "rpress", "where": "buttons" },
+            { "index": 12, "match": 1, "name": "up", "where": "buttons" },
+            { "index": 13, "match": 1, "name": "down", "where": "buttons" },
+            { "index": 14, "match": 1, "name": "left", "where": "buttons" },
+            { "index": 15, "match": 1, "name": "right", "where": "buttons" }
+        ],
+        "id": {
+            "norm": "Xbox 360 Controller (XInput STANDARD GAMEPAD)"
+        }
+    }
+}
