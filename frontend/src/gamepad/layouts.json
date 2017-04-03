@@ -1,5 +1,6 @@
-{
-    "linbox": {
+[
+    {
+        "name": "Linux Xbox and Rock Candy Controller",
         "id": {
             "norm": "Microsoft Controller (Vendor: 045e Product: 02d1)",
             "offbrnd": "Performance Designed Products Rock Candy Gamepad for Xbox 360 (Vendor: 0e6f Product: 011f)"
@@ -30,7 +31,8 @@
             { "index": 6, "match": 1, "name": "right", "where": "axes" }
         ]
     },
-    "linbox1": {
+    {
+        "name": "Linux Xbox Controller 2",
         "axes": [
             { "index": 0, "name": "x", "where": "axes", "which": "left" },
             { "index": 1, "name": "y", "where": "axes", "which": "left" },
@@ -61,7 +63,8 @@
             "norm": "Microsoft Controller (STANDARD GAMEPAD Vendor: 045e Product: 02d1)"
         }
     },
-    "macbox": {
+    {
+        "name": "macOS Xbox Controller",
         "axes": [
             { "index": 0, "name": "x", "where": "axes", "which": "left" },
             { "index": 1, "name": "y", "where": "axes", "which": "left" },
@@ -91,7 +94,8 @@
             "norm": "Xbox One Controller (STANDARD GAMEPAD Vendor: 02d1 Product: 045e)"
         }
     },
-    "macbox2": {
+    {
+        "name": "macOS Rock Candy Controller",
         "axes": [
             { "index": 0, "name": "x", "where": "axes", "which": "left" },
             { "index": 1, "name": "y", "where": "axes", "which": "left" },
@@ -117,7 +121,8 @@
             "matt": "Rock Candy Gamepad for Xbox 360 (Vendor: 0e6f Product: 011f)"
         }
     },
-    "xbox": {
+    {
+        "name": "Windows Standard Xbox Controller",
         "axes": [
             { "index": 0, "name": "x", "where": "axes", "which": "left" },
             { "index": 1, "name": "y", "where": "axes", "which": "left" },
@@ -146,4 +151,4 @@
             "norm": "Xbox 360 Controller (XInput STANDARD GAMEPAD)"
         }
     }
-}
+]

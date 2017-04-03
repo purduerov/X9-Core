@@ -221,7 +221,7 @@ function Gamepad() {
                 if(gp.i_use == undefined) {
                   gp.i_use = i;
                 }
-                gp.map(chk[gp.i_use].id, message);
+                gp.map(chk[gp.i_use].id);
                 if (done) done()
                 //console.log("found a button press...");
               }
@@ -237,52 +237,50 @@ function Gamepad() {
     }, 100);
   };
 
-  this.map = function(id, message) { //maps the gamepad, and the related functions unless they've been defined for the button before
+  this.map = function(id) { //maps the gamepad, and the related functions unless they've been defined for the button before
     console.log("Matching...");
     gp.id = id;
     var match = false;
-    Object.keys(layouts).forEach(function(key, i) {
-      if(key != "length") {
-        Object.keys(layouts[key].id).forEach(function(i_key, j) {
-          console.log(i_key);
-          if(id == layouts[key].id[i_key]) {
-            match = true;
-            gp.layout = key;
-            gp.b_len = layouts[key].buttons.length;
-            var name = "";
-            for(var i = 0; i < gp.b_len; i++) {
-              name = layouts[key].buttons[i].name;
-              gp.setButtonLast(name, true);
-              gp.buttons[name] = {val: 0, pressed: 0, released: 0};
-              if(but_func[name] == undefined) {
-                but_func[name] = {val_func: null, change_func: null, press_func: null, release_func: null};
-              }
+    layouts.forEach((layout) => {
+      Object.keys(layout.id).forEach(function(i_key, j) {
+        console.log(i_key);
+        if(id == layout.id[i_key]) {
+          match = true;
+          gp.layout = layout;
+          gp.b_len = layout.buttons.length;
+          var name = "";
+          for(var i = 0; i < gp.b_len; i++) {
+            name = layout.buttons[i].name;
+            gp.setButtonLast(name, true);
+            gp.buttons[name] = {val: 0, pressed: 0, released: 0};
+            if(but_func[name] == undefined) {
+              but_func[name] = {val_func: null, change_func: null, press_func: null, release_func: null};
             }
-            var arrays = navigator.getGamepads()[gp.i_use].axes;
-            var cur_index = -1;
-            var which = "";
-            gp.a_len = layouts[key].axes.length;
-            for(var i = 0; i < gp.a_len; i++) {
-              name = layouts[key].axes[i].name;
-              which = layouts[key].axes[i].which;
-              cur_index = layouts[key].axes[i].index;
-              gp.axes[which][name] = arrays[cur_index];
-              if(ax_func[name] == undefined) {
-                ax_func[which] = {polar_func: null, cartes_func: null};
-              }
-            }
-            gp.setDisplace("left", gp.axes.left.x, gp.axes.left.y);
-            gp.setDisplace("right", gp.axes.right.x, gp.axes.right.y);
-            gp.ready = true;
           }
-        });
-      }
+          var arrays = navigator.getGamepads()[gp.i_use].axes;
+          var cur_index = -1;
+          var which = "";
+          gp.a_len = layout.axes.length;
+          for(var i = 0; i < gp.a_len; i++) {
+            name = layout.axes[i].name;
+            which = layout.axes[i].which;
+            cur_index = layout.axes[i].index;
+            gp.axes[which][name] = arrays[cur_index];
+            if(ax_func[name] == undefined) {
+              ax_func[which] = {polar_func: null, cartes_func: null};
+            }
+          }
+          gp.setDisplace("left", gp.axes.left.x, gp.axes.left.y);
+          gp.setDisplace("right", gp.axes.right.x, gp.axes.right.y);
+          gp.ready = true;
+        }
+      });
     });
-    if(!gp.ready && message) {
+    if(!gp.ready) {
       if(match) {
-        message.html("The library recognized the gamepad, but didn't map it... Broken? :/");
+        console.log("The library recognized the gamepad, but didn't map it... Broken? :/");
       } else {
-        message.html("The chosen gamepad did not match the library.");
+        console.log("The chosen gamepad did not match the library.");
       }
     } else {
         //NO BIND
@@ -297,14 +295,14 @@ function Gamepad() {
       var where = "";
       var cur_index = -1;
       for(var i = 0; i < gp.b_len; i++) {
-          name = layouts[gp.layout].buttons[i].name;
-          where = layouts[gp.layout].buttons[i].where;
-          cur_index = layouts[gp.layout].buttons[i].index;
+          name = gp.layout.buttons[i].name;
+          where = gp.layout.buttons[i].where;
+          cur_index = gp.layout.buttons[i].index;
           gp.setButtonLast(name);
           if(where == "buttons") {
-            gp.buttons[name].val = (read[where][cur_index].value == layouts[gp.layout].buttons[i].match)? 1 : 0;
+            gp.buttons[name].val = (read[where][cur_index].value == gp.layout.buttons[i].match)? 1 : 0;
           } else if (where == "axes") {
-            gp.buttons[name].val = (read[where][cur_index] == layouts[gp.layout].buttons[i].match)? 1 : 0;
+            gp.buttons[name].val = (read[where][cur_index] == gp.layout.buttons[i].match)? 1 : 0;
           } else {
             console.log("Error: "+where+" presented instead of 'buttons' or 'axes' for get_current in gp_library.js")
           }
@@ -330,9 +328,9 @@ function Gamepad() {
 //console.log(gp.buttons.down.val+" "+gp.buttons.down.released);
       var temp_axes = {left: {x: 0, y: 0}, right: {x: 0, y: 0}};
       for(var i = 0; i < gp.a_len; i++) {
-          name = layouts[gp.layout].axes[i].name;
-          which = layouts[gp.layout].axes[i].which;
-          cur_index = layouts[gp.layout].axes[i].index;
+          name = gp.layout.axes[i].name;
+          which = gp.layout.axes[i].which;
+          cur_index = gp.layout.axes[i].index;
 
           temp_axes[which][name] = read.axes[cur_index];
       }

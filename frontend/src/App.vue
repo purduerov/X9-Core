@@ -82,7 +82,7 @@ export default {
 
         window.vue_app = vm;
 
-        gp.set(undefined, function() {
+        gp.set(function() {
             console.log("And done..")
             window.setInterval(function() {
                 gp.get_current()
