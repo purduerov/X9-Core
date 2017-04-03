@@ -44,7 +44,7 @@
 **************************************************************************************************
 */
 
-let layouts = require("./gp_layouts.json")
+let layouts = require("./layouts.json")
 let bind = require("./bind_functions.js")
 
 function Gamepad() {
@@ -210,7 +210,7 @@ function Gamepad() {
 
 
   //these are for selecting the gamepad, mapping it from the library, and then updating the current status
-  this.set = function(message) { //waits until it sees a gamepad with a button pressed, and sets it as the desired controller
+  this.set = function(message, done) { //waits until it sees a gamepad with a button pressed, and sets it as the desired controller
     if(message) {
       message.text("Press any button on the desired gamepad");
     }
@@ -227,7 +227,8 @@ function Gamepad() {
                 if(message) {
                   message.html("Gamepad connected!</br>ID: "+chk[gp.i_use].id);
                 }
-                gp.map(chk[gp.i_use].id, message);
+                  gp.map(chk[gp.i_use].id, message);
+                  if (done) done()
                 //console.log("found a button press...");
               }
             }
@@ -290,7 +291,8 @@ function Gamepad() {
         message.html("The chosen gamepad did not match the library.");
       }
     } else {
-      bind.activate();
+        //NO BIND
+        //bind.activate();
     }
   };
 
