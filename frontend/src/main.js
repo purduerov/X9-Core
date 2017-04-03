@@ -8,4 +8,3 @@ new Vue({
         App
     }
 })
-

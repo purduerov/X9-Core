@@ -31,21 +31,14 @@ last_rov = {}
 # ROUTING:
 @app.route('/')
 def index():
-    print "Send index2.html"
-    return send_from_directory('frontend/src/', 'index2.html')
+    print "Send index.html"
+    return send_from_directory('frontend/src/', 'index.html')
 
 @app.route('/fonts/<path:path>')
 def send_font_files(path):
 #    print "front file"
 #    print path
     return send_from_directory('frontend/src/', path)
-
-@app.route('/gp/<path:path>')
-def send_UI_files(path):
-#    print "UI file"
-#    print path
-#    print os.path.dirname(os.path.realpath(__file__))
-    return send_from_directory('frontend/gamepad/', path)
 
 @app.route('/pg2/<path:path>')
 def send_index2_page_files(path):
