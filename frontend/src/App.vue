@@ -26,17 +26,16 @@
 </template>
 
 <script>
-var Navbar = require("./Navbar.vue")
-var CameraView = require("./CameraView.vue")
-var IMU = require("./IMU.vue")
-var DataView = require("./DataView.vue")
-var Card = require("./Card.vue")
-var Press_Temp = require("./Pressure.vue")
-var GpInfo = require("./GpInfo.vue")
-var Thruster = require("./Thrusters.vue")
-var gp = require("../gamepad/gp_library.js")
-var controls = require("../controls.js")
-var bind = require("../gamepad/bind_functions.js")
+var Navbar = require("./components/Navbar.vue")
+var CameraView = require("./components/CameraView.vue")
+var IMU = require("./components/IMU.vue")
+var DataView = require("./components/DataView.vue")
+var Card = require("./components/Card.vue")
+var Press_Temp = require("./components/Pressure.vue")
+var GpInfo = require("./components/GpInfo.vue")
+var Thruster = require("./components/Thrusters.vue")
+var gp = require("./gamepad/gp_library.js")
+var controls = require("./controls.js")
 
 export default {
     components: {
@@ -83,23 +82,16 @@ export default {
 
         window.vue_app = vm;
 
-        var go1 = -1;
-        var go2 = -1;
-        var send = {};
-        gp.set();
-        go1 = window.setInterval(function() {
-            if(gp.ready) {
-                window.clearInterval(go1);
-                go1 = -1;
-                bind.activate();
-                go2 = window.setInterval(function() {
-                  gp.get_current();
-                });
-            }
+        gp.set(undefined, function() {
+            console.log("And done..")
+            window.setInterval(function() {
+                gp.get_current()
+            }, 20)
         });
 
         var socket = io.connect('http://' + document.domain + ':' + location.port);
 
+        var send = {};
         var app_refresh = setInterval(function() {
             if(gp.ready) {
                 var send = JSON.stringify(controls);
