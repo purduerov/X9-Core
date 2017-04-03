@@ -44,6 +44,8 @@
 **************************************************************************************************
 */
 
+let layouts = require("./gp_layouts.json")
+
 function Gamepad() {
   this.id = String;
   this.layout = String;
@@ -373,3 +375,4 @@ function Gamepad() {
 }
 
 var gp = new Gamepad();
+module.exports = gp;

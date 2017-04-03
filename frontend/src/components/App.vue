@@ -34,6 +34,7 @@ var Card = require("./Card.vue")
 var Press_Temp = require("./Pressure.vue")
 var GpInfo = require("./GpInfo.vue")
 var Thruster = require("./Thrusters.vue")
+var gp = require("../gamepad/gp_library.js")
 
 export default {
     components: {
@@ -94,9 +95,9 @@ export default {
     },
     mounted: function() {
         var vm = this;
-        
-        vue_app = vm;
-        
+
+        window.vue_app = vm;
+
         var go1 = -1;
         var go2 = -1;
         var send = {};
@@ -131,7 +132,7 @@ export default {
                 //console.log(vm.packet);
             //}, 10);
         });
-        
+
         console.log(vm.gpinfo);
     }
 }
