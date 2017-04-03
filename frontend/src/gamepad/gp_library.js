@@ -210,10 +210,7 @@ function Gamepad() {
 
 
   //these are for selecting the gamepad, mapping it from the library, and then updating the current status
-  this.set = function(message, done) { //waits until it sees a gamepad with a button pressed, and sets it as the desired controller
-    if(message) {
-      message.text("Press any button on the desired gamepad");
-    }
+  this.set = function(done) { //waits until it sees a gamepad with a button pressed, and sets it as the desired controller
     var monitor = window.setInterval(function() {
       var chk = navigator.getGamepads();
       for(var i = 0; i < chk.length; i++) {
@@ -224,11 +221,8 @@ function Gamepad() {
                 if(gp.i_use == undefined) {
                   gp.i_use = i;
                 }
-                if(message) {
-                  message.html("Gamepad connected!</br>ID: "+chk[gp.i_use].id);
-                }
-                  gp.map(chk[gp.i_use].id, message);
-                  if (done) done()
+                gp.map(chk[gp.i_use].id, message);
+                if (done) done()
                 //console.log("found a button press...");
               }
             }
