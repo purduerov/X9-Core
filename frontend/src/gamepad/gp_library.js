@@ -45,6 +45,7 @@
 */
 
 let layouts = require("./gp_layouts.json")
+let bind = require("./bind_functions.js")
 
 function Gamepad() {
   this.id = String;

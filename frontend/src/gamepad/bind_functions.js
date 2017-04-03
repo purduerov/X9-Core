@@ -1,7 +1,7 @@
 /*
   Each button can have one of four function types {value, change, press, release}, which
   will each have a func property and a params OBJECT property to go along with it.
-  
+
   button template:
     btn: {
       value: {
@@ -10,21 +10,21 @@
       },
       change: {
         params: undefined,
-        func: null, 
+        func: null,
       },
       press: {
         params: undefined,
-        func: null, 
+        func: null,
       },
       release: {
         params: undefined,
-        func: null, 
+        func: null,
       },
     },
-    
+
   Each axes can have one of two function types {cartesian, polar}, which
   will each have a func function property and a params OBJECT property to go along with it.
-  
+
   axes template:
     side: {
       cartesian: {
@@ -37,14 +37,15 @@
       },
     },
 */
+let gp = require('./gp_library.js')
 
-bind = {
+var bind = {
   btn: {
     a: {
       change: {
         func: function() {
           vue_app.gpinfo.buttons.a = gp.buttons.a.val;
-        } 
+        }
       },
     },
     b: {
@@ -72,7 +73,7 @@ bind = {
       press: {
         func: function() {
           controls.force.z = gp.buttons.up.val / 2;
-        },  
+        },
       },
       release: {
         func: function() {
@@ -86,14 +87,14 @@ bind = {
       press: {
         func: function() {
           controls.force.z = -gp.buttons.down.val / 2;
-        }, 
+        },
       },
       release: {
         func: function() {
           if(controls.force.z < 0) {
             controls.force.z = 0;
           }
-        }, 
+        },
       },
     }
   },
@@ -131,4 +132,5 @@ bind = {
       }
     });
   }
-}
+};
+module.exports = bind;
