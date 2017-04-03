@@ -35,6 +35,8 @@ var Press_Temp = require("./Pressure.vue")
 var GpInfo = require("./GpInfo.vue")
 var Thruster = require("./Thrusters.vue")
 var gp = require("../gamepad/gp_library.js")
+var controls = require("../controls.js")
+var bind = require("../gamepad/bind_functions.js")
 
 export default {
     components: {
@@ -51,16 +53,10 @@ export default {
         return {
             packet: {
                 IMU: {
-                    x: 3,
-                    y: 4,
-                    z: 2,
-                    pitch: 6,
-                    roll: -4,
-                    yaw: .243
+                    x: 3, y: 4, z: 2, pitch: 6, roll: -4, yaw: .243
                 },
                 PRESSURE: {
-                    pressure: 7,
-                    temperature: 4
+                    pressure: 7, temperature: 4
                 },
                 Thrusters: {
                     t0 : { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
@@ -74,21 +70,10 @@ export default {
                 }
             },
             gpinfo: {
-                buttons: {
-                    a: 0,
-                    b: 0,
-                    x: 0,
-                    y: 0
-                },
+                buttons: { a: 0, b: 0, x: 0, y: 0 },
                 axes: {
-                    left: {
-                        x: 0,
-                        y: 0
-                    },
-                    right: {
-                        x: 0,
-                        y: 0
-                    }
+                    left: { x: 0, y: 0 },
+                    right: { x: 0, y: 0 }
                 }
             },
         };
@@ -132,8 +117,6 @@ export default {
                 //console.log(vm.packet);
             //}, 10);
         });
-
-        console.log(vm.gpinfo);
     }
 }
 </script>
