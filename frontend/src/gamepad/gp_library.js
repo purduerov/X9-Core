@@ -44,329 +44,363 @@
 **************************************************************************************************
 */
 
-let layouts = require("./layouts.json")
-let bind = require("./bind_functions.js")
+let layouts = require('./layouts.json');
+let bind = require('./bind_functions.js');
 
 function Gamepad() {
-  this.id = String;
-  this.layout = String;
-  this.buttons = new Object;
-  this.axes = {left: {}, right: {}};
-  this.b_len = 0;
-  this.a_len = 0;
-  this.ready = false;
-  this.i_use = undefined;
-  var buttons_last = new Object;
-  var axes_off = new Object;
-  var but_func = new Object;
-  var ax_func = {left: null, right: null};
+    this.id = String;
+    this.layout = String;
+    this.buttons = new Object();
+    this.axes = { left: {}, right: {} };
+    this.b_len = 0;
+    this.a_len = 0;
+    this.ready = false;
+    this.i_use = undefined;
+    var buttons_last = new Object();
+    var axes_off = new Object();
+    var but_func = new Object();
+    var ax_func = { left: null, right: null };
 
-  this.butfuncexist = function(key) {
-    return but_func[key] != undefined;
-  };
+    this.butfuncexist = function(key) {
+        return but_func[key] != undefined;
+    };
 
-  this.butfuncreturn = function() {
-    return but_func;
-  };
+    this.butfuncreturn = function() {
+        return but_func;
+    };
 
-  this.axfuncexist = function(key) {
-    return ax_func[key] != undefined;
-  };
+    this.axfuncexist = function(key) {
+        return ax_func[key] != undefined;
+    };
 
-  this.axfuncreturn = function() {
-    return ax_func;
-  };
+    this.axfuncreturn = function() {
+        return ax_func;
+    };
 
-  //these are for identifying if a button has just been pressed or released
-  this.setButtonLast = function(key, init = false) { //is called right before updating buttons
-    if(init) {                                       //init = true when gamepad is being mapped out; user shouldn't worry about it
-      buttons_last[key] = {val: 0};
-    } else {
-      buttons_last[key].val = this.buttons[key].val;
-    }
-  };
-
-  this.getButtonLastPress = function(key) { //allows for user to see/operate off of last press, if desired
-    return buttons_last[key].val;
-  };
-
-  this.setStatusChange = function(key) { //this sets the pressed and released characteristics for each button
-    if(this.buttons[key].val && !buttons_last[key].val) {
-      this.buttons[key].pressed = 1;
-      this.buttons[key].released = 0;
-    } else if(!this.buttons[key].val && buttons_last[key].val) {
-      this.buttons[key].pressed = 0;
-      this.buttons[key].released = 1;
-    } else {
-      this.buttons[key].pressed = 0;
-      this.buttons[key].released = 0;
-    }
-  };
-
-  this.setDisplace = function(key, x, y) { //the initial value of the joysticks are considered their 'error'
-    axes_off[key] = {"x": x, "y": y};
-  };
-
-  this.getDisplace = function() { //allows user to see what the displacement values are, if desired
-    return axes_off;
-  }
-
-  this.axesAdjust = function(key, x, y) { //calculates the polar coordinates, and scales the axes based off of displacement
-    var theta = 0;                        //because of the range of the joystick's possible error, the first 10% of movement
-    var r = 0;                            //has been canceled out for now.
-    if(x > 0) {
-      x = (x - axes_off[key].x) / (1 - axes_off[key].x);
-    } else {
-      x = (x - axes_off[key].x) / (1 + axes_off[key].x);
-    }
-
-    if(y > 0) {
-      y = -(y - axes_off[key].y) / (1 - axes_off[key].y);
-    } else {
-      y = -(y - axes_off[key].y) / (1 + axes_off[key].y);
-    }
-
-    theta = Math.atan2(x,y) * 180 / Math.PI;
-    if(Math.abs(x) < .1 && Math.abs(y) < .1) {
-      x = 0;
-      y = 0;
-      theta = 0;
-    }
-
-    r = Math.sqrt(x*x + y*y);
-
-    if(r > 1) {
-      r = 1;
-    }
-
-    return {"x": x, "y": y, "theta": theta, "r": r};
-  }
-
-  //string for btn and trigger, and function for func; i.e. this.btn_bind("a", "change", function() {kill_all_humans} );
-  //btn is the button key property of buttons, trigger can be 'value', 'change', 'press', or 'release'
-  //------value = while it's being pressed, press = first instant it gets pressed
-  //arg is an object that holds the parameter
-  /* -----FUNCTION assumed to depend on when status turns TRUE----- */
-  this.btn_bind = function(btn, trigger, func, arg) {
-    var bfunc_key = null;
-    var bf_full = null;
-    if(trigger == "change") {
-      bfunc_key = "change_func";
-      bf_full = function() {
-        if(gp.buttons[btn].val != buttons_last[btn].val) {
-          func(arg);
+    //these are for identifying if a button has just been pressed or released
+    this.setButtonLast = function(key, init = false) {
+        //is called right before updating buttons
+        if (init) {
+            //init = true when gamepad is being mapped out; user shouldn't worry about it
+            buttons_last[key] = { val: 0 };
+        } else {
+            buttons_last[key].val = this.buttons[key].val;
         }
-      };
-    } else if(trigger == "value") {
-      bfunc_key = "val_func";
-      bf_full = function() {
-        if(gp.buttons[btn].val){
-          func(arg);
+    };
+
+    this.getButtonLastPress = function(key) {
+        //allows for user to see/operate off of last press, if desired
+        return buttons_last[key].val;
+    };
+
+    this.setStatusChange = function(key) {
+        //this sets the pressed and released characteristics for each button
+        if (this.buttons[key].val && !buttons_last[key].val) {
+            this.buttons[key].pressed = 1;
+            this.buttons[key].released = 0;
+        } else if (!this.buttons[key].val && buttons_last[key].val) {
+            this.buttons[key].pressed = 0;
+            this.buttons[key].released = 1;
+        } else {
+            this.buttons[key].pressed = 0;
+            this.buttons[key].released = 0;
         }
-      }
-    } else if(trigger == "press") {
-      bfunc_key = "press_func";
-      bf_full = function() {
-        if(gp.buttons[btn].pressed) {
-          func(arg);
+    };
+
+    this.setDisplace = function(key, x, y) {
+        //the initial value of the joysticks are considered their 'error'
+        axes_off[key] = { x: x, y: y };
+    };
+
+    this.getDisplace = function() {
+        //allows user to see what the displacement values are, if desired
+        return axes_off;
+    };
+
+    this.axesAdjust = function(key, x, y) {
+        //calculates the polar coordinates, and scales the axes based off of displacement
+        var theta = 0; //because of the range of the joystick's possible error, the first 10% of movement
+        var r = 0; //has been canceled out for now.
+        if (x > 0) {
+            x = (x - axes_off[key].x) / (1 - axes_off[key].x);
+        } else {
+            x = (x - axes_off[key].x) / (1 + axes_off[key].x);
         }
-      };
-    } else if(trigger == "release") {
-      bfunc_key = "release_func";
-      bf_full = function() {
-        if(gp.buttons[btn].released) {
-          func(arg);
+
+        if (y > 0) {
+            y = -(y - axes_off[key].y) / (1 - axes_off[key].y);
+        } else {
+            y = -(y - axes_off[key].y) / (1 + axes_off[key].y);
         }
-      };
-    }
 
-    if(bf_full != null && bfunc_key != null) {
-      but_func[btn][bfunc_key] = bf_full;
-      //console.log(but_func[btn][bfunc_key]);
-    }
-  }
+        theta = Math.atan2(x, y) * 180 / Math.PI;
+        if (Math.abs(x) < 0.1 && Math.abs(y) < 0.1) {
+            x = 0;
+            y = 0;
+            theta = 0;
+        }
 
-  //string for side and trigger, and function for func; i.e. this.ax_bind("left", "polar", function() {kill_all_humans} );
-  //side is the button key property of buttons, trigger can be 'polar' or 'cartesian'
-  //arg is an object that holds the parameter
-  /* -----FUNCTION assumed to work for ANY VALUE given by joysticks----- */
-  this.ax_bind = function(side, trigger, func, arg) {
-    var afunc_key = null;
-    if(trigger == "polar") {
-      afunc_key = "polar_func";
+        r = Math.sqrt(x * x + y * y);
 
-    } else if(trigger == "cartesian") {
-      afunc_key = "cartes_func";
-    }
+        if (r > 1) {
+            r = 1;
+        }
 
-    if(afunc_key != null) {
-      //console.log("Binding: "+side+" "+afunc_key);
-      ax_func[side][afunc_key] = function() {
-        func(arg);
-      }
-      //console.log(ax_func[side][afunc_key]);
-    }
-  }
+        return { x: x, y: y, theta: theta, r: r };
+    };
 
-
-  //these are for selecting the gamepad, mapping it from the library, and then updating the current status
-  this.set = function(done) { //waits until it sees a gamepad with a button pressed, and sets it as the desired controller
-    var monitor = window.setInterval(function() {
-      var chk = navigator.getGamepads();
-      for(var i = 0; i < chk.length; i++) {
-        if(chk[i] != undefined) {
-          if(chk[i].buttons != undefined) {
-            for(var j = 0; j < chk[i].buttons.length; j++) {
-              if(chk[i].buttons[j].pressed) {
-                if(gp.i_use == undefined) {
-                  gp.i_use = i;
+    //string for btn and trigger, and function for func; i.e. this.btn_bind("a", "change", function() {kill_all_humans} );
+    //btn is the button key property of buttons, trigger can be 'value', 'change', 'press', or 'release'
+    //------value = while it's being pressed, press = first instant it gets pressed
+    //arg is an object that holds the parameter
+    /* -----FUNCTION assumed to depend on when status turns TRUE----- */
+    this.btn_bind = function(btn, trigger, func, arg) {
+        var bfunc_key = null;
+        var bf_full = null;
+        if (trigger == 'change') {
+            bfunc_key = 'change_func';
+            bf_full = function() {
+                if (gp.buttons[btn].val != buttons_last[btn].val) {
+                    func(arg);
                 }
-                gp.map(chk[gp.i_use].id);
-                if (done) done()
-                //console.log("found a button press...");
-              }
-            }
-          }
+            };
+        } else if (trigger == 'value') {
+            bfunc_key = 'val_func';
+            bf_full = function() {
+                if (gp.buttons[btn].val) {
+                    func(arg);
+                }
+            };
+        } else if (trigger == 'press') {
+            bfunc_key = 'press_func';
+            bf_full = function() {
+                if (gp.buttons[btn].pressed) {
+                    func(arg);
+                }
+            };
+        } else if (trigger == 'release') {
+            bfunc_key = 'release_func';
+            bf_full = function() {
+                if (gp.buttons[btn].released) {
+                    func(arg);
+                }
+            };
         }
 
-        if(gp.ready) {                      //if gamepad matches a known layout, accept the chosen gamepad
-          window.clearInterval(monitor);
-          //console.log("gamepad accepted");
+        if (bf_full != null && bfunc_key != null) {
+            but_func[btn][bfunc_key] = bf_full;
+            //console.log(but_func[btn][bfunc_key]);
         }
-      }
-    }, 100);
-  };
+    };
 
-  this.map = function(id) { //maps the gamepad, and the related functions unless they've been defined for the button before
-    console.log("Matching...");
-    gp.id = id;
-    var match = false;
-    layouts.forEach((layout) => {
-      Object.keys(layout.id).forEach(function(i_key, j) {
-        console.log(i_key);
-        if(id == layout.id[i_key]) {
-          match = true;
-          gp.layout = layout;
-          gp.b_len = layout.buttons.length;
-          var name = "";
-          for(var i = 0; i < gp.b_len; i++) {
-            name = layout.buttons[i].name;
-            gp.setButtonLast(name, true);
-            gp.buttons[name] = {val: 0, pressed: 0, released: 0};
-            if(but_func[name] == undefined) {
-              but_func[name] = {val_func: null, change_func: null, press_func: null, release_func: null};
-            }
-          }
-          var arrays = navigator.getGamepads()[gp.i_use].axes;
-          var cur_index = -1;
-          var which = "";
-          gp.a_len = layout.axes.length;
-          for(var i = 0; i < gp.a_len; i++) {
-            name = layout.axes[i].name;
-            which = layout.axes[i].which;
-            cur_index = layout.axes[i].index;
-            gp.axes[which][name] = arrays[cur_index];
-            if(ax_func[name] == undefined) {
-              ax_func[which] = {polar_func: null, cartes_func: null};
-            }
-          }
-          gp.setDisplace("left", gp.axes.left.x, gp.axes.left.y);
-          gp.setDisplace("right", gp.axes.right.x, gp.axes.right.y);
-          gp.ready = true;
+    //string for side and trigger, and function for func; i.e. this.ax_bind("left", "polar", function() {kill_all_humans} );
+    //side is the button key property of buttons, trigger can be 'polar' or 'cartesian'
+    //arg is an object that holds the parameter
+    /* -----FUNCTION assumed to work for ANY VALUE given by joysticks----- */
+    this.ax_bind = function(side, trigger, func, arg) {
+        var afunc_key = null;
+        if (trigger == 'polar') {
+            afunc_key = 'polar_func';
+        } else if (trigger == 'cartesian') {
+            afunc_key = 'cartes_func';
         }
-      });
-    });
-    if(!gp.ready) {
-      if(match) {
-        console.log("The library recognized the gamepad, but didn't map it... Broken? :/");
-      } else {
-        console.log("The chosen gamepad did not match the library.");
-      }
-    } else {
-        //NO BIND
-        //bind.activate();
-    }
-  };
 
-  this.get_current = function(message) {
-    read = navigator.getGamepads()[gp.i_use];
-    if(read != undefined && gp.i_use != undefined) {
-      var name = "";
-      var where = "";
-      var cur_index = -1;
-      for(var i = 0; i < gp.b_len; i++) {
-          name = gp.layout.buttons[i].name;
-          where = gp.layout.buttons[i].where;
-          cur_index = gp.layout.buttons[i].index;
-          gp.setButtonLast(name);
-          if(where == "buttons") {
-            gp.buttons[name].val = (read[where][cur_index].value == gp.layout.buttons[i].match)? 1 : 0;
-          } else if (where == "axes") {
-            gp.buttons[name].val = (read[where][cur_index] == gp.layout.buttons[i].match)? 1 : 0;
-          } else {
-            console.log("Error: "+where+" presented instead of 'buttons' or 'axes' for get_current in gp_library.js")
-          }
-          gp.setStatusChange(name);
+        if (afunc_key != null) {
+            //console.log("Binding: "+side+" "+afunc_key);
+            ax_func[side][afunc_key] = function() {
+                func(arg);
+            };
+            //console.log(ax_func[side][afunc_key]);
+        }
+    };
 
-          if(but_func[name].change_func != null) {
-            but_func[name].change_func();
-          }
+    //these are for selecting the gamepad, mapping it from the library, and then updating the current status
+    this.set = function(done) {
+        //waits until it sees a gamepad with a button pressed, and sets it as the desired controller
+        var monitor = window.setInterval(
+            function() {
+                var chk = navigator.getGamepads();
+                for (var i = 0; i < chk.length; i++) {
+                    if (chk[i] != undefined) {
+                        if (chk[i].buttons != undefined) {
+                            for (var j = 0; j < chk[i].buttons.length; j++) {
+                                if (chk[i].buttons[j].pressed) {
+                                    if (gp.i_use == undefined) {
+                                        gp.i_use = i;
+                                    }
+                                    gp.map(chk[gp.i_use].id);
+                                    if (done) done();
+                                    //console.log("found a button press...");
+                                }
+                            }
+                        }
+                    }
 
-          if(but_func[name].val_func != null) {
-            but_func[name].val_func();
-          }
+                    if (gp.ready) {
+                        //if gamepad matches a known layout, accept the chosen gamepad
+                        window.clearInterval(monitor);
+                        //console.log("gamepad accepted");
+                    }
+                }
+            },
+            100
+        );
+    };
 
-          if(but_func[name].press_func != null) {
-            but_func[name].press_func();
-          }
+    this.map = function(id) {
+        //maps the gamepad, and the related functions unless they've been defined for the button before
+        console.log('Matching...');
+        gp.id = id;
+        var match = false;
+        layouts.forEach(layout => {
+            Object.keys(layout.id).forEach(function(i_key, j) {
+                console.log(i_key);
+                if (id == layout.id[i_key]) {
+                    match = true;
+                    gp.layout = layout;
+                    gp.b_len = layout.buttons.length;
+                    var name = '';
+                    for (var i = 0; i < gp.b_len; i++) {
+                        name = layout.buttons[i].name;
+                        gp.setButtonLast(name, true);
+                        gp.buttons[name] = { val: 0, pressed: 0, released: 0 };
+                        if (but_func[name] == undefined) {
+                            but_func[name] = {
+                                val_func: null,
+                                change_func: null,
+                                press_func: null,
+                                release_func: null
+                            };
+                        }
+                    }
+                    var arrays = navigator.getGamepads()[gp.i_use].axes;
+                    var cur_index = -1;
+                    var which = '';
+                    gp.a_len = layout.axes.length;
+                    for (var i = 0; i < gp.a_len; i++) {
+                        name = layout.axes[i].name;
+                        which = layout.axes[i].which;
+                        cur_index = layout.axes[i].index;
+                        gp.axes[which][name] = arrays[cur_index];
+                        if (ax_func[name] == undefined) {
+                            ax_func[which] = {
+                                polar_func: null,
+                                cartes_func: null
+                            };
+                        }
+                    }
+                    gp.setDisplace('left', gp.axes.left.x, gp.axes.left.y);
+                    gp.setDisplace('right', gp.axes.right.x, gp.axes.right.y);
+                    gp.ready = true;
+                }
+            });
+        });
+        if (!gp.ready) {
+            if (match) {
+                console.log(
+                    "The library recognized the gamepad, but didn't map it... Broken? :/"
+                );
+            } else {
+                console.log('The chosen gamepad did not match the library.');
+            }
+        } else {
+            //NO BIND
+            //bind.activate();
+        }
+    };
 
-          if(but_func[name].release_func != null) {
-            but_func[name].release_func();
-          }
-          //console.log("Buttons: "+gp.buttons[name].press+" "+name);
-      }
-//console.log(gp.buttons.down.val+" "+gp.buttons.down.released);
-      var temp_axes = {left: {x: 0, y: 0}, right: {x: 0, y: 0}};
-      for(var i = 0; i < gp.a_len; i++) {
-          name = gp.layout.axes[i].name;
-          which = gp.layout.axes[i].which;
-          cur_index = gp.layout.axes[i].index;
+    this.get_current = function(message) {
+        read = navigator.getGamepads()[gp.i_use];
+        if (read != undefined && gp.i_use != undefined) {
+            var name = '';
+            var where = '';
+            var cur_index = -1;
+            for (var i = 0; i < gp.b_len; i++) {
+                name = gp.layout.buttons[i].name;
+                where = gp.layout.buttons[i].where;
+                cur_index = gp.layout.buttons[i].index;
+                gp.setButtonLast(name);
+                if (where == 'buttons') {
+                    gp.buttons[name].val = read[where][cur_index].value ==
+                        gp.layout.buttons[i].match
+                        ? 1
+                        : 0;
+                } else if (where == 'axes') {
+                    gp.buttons[name].val = read[where][cur_index] ==
+                        gp.layout.buttons[i].match
+                        ? 1
+                        : 0;
+                } else {
+                    console.log(
+                        'Error: ' +
+                            where +
+                            " presented instead of 'buttons' or 'axes' for get_current in gp_library.js"
+                    );
+                }
+                gp.setStatusChange(name);
 
-          temp_axes[which][name] = read.axes[cur_index];
-      }
+                if (but_func[name].change_func != null) {
+                    but_func[name].change_func();
+                }
 
-      Object.keys(gp.axes).forEach(function(key_a, i) {
-          gp.axes[key_a] = gp.axesAdjust(key_a, temp_axes[key_a].x, temp_axes[key_a].y);
-          if(ax_func[key_a].polar_func != null) {
-            ax_func[key_a].polar_func();
-          }
+                if (but_func[name].val_func != null) {
+                    but_func[name].val_func();
+                }
 
-          if(ax_func[key_a].cartes_func != null) {
-            ax_func[key_a].cartes_func();
-          }
-          //console.log("Axes: "+gp.axes[key_a].pos+" "+key_a);
-      });
+                if (but_func[name].press_func != null) {
+                    but_func[name].press_func();
+                }
 
-    } else {
-      Object.keys(gp.buttons).forEach(function(key_b, i) {
-          Object.keys(gp.buttons[key_b]).forEach(function(butn_bit, j) {
-            gp.buttons[key_b][butn_bit] = 0;            //let go of all buttons
-          });
-          //console.log("Buttons: "+gp.buttons[key_b].press+" "+key_b);
-      });
-      Object.keys(gp.axes).forEach(function(key_a, i) {
-          Object.keys(gp.axes[key_a]).forEach(function(ax_bit, j) {
-            gp.axes[key_a][ax_bit] = 0;               //don't want to run the ROV into a wall if the gamepad disconnects
-          });
-          //console.log("Axes: "+gp.axes[key_a].pos+" "+key_a);
-      });
-      gp.ready = false;                       //gp is no longer ready **can be used in outer loop for a marker**
-      gp.i_use = undefined;                   //to reconnect, we'll have to re-assign where the valid gamepad is
-      if(message != undefined) {
-        message.text("Gamepad disconnected");
-      }
-    }
-  };
+                if (but_func[name].release_func != null) {
+                    but_func[name].release_func();
+                }
+                //console.log("Buttons: "+gp.buttons[name].press+" "+name);
+            }
+            //console.log(gp.buttons.down.val+" "+gp.buttons.down.released);
+            var temp_axes = { left: { x: 0, y: 0 }, right: { x: 0, y: 0 } };
+            for (var i = 0; i < gp.a_len; i++) {
+                name = gp.layout.axes[i].name;
+                which = gp.layout.axes[i].which;
+                cur_index = gp.layout.axes[i].index;
+
+                temp_axes[which][name] = read.axes[cur_index];
+            }
+
+            Object.keys(gp.axes).forEach(function(key_a, i) {
+                gp.axes[key_a] = gp.axesAdjust(
+                    key_a,
+                    temp_axes[key_a].x,
+                    temp_axes[key_a].y
+                );
+                if (ax_func[key_a].polar_func != null) {
+                    ax_func[key_a].polar_func();
+                }
+
+                if (ax_func[key_a].cartes_func != null) {
+                    ax_func[key_a].cartes_func();
+                }
+                //console.log("Axes: "+gp.axes[key_a].pos+" "+key_a);
+            });
+        } else {
+            Object.keys(gp.buttons).forEach(function(key_b, i) {
+                Object.keys(gp.buttons[key_b]).forEach(function(butn_bit, j) {
+                    gp.buttons[key_b][butn_bit] = 0; //let go of all buttons
+                });
+                //console.log("Buttons: "+gp.buttons[key_b].press+" "+key_b);
+            });
+            Object.keys(gp.axes).forEach(function(key_a, i) {
+                Object.keys(gp.axes[key_a]).forEach(function(ax_bit, j) {
+                    gp.axes[key_a][ax_bit] = 0; //don't want to run the ROV into a wall if the gamepad disconnects
+                });
+                //console.log("Axes: "+gp.axes[key_a].pos+" "+key_a);
+            });
+            gp.ready = false; //gp is no longer ready **can be used in outer loop for a marker**
+            gp.i_use = undefined; //to reconnect, we'll have to re-assign where the valid gamepad is
+            if (message != undefined) {
+                message.text('Gamepad disconnected');
+            }
+        }
+    };
 }
 
 var gp = new Gamepad();
