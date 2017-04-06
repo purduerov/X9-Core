@@ -37,7 +37,7 @@
       },
     },
 */
-let gp = require('./gp_library.js')
+//let gp = require('./gp_library.js')
 
 var bind = {
   btn: {

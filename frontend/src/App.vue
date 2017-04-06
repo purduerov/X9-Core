@@ -7,7 +7,7 @@
             <Card class="camera-width full-height">
                 <CameraView></CameraView>
             </Card>
-            <div style="width: calc(100% - 800px); height: 100%; float: left">
+            <div style="width: calc(100% - 200px); height: 100%; float: left">
                 <Card class="half-width half-height">
                     <IMU :data="packet.IMU"></IMU>
                 </Card>
@@ -34,7 +34,7 @@ var Card = require("./components/Card.vue")
 var Press_Temp = require("./components/Pressure.vue")
 var GpInfo = require("./components/GpInfo.vue")
 var Thruster = require("./components/Thrusters.vue")
-var gp = require("./gamepad/gp_library.js")
+var Gamepad = require("./gamepad")
 var controls = require("./controls.js")
 
 export default {
@@ -81,34 +81,38 @@ export default {
         var vm = this;
 
         window.vue_app = vm;
+        //window.gp = Gamepad
 
-        gp.set(function() {
-            console.log("And done..")
-            window.setInterval(function() {
-                gp.get_current()
-            }, 20)
-        });
+        let gamepad = undefined
+        Gamepad.findGamepad(gp => {
+            gamepad = gp
 
-        var socket = io.connect('http://' + document.domain + ':' + location.port);
+            setInterval(() => {
+                gamepad.update()
+                console.log(gamepad.axes)
+            }, 300)
+        })
 
-        var send = {};
-        var app_refresh = setInterval(function() {
-            if(gp.ready) {
-                var send = JSON.stringify(controls);
-                //console.log(send);
-                socket.emit("dearflask", send);
-            }
-        }, 50);
-        socket.on("dearclient", function(status) {
-            data = JSON.parse(status);
-            console.log(data);
-            Object.keys(data).forEach(function(key, i) {
-                vm.packet[key] = status[key];
-            });
-            //setTimeout(function() {
-                //console.log(vm.packet);
-            //}, 10);
-        });
+        //var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+        //var send = {};
+        //var app_refresh = setInterval(function() {
+        //    if(gp.ready) {
+        //        var send = JSON.stringify(controls);
+        //        //console.log(send);
+        //        socket.emit("dearflask", send);
+        //    }
+        //}, 50);
+        //socket.on("dearclient", function(status) {
+        //    data = JSON.parse(status);
+        //    console.log(data);
+        //    Object.keys(data).forEach(function(key, i) {
+        //        vm.packet[key] = status[key];
+        //    });
+        //    //setTimeout(function() {
+        //        //console.log(vm.packet);
+        //    //}, 10);
+        //});
     }
 }
 </script>
@@ -151,6 +155,6 @@ export default {
 }
 
 .camera-width {
-    width: 800px;
+    width: 200px;
 }
 </style>
