@@ -25,7 +25,7 @@ This file handles the primary functions of the webapp. Handles:
 app = Flask(__name__) #static_url_path="", static_folder="frontend/src")
 socketio = SocketIO(app, async_mode="eventlet")
 
-last_rov = {}
+last_rov = ""
 pp = pprint.PrettyPrinter(indent=4)
 
 manager = multiprocessing.Manager()
@@ -137,4 +137,3 @@ if __name__ == 'application':
     rov_proc.start()
 
     socketio.run(app, use_reloader=False, debug=True, host="0.0.0.0")
-

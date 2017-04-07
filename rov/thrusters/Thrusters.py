@@ -49,9 +49,9 @@ class Thrusters:
 
     NUM_THRUSTERS = 8
 
-    ZERO_POWER = 300
-    POS_MAX_POWER = 217
-    NEG_MAX_POWER = 383
+    ZERO_POWER = 305
+    POS_MAX_POWER = 222
+    NEG_MAX_POWER = 388
 
     def __init__(self):
         self.t0 = Thruster()
@@ -69,7 +69,8 @@ class Thrusters:
 
         # Pi -> I2C-to-PWM variables:
         #   I2C-to-PWM Pins
-        self.pins = [2, 5, 0, 4, 6, 7, 10, 9]
+        self.pins = [7, 4, 6, 5, 10, 1, 11, 0]
+        #X9 pins FR -> clockwise: [4, 1, 0, 5, 6, 11, 10, 7]
         # Maelstrom thruster pins: [6, 1, 4, 3, 5, 12, 8, 9]
 
         #   I2C-to-PWM chip class:
