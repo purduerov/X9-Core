@@ -20,7 +20,7 @@ class ROV(object):
 
         self._data_lock = lock
         self._data = data
-        self.dearclient = {"thrusters": {}}
+        self.dearclient = {"thrusters": {}, "tools": {}}
 
         self.last_update = time()
 
@@ -99,9 +99,9 @@ class ROV(object):
                 print self._data["dearflask"]["tools"]["valve"]
 
                 self.claw.grab(self._data["dearflask"]["tools"]["claw"])
-                self.dearclient["tools"]["claw"] = self.claw.getPower()
-
                 self.valve.rotate(self._data["dearflask"]["tools"]["valve"])
+
+                self.dearclient["tools"]["claw"] = self.claw.getPower()
                 self.dearclient["tools"]["valve"] = self.valve.getPower()
 
             except TypeError as err:
