@@ -111,8 +111,8 @@ class ROV(object):
                 #thrust = list(np.asarray(thrust)[0])
                 #self.thrusters.temp_move(force, actives)
                 print "Thrust:"
-                print thrust[0]
-                self.thrusters.push_pi_motors(thrust[0], actives)
+                print thrust.tolist()[0]
+                self.thrusters.push_pi_motors(thrust.tolist()[0], actives)
                 #print self._data['dearflask']['thrusters']['t6']
 
                 #self._data['dearclient']["thrusters"]["thrusters"] = self.thrusters.get_data()

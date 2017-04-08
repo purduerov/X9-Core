@@ -70,7 +70,7 @@ def recieve_controls(indata):
     #print indata
     #print dict(indata)
     #print json.dumps(indata)
-    print "indata"
+    #print "indata"
     #print type(str(indata))
     #print str(indata)
     #print json.loads(str(indata), object_hook=ascii_encode_dict)
@@ -82,7 +82,7 @@ def recieve_controls(indata):
 
         with lock:
             data["dearflask"] = json.loads(indata)
-            pp.pprint(data)
+            #pp.pprint(data["dearflask"])
 
 @socketio.on('connect')
 def on_connect():

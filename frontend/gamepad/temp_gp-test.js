@@ -21,7 +21,7 @@ var active_div = function() {
           div.css({left: "+=1"});
       }
   }
-  
+
   if(gp.buttons.up.pressed) {
     div.css({top: "0"});
   }
@@ -36,16 +36,16 @@ var active_div = function() {
     div.css({left: "100%"});
     div.css({left: "-="+(div.width()+3)});
   }
-  
-  
+
+
 
   div.css({top: "+="+parseInt(-10*gp.axes.left.y)+"px"});
   div.css({left: "+="+parseInt(10*gp.axes.left.x)+"px"});
-  
-  
+
+
   Object.keys(gp.buttons) .forEach(function(key_b, i) {
     if(key_b != "length"){
-      txt = txt+"</br>"+key_b+": "+(!!+gp.buttons[key_b].val);
+      txt = txt+"</br>"+key_b+": "+(gp.buttons[key_b].val);
       //console.log("Buttons: "+gp.buttons[key_b].val+" "+key_b);
     }
   });
@@ -61,7 +61,7 @@ var active_div = function() {
         }
       }
   });
-  
+
   info.html(txt);
 }
 
@@ -86,9 +86,9 @@ var run = function(abt) {
 $(document).ready(function() {
   var abt = $("#titles");
   gp.set(abt);
-  
+
   go1 = window.setInterval(function() { run(abt); }, 50);
-  
+
   $("#reset").click(function() {
     if(go2 != -1) {
       gp.ready = false;
@@ -98,7 +98,7 @@ $(document).ready(function() {
     gp.set(abt);
     go1 = window.setInterval(function() { run(abt); }, 50);
   });
-  
+
   $("#bind").click(function() {
     gp.bind("a", "press", function(arg) { arg.message.html("Re-link, </br>\'"+arg.btn+"\' says hi "+arg.count+" times!"); arg.count += 1; },
             {message: $("#reset"), btn: "a", count: 0});

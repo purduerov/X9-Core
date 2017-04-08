@@ -7,7 +7,7 @@
             <Card class="camera-width full-height">
                 <CameraView></CameraView>
             </Card>
-            <div style="width: calc(100% - 800px); height: 100%; float: left">
+            <div style="width: calc(100% - 1800px); height: 100%; float: left">
                 <Card class="half-width half-height">
                     <IMU :data="packet.IMU"></IMU>
                 </Card>
@@ -105,7 +105,6 @@ export default {
             if(gp.ready) {
                 window.clearInterval(go1);
                 go1 = -1;
-                bind.activate();
                 go2 = window.setInterval(function() {
                   gp.get_current();
                 });
@@ -178,6 +177,6 @@ export default {
 }
 
 .camera-width {
-    width: 800px;
+    width: 1800px;
 }
 </style>

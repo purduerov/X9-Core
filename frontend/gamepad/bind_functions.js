@@ -68,44 +68,18 @@ bind = {
         }
       },
     },
-    up: {
-      press: {
-        func: function() {
-          controls.force.z = gp.buttons.up.val;
-        },
-      },
-      release: {
-        func: function() {
-          if(controls.force.z > 0) {
-            controls.force.z = 0;
-          }
-        },
-      },
-    },
-    down: {
-      press: {
-        func: function() {
-          controls.force.z = -gp.buttons.down.val;
-        },
-      },
-      release: {
-        func: function() {
-          if(controls.force.z < 0) {
-            controls.force.z = 0;
-          }
-        },
-      },
-    },
     rb: {
       press: {
         func: function() {
-          controls.force.yaw = gp.buttons.rb.val;
+          controls.force.roll = gp.buttons.rb.val * 0.5;
+          vue_app.packet.IMU.roll = controls.force.roll;
         },
       },
       release: {
         func: function() {
-          if(controls.force.yaw > 0) {
-            controls.force.yaw = 0;
+          if(controls.force.roll > 0) {
+            controls.force.roll = 0;
+            vue_app.packet.IMU.roll = controls.force.roll;
           }
         },
       },
@@ -113,13 +87,35 @@ bind = {
     lb: {
       press: {
         func: function() {
-          controls.force.yaw = -gp.buttons.lb.val;
+          controls.force.roll = -gp.buttons.lb.val * 0.5;
+          vue_app.packet.IMU.roll = controls.force.roll;
         },
       },
       release: {
         func: function() {
-          if(controls.force.yaw < 0) {
-            controls.force.yaw = 0;
+          if(controls.force.roll < 0) {
+            controls.force.roll = 0;
+            vue_app.packet.IMU.roll = controls.force.roll;
+          }
+        },
+      },
+    },
+    rt: {
+      change: {
+        func: function() {
+          if(controls.force.z >= 0) {
+            controls.force.z = gp.buttons.rt.val * 0.75;
+            vue_app.packet.IMU.z = controls.force.z;
+          }
+        },
+      },
+    },
+    lt: {
+      change: {
+        func: function() {
+          if(controls.force.z <= 0) {
+            controls.force.z = -gp.buttons.lt.val * 0.75;
+            vue_app.packet.IMU.z = controls.force.z;
           }
         },
       },
@@ -131,6 +127,8 @@ bind = {
         func: function() {
           controls.force.y = gp.axes.left.x;
           controls.force.x = gp.axes.left.y;
+          vue_app.packet.IMU.x = controls.force.x;
+          vue_app.packet.IMU.y = controls.force.y;
           vue_app.gpinfo.axes.left.x = gp.axes.left.x;
           vue_app.gpinfo.axes.left.y = gp.axes.left.y;
         },
@@ -139,8 +137,10 @@ bind = {
     right: {
       cartesian: {
         func: function() {
-          controls.force.pitch = gp.axes.right.y;
-          controls.force.roll = gp.axes.right.x;
+          controls.force.pitch = -gp.axes.right.y;
+          controls.force.yaw = gp.axes.right.x;
+          vue_app.packet.IMU.pitch = controls.force.pitch;
+          vue_app.packet.IMU.yaw = controls.force.yaw;
           vue_app.gpinfo.axes.right.x = gp.axes.right.x;
           vue_app.gpinfo.axes.right.y = gp.axes.right.y;
         },
@@ -152,7 +152,7 @@ bind = {
       if(btn_ax != "activate") {
         Object.keys(bind[btn_ax]).forEach(function(piece, j) { //goes through buttons or left and right axes
           Object.keys(bind[btn_ax][piece]).forEach(function(which, k) {  //goes through the individual functions
-            console.log(btn_ax+": "+piece+", "+which);
+            //console.log(btn_ax+": "+piece+", "+which);
             gp[btn_ax+"_bind"](piece, which, bind[btn_ax][piece][which].func);
           });
         });
