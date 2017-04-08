@@ -44,28 +44,60 @@ bind = {
       change: {
         func: function() {
           vue_app.gpinfo.buttons.a = gp.buttons.a.val;
+          controls.tools.claw = gp.buttons.a.val;
         }
+      },
+      release: {
+        func: function() {
+          if(controls.tools.claw > 0) {
+            controls.tools.claw = 0;
+          }
+        },
       },
     },
     b: {
       change: {
         func: function() {
           vue_app.gpinfo.buttons.b = gp.buttons.b.val;
+          controls.tools.claw = -gp.buttons.b.val;
         }
+      },
+      release: {
+        func: function() {
+          if(controls.force.claw < 0) {
+            controls.tools.claw = 0;
+          }
+        },
       },
     },
     x: {
       change: {
         func: function() {
           vue_app.gpinfo.buttons.x = gp.buttons.x.val;
+          controls.tools.valve = gp.buttons.x.val;
         }
+      },
+      release: {
+        func: function() {
+          if(controls.tools.valve > 0) {
+            controls.tools.valve = 0;
+          }
+        },
       },
     },
     y: {
       change: {
         func: function() {
           vue_app.gpinfo.buttons.y = gp.buttons.y.val;
+          controls.tools.valve = -gp.buttons.y.val;
         }
+      },
+      release: {
+        func: function() {
+          if(controls.tools.valve < 0) {
+            controls.tools.valve = 0;
+          }
+        },
       },
     },
     rb: {

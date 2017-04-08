@@ -11,6 +11,7 @@ from sensors import Pressure, IMU
 from thrusters import Thrusters
 from thrusters import ThrustMapper
 from camera.cam import Camera
+from tools import Claw, ValveTurner
 
 
 class ROV(object):
@@ -35,6 +36,9 @@ class ROV(object):
 
         self.camera1 = Camera()
         self.camera1.on()
+
+        self.claw = Claw()
+        self.valve = ValveTurner()
 
     @property
     def data(self):
@@ -117,6 +121,12 @@ class ROV(object):
 
                 #self._data['dearclient']["thrusters"]["thrusters"] = self.thrusters.get_data()
                 self.dearclient["thrusters"] = self.thrusters.get_data()
+
+                self.claw.grab(self._data["dearflask"]["tools"]["claw"])
+                self.dearclient["tools"]["claw"] = self.claw.getPower()
+
+                self.valve.rotate(self._data["dearflask"]["tools"]["valve"])
+                self.dearclient["tools"]["valve"] = self.valve.getPower()
 
             except TypeError as err:
                 print err
