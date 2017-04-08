@@ -23,7 +23,7 @@ class Claw:
         elif(direc > 0):
             direc = .25
 
-        self.power = int((self.POW_MAX_POWER - self.ZERO_POWER) * direc)
+        self.power = int((self.POS_MAX_POWER - self.ZERO_POWER) * direc)
 
         self.pwm.set_pwm(self.pin, 0, self.power + self.ZERO_POWER)
 
