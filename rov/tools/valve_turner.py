@@ -8,7 +8,7 @@ class ValveTurner:
     NEG_MAX_POWER = 388
 
     def __init__(self):
-        self.pin = #GIVE ME THE pin
+        self.pin = 9#GIVE ME THE pin
 
         self.power = 0
 
@@ -20,9 +20,9 @@ class ValveTurner:
 
     def rotate(self, direc):
         if(direc < 0):
-            direc = -.1
+            direc = -.15
         elif(direc > 0):
-            direc = .1
+            direc = .15
 
         self.power = int((self.POW_MAX_POWER - self.ZERO_POWER) * direc)
 

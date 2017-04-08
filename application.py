@@ -64,16 +64,6 @@ def send_index2_page_files(path):
 @socketio.on('dearflask')
 def recieve_controls(indata):
     global last_controller, last_rov
-    # parse json controls object into onside object.
-    # print("controls: " + str(json))
-    # print('received message: ' + str(data))
-    #print indata
-    #print dict(indata)
-    #print json.dumps(indata)
-    #print "indata"
-    #print type(str(indata))
-    #print str(indata)
-    #print json.loads(str(indata), object_hook=ascii_encode_dict)
 
     send_packet()
 

@@ -1,6 +1,5 @@
 from Adafruit_PCA9685 import PCA9685
 
-
 class Claw:
 
     ZERO_POWER = 305
@@ -8,7 +7,7 @@ class Claw:
     NEG_MAX_POWER = 388
 
     def __init__(self):
-        self.pin = #GIVE ME THE pin
+        self.pin = 3#GIVE ME THE pin
 
         self.power = 0
 

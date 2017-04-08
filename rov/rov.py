@@ -74,46 +74,19 @@ class ROV(object):
             try:
                 actives = list()
                 force = list()
-                #print "flask"
-                #print self._data['dearflask']["thrusters"]#["t7"]
-                #print "client"
-                #print self._data['dearclient']["thrusters"]
+
                 t = ["t7", "t0", "t4", "t3", "t6", "t1", "t5", "t2"] # The order the Thrust mapping algorithm will see FR -> clockwise
                 f = ["x", "y", "z", "roll", "pitch", "yaw"]
-                #print "in update"
-                #print self._data['dearflask']
-                #for x in self._data['dearflask']:
-                #    print x
-                #print 'Thruster Data:'
-                #print self._data['dearflask'][u'thrusters']
-                #print 'Thruster 6:'
-                #print self._data['dearflask'][u'thrusters'][u't6']
-                #print 'Thruster 6 active:'
-                #print self._data['dearflask']['thrusters']['t6']['active']
 
                 #print 'Looping over thrusters for active list'
                 for x in t:
-                    #print "LOOK AT ME DAMMIT I'M PRETTY"
-                    #print self._data['dearflask']["thrusters"][t+tval]
-                    #print "active"
-                    #print x
-                    #print t[u'active']
                     actives.append(self._data['dearflask'][u'thrusters'][x]['active'])
-                    #print t
-                    #print t["active"]
-                    #actives.append(self._data['dearflask']['thrusters'][t+tval]["active"])
+
                 for m in f:
                     force.append(self._data['dearflask']['force'][m])
-                #print "finished actives"
-                #print "Actives:"
-                #print actives
-                #force = self._data['dearflask']['force']
-                #print "Force:"
-                #print force
-                #print 0.25 * np.array(force)
+
                 thrust = self.mapper.generate_thrust_map(np.array(actives), 0.75 * np.array(force))
-                #thrust = list(np.asarray(thrust)[0])
-                #self.thrusters.temp_move(force, actives)
+
                 print "Thrust:"
                 print thrust.tolist()[0]
                 self.thrusters.push_pi_motors(thrust.tolist()[0], actives)
@@ -121,6 +94,9 @@ class ROV(object):
 
                 #self._data['dearclient']["thrusters"]["thrusters"] = self.thrusters.get_data()
                 self.dearclient["thrusters"] = self.thrusters.get_data()
+
+                print self._data["dearflask"]["tools"]["claw"]
+                print self._data["dearflask"]["tools"]["valve"]
 
                 self.claw.grab(self._data["dearflask"]["tools"]["claw"])
                 self.dearclient["tools"]["claw"] = self.claw.getPower()
