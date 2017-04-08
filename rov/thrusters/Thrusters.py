@@ -69,7 +69,7 @@ class Thrusters:
 
         # Pi -> I2C-to-PWM variables:
         #   I2C-to-PWM Pins
-        self.pins = [7, 4, 6, 5, 10, 1, 11, 0]
+        self.pins = [7, 4, 6, 5, 10, 0, 11, 1]
         #X9 pins FR -> clockwise: [4, 1, 0, 5, 6, 11, 10, 7]
         # Maelstrom thruster pins: [6, 1, 4, 3, 5, 12, 8, 9]
 

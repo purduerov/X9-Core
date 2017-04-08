@@ -107,7 +107,7 @@ class ROV(object):
                 #print "Force:"
                 #print force
                 #print 0.25 * np.array(force)
-                thrust = self.mapper.generate_thrust_map(np.array(actives), 0.35 * np.array(force))
+                thrust = self.mapper.generate_thrust_map(np.array(actives), 0.75 * np.array(force))
                 #thrust = list(np.asarray(thrust)[0])
                 #self.thrusters.temp_move(force, actives)
                 print "Thrust:"
