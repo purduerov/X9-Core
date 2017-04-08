@@ -1,6 +1,6 @@
 <template>
     <div id="camera-view">
-        <iframe src="http://169.254.129.51:8080/?action=stream"></iframe>
+        <iframe src="http://10.42.0.204:8080/?action=stream"></iframe>
     </div>
 </template>
 

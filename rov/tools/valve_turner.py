@@ -8,7 +8,7 @@ class ValveTurner:
     NEG_MAX_POWER = 388
 
     def __init__(self):
-        self.pin = #GIVE ME THE pin
+        self.pin = 9#GIVE ME THE pin
 
         self.power = 0
 
