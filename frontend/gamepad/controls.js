@@ -14,7 +14,7 @@ var controls = {
     tools: {
       claw: 0,
       valve: 0
-    }
+    },
     thrusters: {
         t0 : { active: 1, target: 0.0, current: 0.0, pwm_actual: 0},
         t1 : { active: 1, target: 0.0, current: 0.0, pwm_actual: 0},

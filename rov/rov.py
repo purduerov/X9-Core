@@ -80,7 +80,7 @@ class ROV(object):
 
                 #print 'Looping over thrusters for active list'
                 for x in t:
-                    actives.append(self._data['dearflask'][u'thrusters'][x]['active'])
+                    actives.append(self._data['dearflask']['thrusters'][x]['active'])
 
                 for m in f:
                     force.append(self._data['dearflask']['force'][m])
