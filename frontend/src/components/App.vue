@@ -5,14 +5,17 @@
         </div>
         <div id="main-container">
             <Card class="camera-width full-height">
-                <CameraView></CameraView>
+                <!-- <CameraView></CameraView> -->
             </Card>
-            <div style="width: calc(100% - 1800px); height: 100%; float: left">
+            <div style="width: calc(100% - 800px); height: 100%; float: left">
                 <Card class="half-width half-height">
                     <IMU :data="packet.IMU"></IMU>
                 </Card>
-                <Card class="half-width half-height">
+                <Card class="half-width quarter-height">
                     <Press_Temp :data="packet.PRESSURE"></Press_Temp>
+                </Card>
+                <Card class="half-width quarter-height">
+                    <PID :data="packet.PID"></PID>
                 </Card>
                 <Card class="half-width half-height">
                     <GpInfo :data="gpinfo"></GpInfo>
@@ -35,6 +38,7 @@ var Press_Temp = require("./Pressure.vue")
 var GpInfo = require("./GpInfo.vue")
 var Thruster = require("./Thrusters.vue")
 var CameraView2 = require("./CameraView2.vue")
+var PID = require("./PID.vue")
 export default {
     components: {
         Navbar,
@@ -45,7 +49,8 @@ export default {
         DataView,
         Press_Temp,
         GpInfo,
-        Thruster
+        Thruster,
+        PID
     },
     data: function() {
         return {
@@ -71,6 +76,14 @@ export default {
                     t5 : { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
                     t6 : { active: 0, target: 0.0, current: 0.0, pwm_actual: 0},
                     t7 : { active: 0, target: 0.0, current: 0.0, pwm_actual: 0}
+                },
+                PID: {
+                    x_lock: false,
+                    y_lock: false,
+                    z_lock: false,
+                    roll_lock: false,
+                    pitch_lock: false,
+                    yaw_lock: false
                 }
             },
             gpinfo: {
@@ -112,17 +125,17 @@ export default {
             }
         });
 
-        var socket = io.connect('http://' + document.domain + ':' + location.port);
+        //var socket = io.connect('http://' + document.domain + ':' + location.port);
 
         var app_refresh = setInterval(function() {
             if(gp.ready) {
                 var send = JSON.stringify(controls);
                 //console.log("dearflask");
                 //console.log(send);
-                socket.emit("dearflask", send);
+                //socket.emit("dearflask", send);
             }
         }, 50);
-        socket.on("dearclient", function(status) {
+        //socket.on("dearclient", function(status) {
             //console.log(status);
             //data = JSON.parse(status);
             //console.log("dearclient")
@@ -133,7 +146,7 @@ export default {
             //setTimeout(function() {
                 //console.log(vm.packet);
             //}, 10);
-        });
+        //});
 
         //console.log(vm.gpinfo);
     }
@@ -172,12 +185,17 @@ export default {
     float: left;
 }
 
+.quarter-height {
+    height: 25%;
+    float: left;
+}
+
 .full-height {
     height: 100%;
     float: left;
 }
 
 .camera-width {
-    width: 1800px;
+    width: 800px;
 }
 </style>

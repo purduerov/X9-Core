@@ -1,6 +1,7 @@
 <template>
     <div id="camera-view">
-        <iframe src="http://10.42.0.204:8080/?action=stream"></iframe>
+        <!--<iframe height="764px" width="1024px" src="http://10.42.0.204:8080/?action=stream"></iframe>-->
+        <img src="src/assets/image.jpg"/>
     </div>
 </template>
 
@@ -25,7 +26,7 @@ iframe{
 }
 
 #camera-view > img {
-    max-height: 100%;
-    max-width: 100%;
+    //max-height: 100%;
+    //max-width: 100%;
 }
 </style>
