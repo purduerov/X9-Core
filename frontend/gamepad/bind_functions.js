@@ -41,10 +41,14 @@
 bind = {
   btn: {
     a: {
+      press: {
+        func: function() {
+          controls.tools.claw = gp.buttons.a.val;
+        }
+      },
       change: {
         func: function() {
           vue_app.gpinfo.buttons.a = gp.buttons.a.val;
-          controls.tools.claw = gp.buttons.a.val;
         }
       },
       release: {
@@ -56,10 +60,14 @@ bind = {
       },
     },
     b: {
+      press: {
+        func: function() {
+          controls.tools.claw = -gp.buttons.b.val;
+        }
+      },
       change: {
         func: function() {
           vue_app.gpinfo.buttons.b = gp.buttons.b.val;
-          controls.tools.claw = -gp.buttons.b.val;
         }
       },
       release: {
@@ -71,10 +79,14 @@ bind = {
       },
     },
     x: {
+      press: {
+        func: function() {
+          controls.tools.valve = gp.buttons.x.val;
+        }
+      },
       change: {
         func: function() {
           vue_app.gpinfo.buttons.x = gp.buttons.x.val;
-          controls.tools.valve = gp.buttons.x.val;
         }
       },
       release: {
@@ -86,10 +98,14 @@ bind = {
       },
     },
     y: {
+      press: {
+        func: function() {
+          controls.tools.valve = -gp.buttons.y.val;
+        }
+      },
       change: {
         func: function() {
           vue_app.gpinfo.buttons.y = gp.buttons.y.val;
-          controls.tools.valve = -gp.buttons.y.val;
         }
       },
       release: {
@@ -103,7 +119,7 @@ bind = {
     rb: {
       press: {
         func: function() {
-          controls.force.roll = gp.buttons.rb.val * 0.5;
+          controls.force.roll = gp.buttons.rb.val;
           vue_app.packet.IMU.roll = controls.force.roll;
         },
       },
@@ -119,7 +135,7 @@ bind = {
     lb: {
       press: {
         func: function() {
-          controls.force.roll = -gp.buttons.lb.val * 0.5;
+          controls.force.roll = -gp.buttons.lb.val;
           vue_app.packet.IMU.roll = controls.force.roll;
         },
       },
@@ -136,7 +152,7 @@ bind = {
       change: {
         func: function() {
           if(controls.force.z >= 0) {
-            controls.force.z = gp.buttons.rt.val * 0.75;
+            controls.force.z = gp.buttons.rt.val;
             vue_app.packet.IMU.z = controls.force.z;
           }
         },
@@ -146,7 +162,7 @@ bind = {
       change: {
         func: function() {
           if(controls.force.z <= 0) {
-            controls.force.z = -gp.buttons.lt.val * 0.75;
+            controls.force.z = -gp.buttons.lt.val;
             vue_app.packet.IMU.z = controls.force.z;
           }
         },

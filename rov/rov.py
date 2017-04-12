@@ -85,7 +85,7 @@ class ROV(object):
                 for m in f:
                     force.append(self._data['dearflask']['force'][m])
 
-                thrust = self.mapper.generate_thrust_map(np.array(actives), 0.75 * np.array(force))
+                thrust = self.mapper.generate_thrust_map(np.array(actives), np.array(force) * 1.5)
 
                 print "Thrust:"
                 print thrust.tolist()[0]

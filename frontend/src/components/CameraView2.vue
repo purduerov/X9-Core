@@ -1,12 +1,12 @@
 <template>
-    <div id="camera-view">
-        <iframe src="http://10.42.0.204:8080/?action=stream"></iframe>
+    <div id="camera-view2">
+        <iframe src="http://10.42.0.204:8081/?action=stream"></iframe>
     </div>
 </template>
 
 <script>
 export default {
-    name: 'camera-view',
+    name: 'camera-view2',
 }
 </script>
 
@@ -16,15 +16,15 @@ iframe{
   width: 100%;
 }
 
-#camera-view {
-    z-index: 0;
+#camera-view2 {
+    z-index: 2;
     height: 100%;
     width: 100%;
     display: flex;
     align-items: center;
 }
 
-#camera-view > img {
+#camera-view2 > img {
     max-height: 100%;
     max-width: 100%;
 }

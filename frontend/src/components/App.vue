@@ -34,11 +34,12 @@ var Card = require("./Card.vue")
 var Press_Temp = require("./Pressure.vue")
 var GpInfo = require("./GpInfo.vue")
 var Thruster = require("./Thrusters.vue")
-
+var CameraView2 = require("./CameraView2.vue")
 export default {
     components: {
         Navbar,
         CameraView,
+        CameraView2,
         IMU,
         Card,
         DataView,

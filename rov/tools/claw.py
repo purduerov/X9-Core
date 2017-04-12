@@ -19,9 +19,9 @@ class Claw:
 
     def grab(self, direc):
         if(direc < 0):
-            direc = -.35
+            direc = -.5
         elif(direc > 0):
-            direc = .35
+            direc = .5
 
         self.power = int((self.POS_MAX_POWER - self.ZERO_POWER) * direc)
 
