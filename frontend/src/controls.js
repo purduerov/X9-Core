@@ -1,4 +1,4 @@
-var controls = {
+module.export = {
     force: {
         x: 0,     //considered 'front or back'  (front & back, left joystick)
         y: 0,     //considered 'right or left'  (right & left, left joystick)
@@ -7,10 +7,6 @@ var controls = {
         roll: 0,  //roll to the left or right   (right & left, right joystick)
         yaw: 0    //left or right rotation      (left & right bumper)
     },
-    // PRESSURE: {
-        // pressure: 0,
-        // temperature: 0
-    // },
     thrusters: {
         t0 : { active: 1, target: 0.0, current: 0.0, pwm_actual: 0},
         t1 : { active: 1, target: 0.0, current: 0.0, pwm_actual: 0},
@@ -21,6 +17,6 @@ var controls = {
         t6 : { active: 1, target: 0.0, current: 0.0, pwm_actual: 0},
         t7 : { active: 1, target: 0.0, current: 0.0, pwm_actual: 0}
     },
-    buttons: gp.buttons,
-    axes: gp.axes
+    buttons: {},
+    axes: {}
 };
