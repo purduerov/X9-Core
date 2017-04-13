@@ -15,6 +15,14 @@ var controls = {
       claw: 0,
       valve: 0
     },
+    pid: {
+        x_lock: data.packet.PID.x_lock,
+        y_lock: data.packet.PID.y_lock,
+        z_lock: data.packet.PID.z_lock,
+        roll_lock: data.packet.PID.roll_lock,
+        pitch_lock: data.packet.PID.pitch_lock,
+        yaw_lock: data.packet.PID.yaw_lock
+    },
     thrusters: {
         t0 : { active: 1, target: 0.0, current: 0.0, pwm_actual: 0},
         t1 : { active: 1, target: 0.0, current: 0.0, pwm_actual: 0},

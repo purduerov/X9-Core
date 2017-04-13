@@ -1,11 +1,15 @@
 <template>
     <div>
-        <h1>IMU:</h1>
+        <h1>Sensors:</h1>
         <hr>
-        <ul v-for="(value, key) in data">
+        <p>IMU:</p>
+        <ul v-for="(value, key) in data.IMU">
             <li>{{key}}: {{value}}</li>
-            <hr>
         </ul>
+        <hr>
+        <p>Pressure: {{ data.PRESSURE.pressure }}</p>
+        <hr>
+        <p>Temperature: {{ data.PRESSURE.temperature }}</p>
     </div>
 </template>
 
@@ -18,5 +22,8 @@
 <style scoped>
 h1 {
     font-weight: 400;
+}
+li {
+    padding: 4px 0px
 }
 </style>

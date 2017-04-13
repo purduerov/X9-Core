@@ -9,12 +9,14 @@
             </Card>
             <div style="width: calc(100% - 800px); height: 100%; float: left">
                 <Card class="half-width half-height">
-                    <IMU :data="packet.IMU"></IMU>
+                    <IMU :data="packet"></IMU>
                 </Card>
+                <!--
                 <Card class="half-width quarter-height">
                     <Press_Temp :data="packet.PRESSURE"></Press_Temp>
                 </Card>
-                <Card class="half-width quarter-height">
+                -->
+                <Card class="half-width half-height">
                     <PID :data="packet.PID"></PID>
                 </Card>
                 <Card class="half-width half-height">
@@ -131,7 +133,7 @@ export default {
             if(gp.ready) {
                 var send = JSON.stringify(controls);
                 //console.log("dearflask");
-                //console.log(send);
+                console.log(send);
                 //socket.emit("dearflask", send);
             }
         }, 50);

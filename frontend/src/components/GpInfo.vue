@@ -3,23 +3,24 @@
         <h1>Gamepad</h1>
         <hr>
         <div class="gamepad">
+          <p>buttons:</p>
           <ul v-for="(value, key) in data.buttons">
               <li>{{key}}: {{value}}</li>
           </ul>
           <hr>
           <p>left:</p>
-          <div class="gp_axis">
+          <!--<div class="gp_axis">-->
             <ul v-for="(value, key) in data.axes.left">
                 <li>{{key}}: {{value}}</li>
             </ul>
-          </div>
+          <!--</div>-->
           <hr>
           <p>right:</p>
-          <div class="gp_axis">
+          <!--<div class="gp_axis">-->
             <ul v-for="(value, key) in data.axes.right">
                 <li>{{key}}: {{value}}</li>
             </ul>
-          </div>
+          <!--</div>-->
         </div>
     </div>
 </template>
@@ -35,11 +36,15 @@ h1 {
     font-weight: 400;
 }
 
-.gamepad {
-  border: 2px solid grey;
+p {
+    padding: 4px 0px;
+}
+
+li {
+    padding: 3px 0px;
 }
 
 .gp_axis {
-  padding: 50px;
+  padding: 20px;
 }
 </style>
