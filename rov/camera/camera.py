@@ -1,4 +1,5 @@
 import os
+import time
 import signal
 import subprocess
 
@@ -29,7 +30,7 @@ class Camera:
             contrast=self.contrast
         )
         self.output = 'output_http.so -p {port}'.format(
-            port=self.p
+            port=self.port
         )
 
         self.status = "killed"
@@ -43,7 +44,7 @@ class Camera:
 
     # open video feed for an instance of Camera
     def start(self):
-        self.process = subprocess.Popen(['mjpg_streamer', '-i', self.inp, '-o', self.out], stdout=subprocess.PIPE)
+        self.process = subprocess.Popen(['mjpg_streamer', '-i', self.input, '-o', self.output])
 
         if self.is_alive():
             self.status = 'active'
@@ -51,7 +52,7 @@ class Camera:
     # closes video feed for an instance of Camera: each instance of Camera must be killed
     # using this method
     def kill(self):
-        if not self.is_alive():
+        if self.is_alive():
             self.process.kill()
             self.status = 'killed'
 
@@ -65,7 +66,13 @@ class Camera:
             self.status = 'active'
 
     def is_alive(self):
-        return P.poll() is not None
+        return self.process.poll() is None
+
+    def get_status(self):
+        if not self.is_alive():
+            self.status = 'killed'
+
+        return self.status
 
     def set_status(self, status):
         if status == 'active':

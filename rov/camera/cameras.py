@@ -18,19 +18,21 @@ class Cameras:
             cam = Camera(
                 resolution=self.resolution,
                 framerate=self.framerate,
-                device='/dev/' + video_devices[i],
+                device='/dev/' + self.video_devices[i],
                 port=self.port_start + i,
                 brightness=self.brightness,
                 contrast=self.contrast
             )
 
+            cam.start()
+
             self.cameras.append(cam)
 
     def status(self):
-        return [
-            {'device': cam.device, 'port': cam.port, 'status': cam.status}
+        return {
+            cam.device: {'port': cam.port, 'status': cam.get_status()}
             for cam in self.cameras
-        ]
+	}
 
     def set_status(self, status):
         for cam in self.cameras:
@@ -42,7 +44,6 @@ if __name__ == "__main__":
     import time
 
     cameras = Cameras()
-    while True:
-        print cameras.status()
-        time.sleep(4)
+    time.sleep(2)
+    print cameras.status()
 
