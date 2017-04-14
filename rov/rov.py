@@ -17,8 +17,10 @@ from thrusters.mapper.Simple import Mapper
 
 class ROV(object):
 
-    def __init__(self):
-        self._data = {}
+    def __init__(self, lock, data):
+        self._data_lock = lock
+        self._data = data
+
         self._control_data = {}
         self._new_data = False
         self._last_packet = time() - 1
@@ -28,8 +30,6 @@ class ROV(object):
 
         self._running = True
 
-        self._data_lock = Lock()
-
         self._control_data_lock = Lock()
 
         self.debug = (os.environ.get("ROV_DEBUG") == "1")
@@ -37,8 +37,8 @@ class ROV(object):
         self.init_hw()
 
     def init_hw(self):
-        self.camera1 = Camera()
-        self.camera1.on()
+        # self.camera1 = Camera()
+        # self.camera1.on()
 
         self.motor_control = MotorControl(
             zero_power=310,
@@ -56,7 +56,7 @@ class ROV(object):
 
         self.thruster_control = ThrusterControl(
             self.thrusters,
-            self.mapper,
+            self.thrust_mapper,
             num_thrusters=8,
             ramp=True,
             max_ramp=0.05
@@ -133,5 +133,6 @@ class ROV(object):
                 print e.message
 
 if __name__ == "__main__":
-    r = ROV()
-    r.run()
+    # r = ROV()
+    # r.run()
+    pass
