@@ -1,7 +1,8 @@
 import os
 from camera import Camera
 
-class Cameras:
+
+class Cameras(object):
     # default layout for camera
     def __init__(self, resolution='1024x768', framerate=30, port_start=8080, brightness=16, contrast=32):
         self.cameras = []
@@ -24,15 +25,24 @@ class Cameras:
                 contrast=self.contrast
             )
 
-            cam.start()
 
             self.cameras.append(cam)
+
+        self.start()
+
+    def start(self):
+        for cam in self.cameras:
+            cam.start()
+
+    def kill(self):
+        for cam in self.cameras:
+            cam.kill()
 
     def status(self):
         return {
             cam.device: {'port': cam.port, 'status': cam.get_status()}
             for cam in self.cameras
-	}
+        }
 
     def set_status(self, status):
         for cam in self.cameras:
@@ -41,9 +51,14 @@ class Cameras:
 
 
 if __name__ == "__main__":
-    import time
-
     cameras = Cameras()
-    time.sleep(2)
-    print cameras.status()
+    cameras.start()
 
+    import time
+    time.sleep(2)
+
+    c_status = cameras.status()
+    for c in c_status:
+        print "Name:   %s" % c
+        print "Status: %s" % c_status[c].status
+        print "Port:   %s" % c_status[c].port

@@ -6,7 +6,7 @@ from time import time, sleep
 
 
 from sensors import Pressure, IMU
-from camera.cam import Camera
+from camera import Cameras
 
 from hardware.motor_control import MotorControl
 
@@ -37,8 +37,13 @@ class ROV(object):
         self.init_hw()
 
     def init_hw(self):
-        # self.camera1 = Camera()
-        # self.camera1.on()
+        self.cameras = Cameras(
+            resolution='1024x768',
+            framerate=30,
+            port_start=8080,
+            brightness=16,
+            contrast=32
+        )
 
         self.motor_control = MotorControl(
             zero_power=310,
@@ -133,6 +138,4 @@ class ROV(object):
                 print e.message
 
 if __name__ == "__main__":
-    # r = ROV()
-    # r.run()
     pass

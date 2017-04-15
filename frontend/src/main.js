@@ -1,10 +1,34 @@
-var Vue = require("vue")
-var App = require("./App.vue")
+var gp = require("./gamepad")
 
-new Vue({
-    el: '#app',
-    render: f => f(App),
-    components: {
-        App
+
+function main(dearflask, dearclient) {
+    //let socketHost = `http://${document.domain}:${location.port}`
+    let socketHost = `http://localhost:5000`
+    let socket = io.connect(socketHost, {transports: ['websocket']});
+
+    function update() {
+        if (gp.ready) {
+            dearflask.thrusters.desired_thrust = [
+                gp.axes.left.y,
+                gp.axes.left.x,
+                0,
+                0,
+                0,
+                0
+            ]
+
+            socket.emit("dearflask", dearflask);
+        }
+
+        setTimeout(update, 10)
     }
-})
+
+    socket.on("dearclient", (data) => {
+        dearflask = data
+    })
+
+
+    update()
+}
+
+module.exports = main

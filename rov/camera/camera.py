@@ -1,9 +1,9 @@
 import os
-import time
 import signal
 import subprocess
 
-class Camera:
+
+class Camera(object):
 
     # In order to run mjpg-streamer through Python, make sure
     # mjpg-streamer-experimental is installed so the .so objects

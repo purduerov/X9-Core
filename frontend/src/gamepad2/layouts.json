@@ -1,0 +1,79 @@
+[
+    {
+        "description": "Standard XBOX",
+        "id": [
+            "Holtek Controller (STANDARD GAMEPAD Vendor: 045e Product: 028e)",
+            "Microsoft Controller (STANDARD GAMEPAD Vendor: 045e Product: 02d1)",
+            "Xbox One Controller (STANDARD GAMEPAD Vendor: 02d1 Product: 045e)",
+            "Rock Candy Gamepad for Xbox 360 (Vendor: 0e6f Product: 011f)",
+            "Xbox 360 Controller (XInput STANDARD GAMEPAD)"
+        ],
+        "axes": {
+            "left_x":  {"index": 0, "where": "axes"},
+            "left_y":  {"index": 1, "where": "axes"},
+            "right_x": {"index": 2, "where": "axes"},
+            "right_y": {"index": 3, "where": "axes"}
+        },
+        "buttons": {
+            "a":       {"index": 0, "match": 1, "where": "buttons"},
+            "b":       {"index": 1, "match": 1, "where": "buttons"},
+            "x":       {"index": 2, "match": 1, "where": "buttons"},
+            "y":       {"index": 3, "match": 1, "where": "buttons"},
+
+            "left_1":  {"index": 4, "match": 1, "where": "buttons"},
+            "right_1": {"index": 5, "match": 1, "where": "buttons"},
+
+            "left_2":  {"index": 6, "match": 1, "where": "buttons"},
+            "right_2": {"index": 7, "match": 1, "where": "buttons"},
+
+            "left_3":  {"index": 10, "match": 1, "where": "buttons"},
+            "right_3": {"index": 11, "match": 1, "where": "buttons"},
+
+            "up":      {"index": 12, "match": 1, "where": "buttons"},
+            "down":    {"index": 13, "match": 1, "where": "buttons"},
+            "left":    {"index": 14, "match": 1, "where": "buttons"},
+            "right":   {"index": 15, "match": 1, "where": "buttons"},
+
+            "select":  {"index":  8, "match": 1, "where": "buttons"},
+            "start":   {"index":  9, "match": 1, "where": "buttons"},
+            "home":    {"index": 16, "match": 1, "where": "buttons"}
+        }
+    },
+    {
+        "description": "Linux Xbox and Rock Candy Controller",
+        "id": [
+            "Microsoft Controller (Vendor: 045e Product: 02d1)",
+            "Performance Designed Products Rock Candy Gamepad for Xbox 360 (Vendor: 0e6f Product: 011f)"
+        ],
+        "axes": {
+            "left_x":  {"index": 0, "where": "axes"},
+            "left_y":  {"index": 1, "where": "axes"},
+            "right_x": {"index": 3, "where": "axes"},
+            "right_y": {"index": 4, "where": "axes"}
+        },
+        "buttons": {
+            "a":       {"index": 0, "match": 1, "where": "buttons"},
+            "b":       {"index": 1, "match": 1, "where": "buttons"},
+            "x":       {"index": 2, "match": 1, "where": "buttons"},
+            "y":       {"index": 3, "match": 1, "where": "buttons"},
+
+            "left_1":  {"index": 4, "match": 1, "where": "buttons"},
+            "right_1": {"index": 5, "match": 1, "where": "buttons"},
+
+            "left_2":  {"index": 2, "match": 1, "where": "axes"},
+            "right_2": {"index": 5, "match": 1, "where": "axes"},
+
+            "left_3":  {"index":  9, "match": 1, "where": "buttons"},
+            "right_3": {"index": 10, "match": 1, "where": "buttons"},
+
+            "up":      {"index": 7, "match": -1, "where": "buttons"},
+            "down":    {"index": 7, "match": 1, "where": "buttons"},
+            "left":    {"index": 6, "match": -1, "where": "buttons"},
+            "right":   {"index": 6, "match": 1, "where": "buttons"},
+
+            "select":  {"index": 6, "match": 1, "where": "buttons"},
+            "start":   {"index": 7, "match": 1, "where": "buttons"},
+            "home":    {"index": 8, "match": 1, "where": "buttons"}
+        }
+    },
+]
