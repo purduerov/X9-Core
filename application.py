@@ -10,12 +10,11 @@ import eventlet
 eventlet.sleep()
 eventlet.monkey_patch(socket=False, thread=False)
 
-app = Flask(__name__, static_url_path="", static_folder="frontend/src")
+app = Flask(__name__)
 socketio = SocketIO(app, async_mode='eventlet')
 
-rov = ROV()
 
-last_rov = ""
+last_rov = None
 
 manager = multiprocessing.Manager()
 lock = manager.Lock()
@@ -23,14 +22,9 @@ data = manager.dict()
 data["dearclient"] = {}
 data["dearflask"] = {}
 
-
-# ROUTING:
-@app.route('/')
-def index():
-    return app.send_static_file('index.html')
+rov = ROV(lock, data)
 
 
-# SOCKET-IO:
 @socketio.on('dearflask')
 def recieve_controls(indata):
     global last_rov
@@ -64,7 +58,7 @@ def build_dearclient():
     return json.dumps(d["dearclient"])
 
 if __name__ == 'application':
-    rov_proc = multiprocessing.Process(target=rov.run, args=(lock, data))
+    rov_proc = multiprocessing.Process(target=rov.run)
     rov_proc.start()
 
     socketio.run(app, use_reloader=False, debug=True, host="0.0.0.0")

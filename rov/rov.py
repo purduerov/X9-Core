@@ -1,5 +1,6 @@
 import copy
 import os
+import traceback
 
 from threading import Lock
 from time import time, sleep
@@ -115,11 +116,12 @@ class ROV(object):
                 # The control_data['obj_name'] data gets unpacked and directly
                 # passed into the update methods as arguments
                 try:
-                    self.update_objects[obj].update(**control_data[obj])
-                    self._data[obj] = self.update_objects[obj].data
+                    if obj in control_data:
+                        self.update_objects[obj].update(**control_data[obj])
+                        self._data[obj] = self.update_objects[obj].data
                 except Exception as e:
                     print "Failed updating: %s" % obj
-                    print e.message
+                    print traceback.format_exc()
 
             # Our last update
             self.last_update = time()
@@ -135,7 +137,7 @@ class ROV(object):
             try:
                 self.update()
             except Exception as e:
-                print e.message
+                print e
 
 if __name__ == "__main__":
     pass
