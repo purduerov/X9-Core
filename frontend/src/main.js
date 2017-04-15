@@ -1,7 +1,7 @@
 var gp = require("./gamepad")
 
 
-function main(packets) {
+function main(packets, other) {
     //let socketHost = `http://${document.domain}:${location.port}`
     let socketHost = `ws://raspberrypi.local:5000`
     let socket = io.connect(socketHost, {transports: ['websocket']});
@@ -12,24 +12,26 @@ function main(packets) {
         if (gp.ready) {
             gp.get_current();
 
+            let ts = other.thrust_scales
+
             packets.dearflask.thrusters.desired_thrust = [
                 //VelX - forwards and backwards
-                gp.axes.left.y,
+                gp.axes.left.y * (ts.master/100.0) * (ts.velX/100.0),
 
                 //VelY - strafe left and right
-                (gp.buttons.rb.val - gp.buttons.lb.val) * 0.4,
+                (gp.buttons.rb.val - gp.buttons.lb.val) * (ts.master/100.0)  * (ts.velY/100.0),
 
                 //VelZ - ascend and descend
-                gp.buttons.rt.val - gp.buttons.lt.val,
+                (gp.buttons.rt.val - gp.buttons.lt.val) * (ts.master/100.0)  * (ts.velZ/100.0),
 
                 //Roll
-                gp.axes.right.x,
+                gp.axes.right.x * (ts.master/100.0)  * (ts.pitchRoll/100.0),
 
                 //Pitch
-                gp.axes.right.y,
+                gp.axes.right.y * (ts.master/100.0)  * (ts.pitchRoll/100.0),
 
                 //Yaw
-                gp.axes.left.x
+                gp.axes.left.x * (ts.master/100.0)  * (ts.yaw/100.0)
             ]
 
             packets.dearflask.valve_turner.power = (gp.buttons.b.val - gp.buttons.y.val) * 0.15

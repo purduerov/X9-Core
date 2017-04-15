@@ -24,6 +24,9 @@
                 <Card class="half-width half-height">
                     <ToolInfo :data="packets.dearflask"></ToolInfo>
                 </Card>
+                <Card class="half-width half-height">
+                    <ThrusterControl :data="other.thrust_scales"></ThrusterControl>
+                </Card>
             </div>
         </div>
     </div>
@@ -38,6 +41,7 @@ var Card = require("./components/Card.vue")
 var Press_Temp = require("./components/Pressure.vue")
 var GpInfo = require("./components/GpInfo.vue")
 var Thruster = require("./components/Thrusters.vue")
+var ThrusterControl = require("./components/ThrusterControl.vue")
 var ToolInfo = require("./components/ToolInfo.vue")
 
 var packets = require("./packets.js")
@@ -53,15 +57,26 @@ export default {
         Press_Temp,
         GpInfo,
         Thruster,
+        ThrusterControl,
         ToolInfo
     },
     data: function() {
         return {
-            packets: packets
+            packets: packets,
+            other: {
+                thrust_scales: {
+                    master: 60,
+                    velX: 100,
+                    velY: 40,
+                    velZ: 100,
+                    pitchRoll: 100,
+                    yaw: 100,
+                }
+            }
         }
     },
     mounted: function() {
-        main(this.packets)
+        main(this.packets, this.other)
     }
 }
 </script>
