@@ -6,27 +6,27 @@
             <div class="info">
                 <div>
                     <span>Master</span>
-                    <input type="range" min="-1" max="100" :value="data.master">
+                    <input type="range" min="-1" max="100" v-model="data.master">
                 </div>
                 <div>
                     <span>Forward / Backward</span>
-                    <input type="range" min="-1" max="100" :value="data.velX">
+                    <input type="range" min="-1" max="100" v-model="data.velX">
                 </div>
                 <div>
                     <span>Strafe</span>
-                    <input type="range" min="0" max="100" :value="data.velY">
+                    <input type="range" min="0" max="100" v-model="data.velY">
                 </div>
                 <div>
                     <span>Ascend/Descend</span>
-                    <input type="range" min="0" max="100" :value="data.velZ">
+                    <input type="range" min="0" max="100" v-model="data.velZ">
                 </div>
                 <div>
                     <span>Pitch / Roll</span>
-                    <input type="range" min="0" max="100" :value="data.pitchRoll">
+                    <input type="range" min="0" max="100" v-model="data.pitchRoll">
                 </div>
                 <div>
                     <span>Turning</span>
-                    <input type="range" min="0" max="100" :value="data.yaw">
+                    <input type="range" min="0" max="100" v-model="data.yaw">
                 </div>
             </div>
         </div>
