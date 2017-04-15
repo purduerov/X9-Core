@@ -1,4 +1,3 @@
-import json
 import multiprocessing
 
 from flask import Flask
@@ -13,7 +12,6 @@ eventlet.monkey_patch(socket=False, thread=False)
 app = Flask(__name__)
 socketio = SocketIO(app, async_mode='eventlet')
 
-
 last_rov = None
 
 manager = multiprocessing.Manager()
@@ -24,9 +22,17 @@ data["dearflask"] = {}
 
 rov = ROV(lock, data)
 
+@socketio.on('connect')
+def on_connect():
+    print "Client connected"
+
+@socketio.on('disconnect')
+def on_disconnect():
+    print "Client disconnected"
+
 
 @socketio.on('dearflask')
-def recieve_controls(indata):
+def dearflask(indata):
     global last_rov
 
     send_packet()
@@ -35,27 +41,15 @@ def recieve_controls(indata):
         last_rov = indata
 
         with lock:
-            data["dearflask"] = json.loads(indata)
+            data["dearflask"] = indata
 
-@socketio.on('connect')
-def on_connect():
-    print "Client connected"
-
-
-@socketio.on('disconnect')
-def on_disconnect():
-    print "Client disconnected"
-
-def send_packet():
+@socketio.on('dearclient')
+def dearclient(indata):
     lock.acquire()
-    packet = build_dearclient()
+    packet = data._getvalue()["dearclient"]
     lock.release()
 
     socketio.emit("dearclient", packet, json=True)
-
-def build_dearclient():
-    d = data._getvalue()
-    return json.dumps(d["dearclient"])
 
 if __name__ == 'application':
     rov_proc = multiprocessing.Process(target=rov.run)
