@@ -1,4 +1,6 @@
 import os
+import time
+
 from camera import Camera
 
 
@@ -27,15 +29,24 @@ class Cameras(object):
 
             self.cameras.append(cam)
 
+        # clear previous open ones
+        self.system_kill()
+
         self.start()
 
     def start(self):
         for cam in self.cameras:
+            time.sleep(0.2)
             cam.start()
 
     def kill(self):
         for cam in self.cameras:
             cam.kill()
+
+        self.system_kill()
+
+    def system_kill(self):
+        os.system("pgrep 'mjpg' | xargs kill -9")
 
     def status(self):
         return {
@@ -53,12 +64,12 @@ if __name__ == "__main__":
     cameras = Cameras()
     cameras.start()
 
-    import time
-    time.sleep(2)
+    while True:
+        c_status = cameras.status()
+        for c in c_status:
+            print ""
+            print "Name:   %s" % c
+            print "Status: %s" % c_status[c]['status']
+            print "Port:   %s" % c_status[c]['port']
 
-    c_status = cameras.status()
-    for c in c_status:
-        print ""
-        print "Name:   %s" % c
-        print "Status: %s" % c_status[c]['status']
-        print "Port:   %s" % c_status[c]['port']
+        time.sleep(2)
