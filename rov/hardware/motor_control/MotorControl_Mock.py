@@ -5,3 +5,6 @@ class MotorControl(object):
 
     def set(self, *args, **kwargs):
         pass
+
+    def kill(self, *args, **kwargs):
+        pass

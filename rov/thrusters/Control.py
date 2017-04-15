@@ -11,7 +11,7 @@ class ThrusterControl(object):
         self._prev_values = None
         self._set_zero_vals()
 
-        self._running = False
+        self.running = False
 
     @property
     def data(self):

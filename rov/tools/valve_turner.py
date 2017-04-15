@@ -3,5 +3,5 @@ class ValveTurner(object):
         self.pin = pin
         self.motor_control = motor_control
 
-    def rotate(self, power):
+    def update(self, power):
         self.motor_control.set(self.pin, power)

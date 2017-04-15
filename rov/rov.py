@@ -15,67 +15,28 @@ from thrusters.Control import ThrusterControl
 from thrusters.hardware.PWM_Control import Thrusters
 from thrusters.mapper.Simple import Mapper
 
-from tools import Claw, ValveTurner
+from tools import Claw, ValveTurner, FountainTool
 
 
 class ROV(object):
 
     def __init__(self, lock, data):
         self._data_lock = lock
-        self._data = data
 
-        self._control_data = {}
+        self._data = data
         self._new_data = False
         self._last_packet = time() - 1
 
         self.last_update = time()
-        self.last_print = time()
 
         self._running = True
 
-        self._control_data_lock = Lock()
+        self.dearclient = {}
+        self.dearflask = {}
 
         self.debug = (os.environ.get("ROV_DEBUG") == "1")
 
         self.init_hw()
-
-    @property
-    def data(self):
-        with self._data_lock:
-            return copy.deepcopy(self._data)
-
-    @property
-    def control_data(self):
-        with self._control_data_lock:
-            return self._control_data
-
-    @control_data.setter
-    def control_data(self, val):
-        with self._control_data_lock:
-            self._control_data = copy.deepcopy(val)
-            self._new_data = True
-            self._last_packet = time()
-
-    def debug_print(self):
-        if time() - self.last_print > 0.4:
-            print '\n\nControl Data: '
-            print self.control_data
-
-            print '\n\nROV Data: '
-            print self._data
-
-            self.last_print = time()
-
-    def run(self):
-        while self._running:
-            while time() - self.last_update < 0.01:
-                sleep(0.005)
-
-            try:
-                self.update()
-            except Exception as e:
-                print "Exception: %s" % e
-                print traceback.format_exc()
 
     def init_hw(self):
         self.cameras = Cameras(
@@ -118,36 +79,66 @@ class ROV(object):
             pin=9
         )
 
-        self.IMU = IMU()
+        """ Requires pin number!!
+        self.fountain_tool = FountainTool(
+            self.motor_control,
+            pin=-1 # get pin number
+        )
+        """
 
-        self.pressure = Pressure()
+        """ Disabled until hardware is done and sw is tested
+        # self.IMU = IMU()
+        # self.pressure = Pressure()
+        """
 
     def update(self):
         with self._data_lock:
-            if self._new_data:
-                self._new_data = False
-            elif time() - self._last_packet > 0.5:
-                print 'Data connection lost'
-                self.motor_control.kill()
-                self.thruster_control.stop()
+            self.dearflask = self._data['dearflask']
 
-            control_data = self.control_data
+        # if time() - self._last_packet > 0.5:
+            # # print 'Data connection lost'
+            # self.motor_control.kill()
+            # self.thruster_control.stop()
 
-            try:
-                self.thruster_control.update(**control_data['thrusters'])
-                self.claw.manipulate(**control_data['claw'])
-                self.valve_turner.manipulate(**control_data['valve_turner'])
+        try:
+            df = self.dearflask
+            print df
 
-                self.pressure.update()
-                self.IMU.update()
+            self.thruster_control.update(**df['thrusters'])
 
-            except Exception as e:
-                print "Failed updating things"
-                print "Exception: %s" % e
-                print traceback.format_exc()
+            self.claw.update(df['claw']['power'])
+            self.valve_turner.update(df['valve_turner']['power'])
 
-            # Our last update
-            self.last_update = time()
+            """ Disabled until hardware is done and sw is tested
+            # self.fountain_tool.update(dearflask['claw']['power'])
+            # self.pressure.update()
+            # self.IMU.update()
+            """
+        except Exception as e:
+            print "Failed updating things"
+            print "Exception: %s" % e
+            print traceback.format_exc()
 
-            if self.debug:
-                self.debug_print()
+
+        # retrieve all sensor data
+        # self.dearclient['sensor'] = sensorThings
+
+        self.last_update = time()
+
+        self.dearclient['last_update'] = self.last_update
+
+        with self._data_lock:
+            self._data['dearclient'] = self.dearclient
+
+
+def run(lock, data):
+    rov = ROV(lock, data)
+    while True:
+        while time() - rov.last_update < 0.01:
+            sleep(0.005)
+
+        try:
+            rov.update()
+        except Exception as e:
+            print "Exception: %s" % e
+            print traceback.format_exc()
