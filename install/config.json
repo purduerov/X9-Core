@@ -10,7 +10,8 @@
     "aptget-hw": [
         "python-smbus",
         "libffi-dev",
-        "i2c-tools"
+        "i2c-tools",
+        "wiringpi"
     ],
     "aptget-cam": [
         "libjpeg8-dev",
