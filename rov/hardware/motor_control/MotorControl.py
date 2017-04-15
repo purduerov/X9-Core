@@ -40,11 +40,11 @@ class MotorControl(object):
         if pin < 0 or pin > 15:
             raise Exception("Pin %d does not exist" % pin)
 
-        if value < -1.0 or value > -1.0:
+        if value < -1.0 or value > 1.0:
             raise Exception("Value %f is out of range" % value)
 
         pwm_val = self.toPWM(value)
-        self.pwm_control.set_pwm(pin, 0, pwm_val)
+        self.pwm.set_pwm(pin, 0, pwm_val)
 
     def toPWM(self, val):
         if val > 1.0:

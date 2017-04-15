@@ -60,5 +60,5 @@ if __name__ == "__main__":
     c_status = cameras.status()
     for c in c_status:
         print "Name:   %s" % c
-        print "Status: %s" % c_status[c].status
-        print "Port:   %s" % c_status[c].port
+        print "Status: %s" % c_status[c]['status']
+        print "Port:   %s" % c_status[c]['port']
