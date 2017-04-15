@@ -13,7 +13,7 @@ class Camera(object):
     # specified in "integerxinteger" and not by name.
 
     # default layout for camera
-    def __init__(self, resolution='1024x768', framerate=30, device='/dev/video0', port=8080, brightness=16, contrast=32):
+    def __init__(self, resolution='1280x720', framerate=30, device='/dev/video0', port=8080, brightness=16, contrast=32):
         self.process = None
         self.resolution = resolution
         self.framerate = framerate
@@ -34,7 +34,6 @@ class Camera(object):
         )
 
         self.status = "killed"
-
 
     # framerate shouldn't be changed: keep at 30, allows for a good image while
     # reserving valuable processing power for other devices. Device is formatted as a

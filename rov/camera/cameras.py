@@ -4,7 +4,7 @@ from camera import Camera
 
 class Cameras(object):
     # default layout for camera
-    def __init__(self, resolution='1024x768', framerate=30, port_start=8080, brightness=16, contrast=32):
+    def __init__(self, resolution='1280x720', framerate=30, port_start=8080, brightness=16, contrast=32):
         self.cameras = []
         self.port_start = port_start
 
@@ -24,7 +24,6 @@ class Cameras(object):
                 brightness=self.brightness,
                 contrast=self.contrast
             )
-
 
             self.cameras.append(cam)
 
@@ -59,6 +58,7 @@ if __name__ == "__main__":
 
     c_status = cameras.status()
     for c in c_status:
+        print ""
         print "Name:   %s" % c
         print "Status: %s" % c_status[c]['status']
         print "Port:   %s" % c_status[c]['port']

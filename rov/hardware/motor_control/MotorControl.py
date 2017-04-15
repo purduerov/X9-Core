@@ -46,6 +46,9 @@ class MotorControl(object):
         pwm_val = self.toPWM(value)
         self.pwm.set_pwm(pin, 0, pwm_val)
 
+    def kill(self):
+        self.pwm.set_all_pwm(0, self.ZERO_POWER)
+
     def toPWM(self, val):
         if val > 1.0:
             return self.POS_MAX_POWER

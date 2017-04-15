@@ -7,6 +7,13 @@ from CameraServo import Servo
 #ASSUME that you are using a Servo Class created by Power and Movement that sets the servo to a raw angle.
 #ASSUME that servo has a function called setAngle which sets the servo angle appropriately.
 
+
+"""
+#################################################################
+NEEDS TO BE UPDATE TO USE HARDWARE/SERVO LIBRARY AS OF APRIL 15TH
+#################################################################
+"""
+
 class CameraServoWrapper(object):
       def __init__(self):
             self.servo = Servo
