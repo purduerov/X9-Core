@@ -39,7 +39,7 @@ class ROV(object):
 
     def init_hw(self):
         self.cameras = Cameras(
-            resolution='1024x768',
+            resolution='1280x720',
             framerate=30,
             port_start=8080,
             brightness=16,
@@ -47,15 +47,15 @@ class ROV(object):
         )
 
         self.motor_control = MotorControl(
-            zero_power=310,
-            neg_max_power=227,
-            pos_max_power=393,
+            zero_power=305,
+            neg_max_power=222,
+            pos_max_power=388,
             frequency=47
         )
 
         self.thrusters = Thrusters(
             self.motor_control,
-            [6, 1, 4, 3, 5, 12, 8, 9]
+            [7, 4, 6, 5, 10, 0, 11, 1]
         )
 
         self.thrust_mapper = Mapper()
@@ -137,7 +137,8 @@ class ROV(object):
             try:
                 self.update()
             except Exception as e:
-                print e
+                print "Exception: %s" % e
+                print traceback.format_exc()
 
 if __name__ == "__main__":
     pass
