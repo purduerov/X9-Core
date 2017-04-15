@@ -319,23 +319,19 @@ function Gamepad() {
                 where = gp.layout.buttons[i].where;
                 cur_index = gp.layout.buttons[i].index;
                 gp.setButtonLast(name);
-                if (where == 'buttons') {
-                    gp.buttons[name].val = read[where][cur_index].value ==
-                        gp.layout.buttons[i].match
-                        ? 1
-                        : 0;
-                } else if (where == 'axes') {
-                    gp.buttons[name].val = read[where][cur_index] ==
-                        gp.layout.buttons[i].match
-                        ? 1
-                        : 0;
+
+                if (where == "buttons") {
+                    gp.buttons[name].val = (read[where][cur_index].value == gp.layout.buttons[i].max) ? 1 : 0;
+                } else if (where == "axes") {
+                    if (name[1] == 't') {
+                        gp.buttons[name].val = (read[where][cur_index] + -gp.layout.buttons[i].base) / (gp.layout.buttons[i].max - gp.layout.buttons[i].base);
+                    } else {
+                        gp.buttons[name].val = (read[where][cur_index] == gp.layout.buttons[i].max) ? 1 : 0;
+                    }
                 } else {
-                    console.log(
-                        'Error: ' +
-                            where +
-                            " presented instead of 'buttons' or 'axes' for get_current in gp_library.js"
-                    );
+                    console.log("Error: "+where+" presented instead of 'buttons' or 'axes' for get_current in gp_library.js")
                 }
+
                 gp.setStatusChange(name);
 
                 if (but_func[name].change_func != null) {

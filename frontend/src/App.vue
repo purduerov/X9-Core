@@ -7,19 +7,23 @@
             <Card class="camera-width full-height">
                 <CameraView></CameraView>
             </Card>
-            <div style="width: calc(100% - 200px); height: 100%; float: left">
-                <!--<Card class="half-width half-height">-->
-                    <!--<IMU :data="packet.IMU"></IMU>-->
-                <!--</Card>-->
-                <!--<Card class="half-width half-height">-->
-                    <!--<Press_Temp :data="packet.PRESSURE"></Press_Temp>-->
-                <!--</Card>-->
-                <!--<Card class="half-width half-height">-->
-                    <!--<GpInfo :data="gpinfo"></GpInfo>-->
-                <!--</Card>-->
-                <!--<Card class="half-width half-height">-->
-                    <!--<Thruster :data="packet.Thrusters"></Thruster>-->
-                <!--</Card>-->
+            <div class="data-width full-height">
+                <!-- 
+                <Card class="half-width half-height">
+                    <IMU :data="packets.dearclient.IMU"></IMU>
+                </Card>
+                <Card class="half-width half-height">
+                    <Press_Temp :data="packets.dearclient.pressure"></Press_Temp>
+                </Card>
+                <Card class="half-width half-height">
+                    <GpInfo :data="gpinfo"></GpInfo>
+                </Card> -->
+                <Card class="half-width half-height">
+                    <Thruster :data="packets.dearclient.thrusters"></Thruster>
+                </Card>
+                <Card class="half-width half-height">
+                    <ToolInfo :data="packets.dearflask"></ToolInfo>
+                </Card>
             </div>
         </div>
     </div>
@@ -34,6 +38,7 @@ var Card = require("./components/Card.vue")
 var Press_Temp = require("./components/Pressure.vue")
 var GpInfo = require("./components/GpInfo.vue")
 var Thruster = require("./components/Thrusters.vue")
+var ToolInfo = require("./components/ToolInfo.vue")
 
 var packets = require("./packets.js")
 var main = require("./main.js")
@@ -47,16 +52,16 @@ export default {
         DataView,
         Press_Temp,
         GpInfo,
-        Thruster
+        Thruster,
+        ToolInfo
     },
     data: function() {
         return {
-            dearflask: packets.dearflask,
-            dearclient: packets.dearclient
+            packets: packets
         }
     },
     mounted: function() {
-        main(this.dearflask, this.dearclient)
+        main(this.packets)
     }
 }
 </script>
@@ -99,6 +104,9 @@ export default {
 }
 
 .camera-width {
-    width: 200px;
+    width: 800px;
+}
+.data-width {
+    width: calc(100% - 800px)
 }
 </style>
