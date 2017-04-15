@@ -32,9 +32,9 @@ function main(packets) {
                 gp.axes.left.x
             ]
 
-            packets.dearflask.valve_turner.power = (gp.buttons.b.val - gp.buttons.y.val) * 0.1
+            packets.dearflask.valve_turner.power = (gp.buttons.b.val - gp.buttons.y.val) * 0.15
             packets.dearflask.fountain_tool.power = (gp.buttons.left.val - gp.buttons.right.val) * 0.1
-            packets.dearflask.claw.power = (gp.buttons.a.val - gp.buttons.x.val) * 0.1
+            packets.dearflask.claw.power = (gp.buttons.a.val - gp.buttons.x.val) * 0.3
 
             socket.emit("dearflask", packets.dearflask);
         }
