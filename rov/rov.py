@@ -126,6 +126,8 @@ class ROV(object):
         self.last_update = time()
 
         self.dearclient['last_update'] = self.last_update
+        self.dearclient['thrusters'] = self.thruster_control.data
+        self.dearclient['cameras'] = self.cameras.status()
 
         with self._data_lock:
             self._data['dearclient'] = self.dearclient

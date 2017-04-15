@@ -33,19 +33,19 @@ class Mapper(BaseMapper):
         verticalThrusters = [0, 0, 0, 0]
 
         horizontalThrusters[0] += velX
-        horizontalThrusters[1] -= velX
-        horizontalThrusters[2] += velX
+        horizontalThrusters[1] += velX
+        horizontalThrusters[2] -= velX
         horizontalThrusters[3] -= velX
 
-        verticalThrusters[0] += velY
-        verticalThrusters[1] += velY
-        verticalThrusters[2] += velY
-        verticalThrusters[3] += velY
+        horizontalThrusters[0] += velY
+        horizontalThrusters[1] -= velY
+        horizontalThrusters[2] += velY
+        horizontalThrusters[3] -= velY
 
-        horizontalThrusters[0] += velZ
-        horizontalThrusters[1] += velZ
-        horizontalThrusters[2] -= velZ
-        horizontalThrusters[3] -= velZ
+        verticalThrusters[0] += velZ
+        verticalThrusters[1] += velZ
+        verticalThrusters[2] += velZ
+        verticalThrusters[3] += velZ
 
         verticalThrusters[0] += pitch
         verticalThrusters[1] += pitch
