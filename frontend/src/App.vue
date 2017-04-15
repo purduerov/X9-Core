@@ -119,9 +119,9 @@ export default {
 }
 
 .camera-width {
-    width: 800px;
+    width: 1200px;
 }
 .data-width {
-    width: calc(100% - 800px)
+    width: calc(100% - 1200px)
 }
 </style>
