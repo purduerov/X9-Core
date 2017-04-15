@@ -3,7 +3,7 @@ var gp = require("./gamepad")
 
 function main(dearflask, dearclient) {
     //let socketHost = `http://${document.domain}:${location.port}`
-    let socketHost = `http://raspberrypi.local:5000`
+    let socketHost = `ws://raspberrypi.local:5000`
     let socket = io.connect(socketHost, {transports: ['websocket']});
 
     function update() {
