@@ -39,20 +39,20 @@ class ROV(object):
         self.init_hw()
 
     def init_hw(self):
-        self.cameras = Cameras(
-            resolution='1280x720',
-            framerate=30,
-            port_start=8080,
-            brightness=16,
-            contrast=32
-        )
-
         self.motor_control = MotorControl(
             zero_power=305,
             neg_max_power=222,
             pos_max_power=388,
             frequency=47
         )
+
+	self.cameras = Cameras(
+		resolution='640x480',
+		framerate=30,
+		port_start=8080,
+		brightness=16,
+		contrast=32
+	)
 
         self.thrusters = Thrusters(
             self.motor_control,
@@ -69,12 +69,12 @@ class ROV(object):
             max_ramp=0.05
         )
 
-        self.claw = Claw(
+        self.valve_turner = ValveTurner(
             self.motor_control,
-            pin=3
+            pin=8
         )
 
-        self.valve_turner = ValveTurner(
+        self.claw = Claw(
             self.motor_control,
             pin=9
         )
@@ -106,8 +106,8 @@ class ROV(object):
 
             self.thruster_control.update(**df['thrusters'])
 
-            self.claw.update(df['claw']['power'])
             self.valve_turner.update(df['valve_turner']['power'])
+            self.claw.update(df['claw']['power'])
 
             """ Disabled until hardware is done and sw is tested
             # self.fountain_tool.update(dearflask['claw']['power'])
