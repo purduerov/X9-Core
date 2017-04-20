@@ -40,7 +40,7 @@ class ROV(object):
 
     def init_hw(self):
         self.cameras = Cameras(
-            resolution='1280x720',
+            resolution='640x480',
             framerate=30,
             port_start=8080,
             brightness=16,
@@ -71,12 +71,12 @@ class ROV(object):
 
         self.claw = Claw(
             self.motor_control,
-            pin=3
+            pin=9
         )
 
         self.valve_turner = ValveTurner(
             self.motor_control,
-            pin=9
+            pin=8
         )
 
         """ Requires pin number!!

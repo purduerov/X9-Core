@@ -6,7 +6,7 @@ from camera import Camera
 
 class Cameras(object):
     # default layout for camera
-    def __init__(self, resolution='1280x720', framerate=30, port_start=8080, brightness=16, contrast=32):
+    def __init__(self, resolution='640x480', framerate=30, port_start=8080, brightness=16, contrast=32):
         self.cameras = []
         self.port_start = port_start
 
