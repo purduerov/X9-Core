@@ -32,18 +32,25 @@ class Cameras(object):
         # clear previous open ones
         self.system_kill()
 
-        self.start()
 
-    def start(self):
+    def start(self, port):
+        #for cam in self.cameras:
+        #    time.sleep(0.2)
+        #    cam.start()
+
         for cam in self.cameras:
-            time.sleep(0.2)
-            cam.start()
+            if cam.status == "killed" and cam.port == port:
+                cam.start()
 
-    def kill(self):
+    def kill(self, port):
+        #for cam in self.cameras:
+        #    cam.kill()
+
         for cam in self.cameras:
-            cam.kill()
+            if cam.port == port and cam.status == "active":
+                cam.kill()
 
-        self.system_kill()
+        #self.system_kill()
 
     def system_kill(self):
         os.system("pgrep 'mjpg' | xargs kill -9")

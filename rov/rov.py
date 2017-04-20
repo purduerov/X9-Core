@@ -74,7 +74,7 @@ class ROV(object):
             self.thrust_mapper,
             num_thrusters=8,
             ramp=True,
-            max_ramp=0.05
+            max_ramp=0.03
         )
 
         self.valve_turner = ValveTurner(
@@ -82,22 +82,21 @@ class ROV(object):
             pin=9
         )
 
+        self.claw_status = False
         self.claw = Claw(
             self.motor_control,
             pin=8
         )
 
-        """ Requires pin number!!
         self.fountain_tool = FountainTool(
             self.motor_control,
-            pin=-1 # get pin number
+            pin=2
         )
-        """
 
-        """ Disabled until hardware is done and sw is tested
+        #""" Disabled until hardware is done and sw is tested
         # self.IMU = IMU()
         # self.pressure = Pressure()
-        """
+        #"""
 
     def update(self):
         with self._data_lock:
@@ -115,10 +114,27 @@ class ROV(object):
             self.thruster_control.update(**df['thrusters'])
 
             self.valve_turner.update(df['valve_turner']['power'])
-            self.claw.update(df['claw']['power'])
+
+            # if 'claw' is powered, turn off, else if last status was off but current status is on then let it be on (turn ramping off).
+            # This assumes an on period per button press of about 10ms.
+            if self.claw_status == False and df['claw']['power'] != 0:
+                claw_power = (df['claw']['power'] / abs(df['claw']['power'])) * .7
+            else:
+                claw_power = 0.0
+            self.claw.update(claw_power)
+            if df['claw']['power'] != 0:
+                self.claw_status = True
+            else:
+                self.claw_status = False
+
+            for cam in df['cameras']:
+                if (cam.status == 0):
+                    cameras.kill(cam.port)
+                if (cam.status == 1):
+                    cameras.start(cam.port)
 
             """ Disabled until hardware is done and sw is tested
-            # self.fountain_tool.update(dearflask['claw']['power'])
+            self.fountain_tool.update(dearflask['fountain_tool']['power'])
             # self.pressure.update()
             # self.IMU.update()
             """
