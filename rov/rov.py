@@ -54,13 +54,13 @@ class ROV(object):
             frequency=47
         )
 
-	self.cameras = Cameras(
-		resolution='640x480',
-		framerate=30,
-		port_start=8080,
-		brightness=16,
-		contrast=32
-	)
+        self.cameras = Cameras(
+            resolution='640x480',
+            framerate=30,
+            port_start=8080,
+            brightness=16,
+            contrast=32
+        )
 
         self.thrusters = Thrusters(
             self.motor_control,
@@ -114,6 +114,7 @@ class ROV(object):
             self.thruster_control.update(**df['thrusters'])
 
             self.valve_turner.update(df['valve_turner']['power'])
+            self.fountain_tool.update(df['fountain_tool']['power'])
 
             # if 'claw' is powered, turn off, else if last status was off but current status is on then let it be on (turn ramping off).
             # This assumes an on period per button press of about 10ms.
@@ -134,9 +135,8 @@ class ROV(object):
                     cameras.start(cam.port)
 
             """ Disabled until hardware is done and sw is tested
-            self.fountain_tool.update(dearflask['fountain_tool']['power'])
-            # self.pressure.update()
-            # self.IMU.update()
+            self.pressure.update()
+            self.IMU.update()
             """
         except Exception as e:
             print "Failed updating things"
