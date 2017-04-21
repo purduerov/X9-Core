@@ -4,6 +4,12 @@ All of X9's core software for the 2016-2017 Purdue ROV team.
 ## Scotty:
 scotty is our favorite [cheif engineer](http://www.ex-astris-scientia.org/inconsistencies/movies/underwater-scotty-stid.jpg) that install the dependencies, runs the software, and runs tests.
 
+### tl;dr
+```bash
+sudo ./scotty install # do once, or when dependencies have updated
+sudo ./scotty run
+```
+
 ### Using Scotty to Install Dependencies:
 ```
 scotty install [--pi] [--dev [--cam]]
@@ -58,12 +64,3 @@ Scotty will run linting tests to check for things like unused variables, bad imp
 - pylint: tests for undeclared variables, bad whitespace, misspelled items
 
 Will hope to add more tests that can test our modules individually
-
-### To install node and Vue:
-1. `curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -`
-
-2. `sudo apt-get install nodejs`
-
-3. now, navigate to `X9-Core/frontend/` and run `npm install`
-
-4. once that's done, just run `npm run build` to condense the files for the webpage

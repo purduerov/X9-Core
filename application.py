@@ -34,7 +34,9 @@ data["dearflask"] = {
     },
     "fountain_tool": {
         "power": 0.0
-    }
+    },
+    "cameras": [
+    ]
 }
 
 @socketio.on('connect')

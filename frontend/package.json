@@ -1,6 +1,6 @@
 {
   "name": "battlestation",
-  "main": "electron.js",
+  "main": "electron-setup.js",
   "version": "1.0.0",
   "description": "Purdue ROV 2017",
   "author": "Purdue ROV Software Team",

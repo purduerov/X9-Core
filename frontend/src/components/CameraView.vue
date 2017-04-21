@@ -22,7 +22,7 @@ export default {
     },
     computed: {
         source: function() {
-            return `http://raspberrypi.local:${this.port}/?action=stream`
+            return `http://10.42.0.164:${this.port}/?action=stream`
         }
     }
 }

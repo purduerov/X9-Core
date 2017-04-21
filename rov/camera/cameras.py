@@ -6,7 +6,7 @@ from camera import Camera
 
 class Cameras(object):
     # default layout for camera
-    def __init__(self, resolution='1280x720', framerate=30, port_start=8080, brightness=16, contrast=32):
+    def __init__(self, resolution='640x480', framerate=30, port_start=8080, brightness=16, contrast=32):
         self.cameras = []
         self.port_start = port_start
 
@@ -32,18 +32,25 @@ class Cameras(object):
         # clear previous open ones
         self.system_kill()
 
-        self.start()
 
-    def start(self):
+    def start(self, port):
+        #for cam in self.cameras:
+        #    time.sleep(0.2)
+        #    cam.start()
+
         for cam in self.cameras:
-            time.sleep(0.2)
-            cam.start()
+            if cam.status == "killed" and cam.port == port:
+                cam.start()
 
-    def kill(self):
+    def kill(self, port):
+        #for cam in self.cameras:
+        #    cam.kill()
+
         for cam in self.cameras:
-            cam.kill()
+            if cam.port == port and cam.status == "active":
+                cam.kill()
 
-        self.system_kill()
+        #self.system_kill()
 
     def system_kill(self):
         os.system("pgrep 'mjpg' | xargs kill -9")
