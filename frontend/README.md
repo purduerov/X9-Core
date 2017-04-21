@@ -4,6 +4,11 @@
 
 ## Installing
 
+### Installing Node:
+- For Linux: [Install Via Package Manager](https://nodejs.org/en/download/package-manager/)
+- For Windows: [Use Windows Installer](https://nodejs.org/en/download/)
+
+### Install Dependencies
 ```bash
 # install dependencies
 npm install
