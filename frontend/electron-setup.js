@@ -39,7 +39,7 @@ function createWindow () {
     // Maximize first, so that when coming out of full screen the window
     // is fully maximized.
     mainWindow.maximize()
-    mainWindow.setFullScreen(true)
+    mainWindow.setFullScreen(false)
 }
 
 // This method will be called when Electron has finished
