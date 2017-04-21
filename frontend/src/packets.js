@@ -22,7 +22,7 @@ module.exports = {
             power: 0.0
         },
         cameras: {
-            { port: 8080, status: 1 }
+            port: 8080, status: 1
         }
     },
     dearclient: {

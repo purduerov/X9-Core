@@ -13,7 +13,13 @@ let mainWindow
 
 function createWindow () {
     // Create the browser window.
-    mainWindow = new BrowserWindow({width: 800, height: 600, fullscreen: false})
+    mainWindow = new BrowserWindow({
+        // If you have a big enough monitor, use width: 2576 and height 1119
+        // to make the display area match that of the ROV monitor. These are
+        // Window's 10 specific to the titlebar and window outline widths.
+        width: 1000,
+        height: 800
+    })
 
     // and load the index.html of the app.
     mainWindow.loadURL(url.format({
@@ -22,9 +28,6 @@ function createWindow () {
         slashes: true
     }))
 
-    // Open the DevTools.
-    // mainWindow.webContents.openDevTools()
-
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {
         // Dereference the window object, usually you would store windows
@@ -32,6 +35,11 @@ function createWindow () {
         // when you should delete the corresponding element.
         mainWindow = null
     })
+
+    // Maximize first, so that when coming out of full screen the window
+    // is fully maximized.
+    mainWindow.maximize()
+    mainWindow.setFullScreen(true)
 }
 
 // This method will be called when Electron has finished
@@ -40,19 +48,4 @@ function createWindow () {
 app.on('ready', createWindow)
 
 // Quit when all windows are closed.
-app.on('window-all-closed', function () {
-    // On OS X it is common for applications and their menu bar
-    // to stay active until the user quits explicitly with Cmd + Q
-    app.quit()
-})
-
-app.on('activate', function () {
-    // On OS X it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (mainWindow === null) {
-        createWindow()
-    }
-})
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+app.on('window-all-closed', app.quit)
