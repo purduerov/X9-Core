@@ -69,8 +69,8 @@ export default {
                     velX: 100,
                     velY: 40,
                     velZ: 100,
-                    pitchRoll: 100,
-                    yaw: 100,
+                    pitchRoll: 25,
+                    yaw: 25,
                 }
             }
         }
