@@ -65,7 +65,9 @@ class Camera(object):
             self.status = 'active'
 
     def is_alive(self):
-        return self.process.poll() is None
+        if self.process is None:
+            return False
+        return (self.process.poll() is None)
 
     def get_status(self):
         if not self.is_alive():
