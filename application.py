@@ -36,6 +36,7 @@ data["dearflask"] = {
         "power": 0.0
     },
     "cameras": [
+        {"status": 1, "port": 8080},
     ]
 }
 

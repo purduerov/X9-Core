@@ -35,9 +35,9 @@ function main(packets, other) {
             ]
 
             let tl = other.tool_scales;
-            let clw = (gp.buttons.a.val - gp.buttons.x.val);
+            let clw = (gp.buttons.a.val - gp.buttons.b.val);
 
-            packets.dearflask.valve_turner.power = (gp.buttons.b.val - gp.buttons.y.val) * (tl.vlv_turn.main/100);
+            packets.dearflask.valve_turner.power = (gp.buttons.x.val - gp.buttons.y.val) * (tl.vlv_turn.main/100);
             packets.dearflask.fountain_tool.power = (gp.buttons.left.val - gp.buttons.right.val) * (tl.fountain.main/100)
             packets.dearflask.claw.power = clw * (( (clw > 0) ? tl.claw.open : tl.claw.close )/100) * (tl.claw.master/100);
 

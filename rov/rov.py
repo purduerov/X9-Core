@@ -129,12 +129,17 @@ class ROV(object):
             else:
                 self.claw_status = False
 
-            print "Type: {}".format(df['cameras'][0])
+            print "cameras: {}".format(df['cameras'])
+            print "type: {}".format(type(df['cameras']))
+            print "len: {}".format(len(df['cameras']))
+
+            #cam = df['cameras']
             for cam in df['cameras']:
-                if (cam.status == 0):
-                    cameras.kill(cam.port)
-                if (cam.status == 1):
-                    cameras.start(cam.port)
+                print cam
+                if (cam['status'] == 0):
+                    self.cameras.kill(cam['port'])
+                if (cam['status'] == 1):
+                    self.cameras.start(cam['port'])
 
             """ Disabled until hardware is done and sw is tested
             self.pressure.update()
