@@ -22,10 +22,12 @@ module.exports = {
             power: 0.0
         },
         cameras: [
-            { port: 8080, status: 1 },
-            { port: 8081, status: 1 },
+            { port: 8080, status: 0 },
+            { port: 8081, status: 0 },
             { port: 8082, status: 1 },
-            { port: 8083, status: 1 },
+            { port: 8083, status: 0 },
+            { port: 8084, status: 1 },
+            { port: 8085, status: 0 },
         ],
     },
     dearclient: {

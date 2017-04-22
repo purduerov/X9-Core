@@ -129,13 +129,8 @@ class ROV(object):
             else:
                 self.claw_status = False
 
-            print "cameras: {}".format(df['cameras'])
-            print "type: {}".format(type(df['cameras']))
-            print "len: {}".format(len(df['cameras']))
-
             #cam = df['cameras']
             for cam in df['cameras']:
-                print cam
                 if (cam['status'] == 0):
                     self.cameras.kill(cam['port'])
                 if (cam['status'] == 1):
