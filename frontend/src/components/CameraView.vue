@@ -7,9 +7,9 @@
             <button @click="port = 8082">Camera 1</button>
             <button @click="port = 8084">Camera 2</button>
             <button @click="port = 8080">Camera 3</button>
-            <button @click="port = 8083">Camera 4</button>
+            <button @click="port = 8085">Camera 4</button>
             <button @click="port = 8081">Camera 5</button>
-            <button @click="port = 8085">Camera 6</button>
+            <button @click="port = 8083">Camera 6</button>
         </div>
     </div>
 </template>

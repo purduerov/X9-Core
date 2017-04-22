@@ -1,4 +1,5 @@
 import multiprocessing
+import os
 
 from flask import Flask
 from flask_socketio import SocketIO
@@ -36,9 +37,18 @@ data["dearflask"] = {
         "power": 0.0
     },
     "cameras": [
-        {"status": 1, "port": 8080},
-    ]
+        { port: 8080, status: 1 },
+        { port: 8081, status: 0 },
+        { port: 8082, status: 1 },
+        { port: 8083, status: 0 },
+        { port: 8084, status: 1 },
+        { port: 8085, status: 1 },
+    ],
 }
+try:
+    os.system("../runCams.sh > ../mjpeg_noise.txt")
+except Exception:
+    print "Run mjpeg streamer on your own please"
 
 @socketio.on('connect')
 def on_connect():
