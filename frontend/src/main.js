@@ -34,9 +34,12 @@ function main(packets, other) {
                 gp.axes.right.x * (ts.master/100.0)  * (ts.yaw/100.0)
             ]
 
-            packets.dearflask.valve_turner.power = (gp.buttons.b.val - gp.buttons.y.val) * 0.15
-            packets.dearflask.fountain_tool.power = (gp.buttons.left.val - gp.buttons.right.val) * 0.1
-            packets.dearflask.claw.power = (gp.buttons.a.val - gp.buttons.x.val) * 0.5
+            let tl = other.tool_scales;
+            let clw = (gp.buttons.a.val - gp.buttons.x.val);
+
+            packets.dearflask.valve_turner.power = (gp.buttons.b.val - gp.buttons.y.val) * (tl.vlv_turn.main/100);
+            packets.dearflask.fountain_tool.power = (gp.buttons.left.val - gp.buttons.right.val) * (tl.fountain.main/100)
+            packets.dearflask.claw.power = clw * (( (clw > 0) ? tl.claw.open : tl.claw.close )/100) * (tl.claw.master/100);
 
             socket.emit("dearflask", packets.dearflask);
         }

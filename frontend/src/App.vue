@@ -8,7 +8,7 @@
                 <CameraView></CameraView>
             </Card>
             <div class="data-width full-height">
-                <!-- 
+                <!--
                 <Card class="half-width half-height">
                     <IMU :data="packets.dearclient.IMU"></IMU>
                 </Card>
@@ -27,6 +27,9 @@
                 <Card class="half-width half-height">
                     <ThrusterControl :data="other.thrust_scales"></ThrusterControl>
                 </Card>
+                <Card class="half-width half-height">
+                    <ToolControl :data="other.tool_scales"></ToolControl>
+                </Card>
             </div>
         </div>
     </div>
@@ -42,6 +45,7 @@ var Press_Temp = require("./components/Pressure.vue")
 var GpInfo = require("./components/GpInfo.vue")
 var Thruster = require("./components/Thrusters.vue")
 var ThrusterControl = require("./components/ThrusterControl.vue")
+var ToolControl = require("./components/ToolControl.vue")
 var ToolInfo = require("./components/ToolInfo.vue")
 
 var packets = require("./packets.js")
@@ -58,6 +62,7 @@ export default {
         GpInfo,
         Thruster,
         ThrusterControl,
+        ToolControl,
         ToolInfo
     },
     data: function() {
@@ -71,6 +76,19 @@ export default {
                     velZ: 100,
                     pitchRoll: 25,
                     yaw: 25,
+                },
+                tool_scales: {
+                    claw: {
+                        master: 50,
+                        open: 25,
+                        close: 25
+                    },
+                    vlv_turn: {
+                        main: 15,
+                    },
+                    fountain: {
+                        main: 10,
+                    }
                 }
             }
         }

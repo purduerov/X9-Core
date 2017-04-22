@@ -79,13 +79,13 @@ class ROV(object):
 
         self.valve_turner = ValveTurner(
             self.motor_control,
-            pin=9
+            pin=8
         )
 
         self.claw_status = False
         self.claw = Claw(
             self.motor_control,
-            pin=8
+            pin=3
         )
 
         self.fountain_tool = FountainTool(
@@ -128,6 +128,7 @@ class ROV(object):
             else:
                 self.claw_status = False
 
+            print "Type: {}".format(df['cameras'][0])
             for cam in df['cameras']:
                 if (cam.status == 0):
                     cameras.kill(cam.port)
