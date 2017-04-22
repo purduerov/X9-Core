@@ -118,10 +118,11 @@ class ROV(object):
 
             # if 'claw' is powered, turn off, else if last status was off but current status is on then let it be on (turn ramping off).
             # This assumes an on period per button press of about 10ms.
-            if self.claw_status == False and df['claw']['power'] != 0:
-                claw_power = (df['claw']['power'] / abs(df['claw']['power'])) * .7
+            if self.claw_status == True and df['claw']['power'] != 0:
+                claw_power = (df['claw']['power'])
             else:
                 claw_power = 0.0
+
             self.claw.update(claw_power)
             if df['claw']['power'] != 0:
                 self.claw_status = True
