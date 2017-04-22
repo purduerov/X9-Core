@@ -5,6 +5,10 @@
         <div class="trst">
             <div class="info">
                 <span>Claw</span>
+                <div>
+                    <span>Master:</span>
+                    <input type="range" min="-1" max="100" v-model="data.claw.master">
+                </div>
                 <hr/>
                 <div class="tool_sub">
                     <div>
@@ -18,11 +22,11 @@
                 </div>
                 <div>
                     <span>Valve Turner</span>
-                    <input type="range" min="0" max="100" v-model="data.vlv_turn.main">
+                    <input type="range" min="0" max="25" v-model="data.vlv_turn.main">
                 </div>
                 <div>
                     <span>Fountain Tool</span>
-                    <input type="range" min="0" max="100" v-model="data.fountain.main">
+                    <input type="range" min="0" max="25" v-model="data.fountain.main">
                 </div>
             </div>
         </div>
