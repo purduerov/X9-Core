@@ -25,7 +25,7 @@
                     <input type="range" min="0" max="100" v-model="data.pitchRoll">
                 </div>
                 <div>
-                    <span>Turning</span>
+                    <span>Yaw</span>
                     <input type="range" min="0" max="100" v-model="data.yaw">
                 </div>
             </div>
