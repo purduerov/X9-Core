@@ -39,27 +39,19 @@ class ROV(object):
         self.init_hw()
 
     def init_hw(self):
-        self.cameras = Cameras(
-            resolution='640x480',
-            framerate=30,
-            port_start=8080,
-            brightness=16,
-            contrast=32
-        )
+        #self.cameras = Cameras(
+        #    resolution='640x480',
+        #    framerate=30,
+        #    port_start=8080,
+        #    brightness=16,
+        #    contrast=32
+        #)
 
         self.motor_control = MotorControl(
             zero_power=305,
             neg_max_power=222,
             pos_max_power=388,
             frequency=47
-        )
-
-        self.cameras = Cameras(
-            resolution='640x480',
-            framerate=30,
-            port_start=8080,
-            brightness=16,
-            contrast=32
         )
 
         self.thrusters = Thrusters(
@@ -130,11 +122,11 @@ class ROV(object):
                 self.claw_status = False
 
             #cam = df['cameras']
-            for cam in df['cameras']:
-                if (cam['status'] == 0):
-                    self.cameras.kill(cam['port'])
-                if (cam['status'] == 1):
-                    self.cameras.start(cam['port'])
+            #for cam in df['cameras']:
+            #    if (cam['status'] == 0):
+            #        self.cameras.kill(cam['port'])
+            #    if (cam['status'] == 1):
+            #        self.cameras.start(cam['port'])
 
             """ Disabled until hardware is done and sw is tested
             self.pressure.update()
@@ -153,7 +145,7 @@ class ROV(object):
 
         self.dearclient['last_update'] = self.last_update
         self.dearclient['thrusters'] = self.thruster_control.data
-        self.dearclient['cameras'] = self.cameras.status()
+        #self.dearclient['cameras'] = self.cameras.status()
 
         with self._data_lock:
             self._data['dearclient'] = self.dearclient
