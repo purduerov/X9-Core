@@ -22,10 +22,10 @@ function main(packets, other) {
                 gp.axes.left.x * (ts.master/100.0)  * (ts.velY/100.0) * -1,
 
                 //VelZ - ascend and descend
-                (gp.buttons.rt.val - gp.buttons.lt.val) * (ts.master/100.0)  * (ts.velZ/100.0) * -1,
+                (gp.buttons.rb.val - gp.buttons.lb.val) * (ts.master/100.0)  * (ts.velZ/100.0) * -1,
 
                 //Roll
-                (gp.buttons.rb.val - gp.buttons.lb.val) * (ts.master/100.0)  * (ts.pitchRoll/100.0),
+                (gp.buttons.slct.val - gp.buttons.strt.val) * (ts.master/100.0)  * (ts.pitchRoll/100.0),
 
                 //Pitch
                 gp.axes.right.y * (ts.master/100.0)  * (ts.pitchRoll/100.0),

@@ -24,7 +24,7 @@ export default {
     },
     computed: {
         source: function() {
-            return `http://10.42.0.204:${this.port}/?action=stream`
+            return `http://10.42.0.130:${this.port}/?action=stream`
         }
     }
 }
