@@ -22,13 +22,13 @@ function main(packets, other) {
                 gp.axes.left.x * (ts.master/100.0)  * (ts.velY/100.0) * -1,
 
                 //VelZ - ascend and descend
-                (gp.buttons.rb.val - gp.buttons.lb.val) * (ts.master/100.0)  * (ts.velZ/100.0) * -1,
+                (gp.buttons.lb.val - gp.buttons.rb.val) * (ts.master/100.0)  * (ts.velZ/100.0) * -1,
 
                 //Roll
                 (gp.buttons.slct.val - gp.buttons.strt.val) * (ts.master/100.0)  * (ts.pitchRoll/100.0),
 
                 //Pitch
-                gp.axes.right.y * (ts.master/100.0)  * (ts.pitchRoll/100.0),
+                -gp.axes.right.y * (ts.master/100.0)  * (ts.pitchRoll/100.0),
 
                 //Yaw
                 gp.axes.right.x * (ts.master/100.0)  * (ts.yaw/100.0)
