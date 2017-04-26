@@ -84,7 +84,7 @@ export default {
                         close: 25
                     },
                     vlv_turn: {
-                        main: 15,
+                        main: 30,
                     },
                     fountain: {
                         main: 10,
