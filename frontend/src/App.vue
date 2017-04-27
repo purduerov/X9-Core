@@ -1,4 +1,4 @@
-<template>
+\<template>
     <div id="app">
         <div id="navbar">
             <Navbar title="Purdue ROV - BattleStation"></Navbar>
@@ -20,9 +20,11 @@
                 </Card> -->
                 <Card class="half-width half-height">
                     <Thruster :data="packets.dearclient.thrusters"></Thruster>
+                    <br>
+		    <ToolInfo :data="packets.dearflask"></ToolInfo>
                 </Card>
                 <Card class="half-width half-height">
-                    <ToolInfo :data="packets.dearflask"></ToolInfo>
+                   <Timer></Timer>
                 </Card>
                 <Card class="half-width half-height">
                     <ThrusterControl :data="other.thrust_scales"></ThrusterControl>
@@ -47,6 +49,7 @@ var Thruster = require("./components/Thrusters.vue")
 var ThrusterControl = require("./components/ThrusterControl.vue")
 var ToolControl = require("./components/ToolControl.vue")
 var ToolInfo = require("./components/ToolInfo.vue")
+var Timer = require("./components/Timer.vue")
 
 var packets = require("./packets.js")
 var main = require("./main.js")
@@ -63,31 +66,32 @@ export default {
         Thruster,
         ThrusterControl,
         ToolControl,
-        ToolInfo
+        ToolInfo,
+	Timer
     },
     data: function() {
         return {
             packets: packets,
             other: {
                 thrust_scales: {
-                    master: 60,
-                    velX: 100,
-                    velY: 40,
-                    velZ: 100,
-                    pitchRoll: 25,
+                    master: 50,
+                    velX: 60,
+                    velY: 50,
+                    velZ: 60,
+                    pitchRoll: 35,
                     yaw: 25,
                 },
                 tool_scales: {
                     claw: {
                         master: 50,
-                        open: 25,
-                        close: 25
+                        open: 50,
+                        close: 50
                     },
                     vlv_turn: {
                         main: 30,
                     },
                     fountain: {
-                        main: 10,
+                        main: 25,
                     }
                 }
             }

@@ -5,3 +5,7 @@ hr {
 body {
     font-family: 'Roboto', Helvetica, Arial, sans-serif;
 }
+
+h1 {
+   font-size: 30px;
+}

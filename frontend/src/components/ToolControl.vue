@@ -6,27 +6,27 @@
             <div class="info">
                 <span>Claw</span>
                 <div>
-                    <span>Master:</span>
+                    <span>Master: {{data.claw.master}}%</span>
                     <input type="range" min="-1" max="100" v-model="data.claw.master">
                 </div>
                 <hr/>
                 <div class="tool_sub">
                     <div>
-                        <span>Open:</span>
+                        <span>Open: {{data.claw.open}}%</span>
                         <input type="range" min="-1" max="100" v-model="data.claw.open">
                     </div>
                     <div>
-                        <span>Close:</span>
+                        <span>Close: {{data.claw.close}}%</span>
                         <input type="range" min="-1" max="100" v-model="data.claw.close">
                     </div>
                 </div>
                 <div>
-                    <span>Valve Turner</span>
-                    <input type="range" min="0" max="25" v-model="data.vlv_turn.main">
+                    <span>Valve Turner: {{data.vlv_turn.main}}%</span>
+                    <input type="range" min="0" max="65" v-model="data.vlv_turn.main">
                 </div>
                 <div>
-                    <span>Fountain Tool</span>
-                    <input type="range" min="0" max="25" v-model="data.fountain.main">
+                    <span>Fountain Tool: {{data.fountain.main}}%</span>
+                    <input type="range" min="0" max="50" v-model="data.fountain.main">
                 </div>
             </div>
         </div>

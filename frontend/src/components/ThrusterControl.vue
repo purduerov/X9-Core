@@ -3,29 +3,29 @@
         <h1>Thruster Scaling:</h1>
         <hr>
         <div class="trst">
-            <div class="info">
+	  <div class="info">
                 <div>
-                    <span>Master</span>
-                    <input type="range" min="-1" max="100" v-model="data.master">
-                </div>
+                    <span>Master: {{data.master}}%</span>
+                    <input type="range" min="-1" max="70" v-model="data.master">			
+		</div>
                 <div>
-                    <span>Forward / Backward</span>
+                    <span>Forward/Backward: {{data.velX}}%</span>
                     <input type="range" min="-1" max="100" v-model="data.velX">
                 </div>
                 <div>
-                    <span>Strafe</span>
+                    <span>Strafe: {{data.velY}}%</span>
                     <input type="range" min="0" max="100" v-model="data.velY">
                 </div>
                 <div>
-                    <span>Ascend/Descend</span>
+                    <span>Ascend/Descend: {{data.velZ}}%</span>
                     <input type="range" min="0" max="100" v-model="data.velZ">
                 </div>
                 <div>
-                    <span>Pitch / Roll</span>
+                    <span>Pitch/Roll: {{data.pitchRoll}}%</span>
                     <input type="range" min="0" max="100" v-model="data.pitchRoll">
                 </div>
                 <div>
-                    <span>Yaw</span>
+                    <span>Yaw: {{data.yaw}}%</span>
                     <input type="range" min="0" max="100" v-model="data.yaw">
                 </div>
             </div>
