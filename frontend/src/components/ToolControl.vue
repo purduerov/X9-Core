@@ -7,17 +7,17 @@
                 <span>Claw</span>
                 <div>
                     <span>Master: {{data.claw.master}}%</span>
-                    <input type="range" min="-1" max="100" v-model="data.claw.master">
+                    <input type="range" min="0" max="100" v-model="data.claw.master">
                 </div>
                 <hr/>
                 <div class="tool_sub">
                     <div>
                         <span>Open: {{data.claw.open}}%</span>
-                        <input type="range" min="-1" max="100" v-model="data.claw.open">
+                        <input type="range" min="0" max="100" v-model="data.claw.open">
                     </div>
                     <div>
                         <span>Close: {{data.claw.close}}%</span>
-                        <input type="range" min="-1" max="100" v-model="data.claw.close">
+                        <input type="range" min="0" max="100" v-model="data.claw.close">
                     </div>
                 </div>
                 <div>

@@ -6,11 +6,11 @@
 	  <div class="info">
                 <div>
                     <span>Master: {{data.master}}%</span>
-                    <input type="range" min="-1" max="70" v-model="data.master">			
+                    <input type="range" min="0" max="70" v-model="data.master">
 		</div>
                 <div>
                     <span>Forward/Backward: {{data.velX}}%</span>
-                    <input type="range" min="-1" max="100" v-model="data.velX">
+                    <input type="range" min="0" max="100" v-model="data.velX">
                 </div>
                 <div>
                     <span>Strafe: {{data.velY}}%</span>
