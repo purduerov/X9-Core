@@ -67,7 +67,7 @@ export default {
         ThrusterControl,
         ToolControl,
         ToolInfo,
-	Timer
+	      Timer
     },
     data: function() {
         return {
@@ -98,7 +98,7 @@ export default {
         }
     },
     mounted: function() {
-        main(this.packets, this.other)
+        main(this.packets, this.other);
     }
 }
 </script>

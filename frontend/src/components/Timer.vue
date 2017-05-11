@@ -1,81 +1,103 @@
-<template>
+seconds<template>
 <div>
 	<div class="wrapper">
 		<h1>Timer</h1>
 		<br>
-		<h1><span id="seconds">00</span>:<span id="tens">00</span></h1>
+		<h1><span id="min">00</span>:<span id="seconds">00</span></h1>
 		<br> <br>
 		<div class="buttons">
-			<button id="button-start">Start</button>
-			<button id="button-stop">Stop</button>
-			<button id="button-reset">Reset</button>
-		</div>	
-</div> 
+			<button v-on:click="start()">Start</button>
+			<button v-on:click="stop()">Stop</button>
+			<button v-on:click="reset()">Reset</button>
+		</div>
+</div>
 </div>
 </template>
 
 <script>
-	window.onload = function () {
-  
-  var seconds = 0; 
-  var tens = 0; 
-  var appendTens = document.getElementById("tens")
-  var appendSeconds = document.getElementById("seconds")
-  var buttonStart = document.getElementById('button-start');
-  var buttonStop = document.getElementById('button-stop');
-  var buttonReset = document.getElementById('button-reset');
-  var Interval ;
 
-  buttonStart.onclick = function() {
-    
-     clearInterval(Interval);
-     Interval = setInterval(startTimer, 10);
-  }
-  
-    buttonStop.onclick = function() {
-       clearInterval(Interval);
-  }
-  
+export default {
+	mounted: function() {
+		var tmr_ref = -1;
+		var comp;
 
-  buttonReset.onclick = function() {
-     clearInterval(Interval);
-    tens = "00";
-  	seconds = "00";
-    appendTens.innerHTML = tens;
-  	appendSeconds.innerHTML = seconds;
-  }
-  
-   
-  
-  function startTimer () {
-    tens++; 
-    
-    if(tens < 9){
-      appendTens.innerHTML = "0" + tens;
-    }
-    
-    if (tens > 9){
-      appendTens.innerHTML = tens;
-      
-    } 
-    
-    if (tens > 99) {
-      console.log("seconds");
-      seconds++;
-      appendSeconds.innerHTML = "0" + seconds;
-      tens = 0;
-      appendTens.innerHTML = "0" + 0;
-    }
-    
-    if (seconds > 9){
-      appendSeconds.innerHTML = seconds;
-    }
-  
-  }
-  
+		var min_span = document.getElementById("min");
+		var sec_span = document.getElementById("seconds");
 
+		var that = this;
+
+		console.log(that);
+
+		this.time_string = function(num) {
+			if(num < 10) {
+				return "0"+num.toString();
+			} else {
+				return num.toString();
+			}
+		}
+
+		this.start = function() {
+			if(tmr_ref == -1) {
+				if(sec_span == null) {		//initial initialization returning null...
+					min_span = document.getElementById("min");
+					sec_span = document.getElementById("seconds");
+				}
+				console.log(document.getElementById("min"));
+
+				var s_cur = parseInt( sec_span.textContent );
+				var m_cur = parseInt( min_span.textContent );
+				comp = Date.now() - ((m_cur*60)+s_cur)*1000;		//this is in milliseconds
+				var blip;
+
+				var sec;
+				var min;
+
+				tmr_ref = setInterval(function() {
+					blip = parseInt((Date.now() - comp)/1000);		//this is in seconds
+
+					min = parseInt(blip / 60);
+					console.log(blip+"\n"+(blip / 60)+"\n"+min);
+					sec = blip % 60;
+
+					sec_span.textContent = that.time_string(sec);
+					min_span.textContent = that.time_string(min);
+				}, 10);
+			}
+		}
+
+		this.stop = function() {
+			if(sec_span == null) {		//initial initialization returning null...
+				sec_span = document.getElementById("min");
+				ten_span = document.getElementById("seconds");
+			}
+			console.log(document.getElementById("min"));
+			if(tmr_ref != -1) {
+				clearInterval(tmr_ref);
+				tmr_ref = -1;
+				comp = -5;
+			} else {
+				console.log("Extra stop press.");
+			}
+		}
+
+		this.reset = function() {
+			if(sec_span == null) {		//initial initialization returning null...
+				sec_span = document.getElementById("min");
+				ten_span = document.getElementById("seconds");
+			}
+			if(tmr_ref != -1) {
+				clearInterval(tmr_ref);
+				tmr_ref = -1;
+				comp = -5;
+			}
+
+			sec_span.textContent = "00";
+			min_span.textContent = "00";
+		}
+
+		this.reset();
+	}
 }
-
 
 </script>
 
