@@ -7,6 +7,9 @@ const BrowserWindow = electron.BrowserWindow
 const path = require('path')
 const url = require('url')
 
+const fs = require('fs')
+const ipc = require('ipc')
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
@@ -27,7 +30,58 @@ function createWindow () {
         protocol: 'file:',
         slashes: true
     }))
-
+/*
+    fs.access("./settings/", function(err) {
+      if(err && err.code == 'ENOENT') {
+        fs.mkdir("./settings/");
+      }
+      return;
+    });
+    
+    ipc.on('listings', function () {
+      var names = Array;
+      fs.readdir('./settings/', function(err, files) {
+        if(err) {
+          throw err;
+        } else {
+          names = files;
+        }
+        return;
+      });
+      
+      return names;
+    });
+    
+    ipc.on('write', function(filename, save) {
+      fs.writeFile('./settings/'+filename, save, function(err) {
+        if(err) {
+          throw err;
+        }
+      });
+    });
+    
+    ipc.on('read', function(filename, copy) {
+      var content = String;
+      fs.readFile(filename, function(err, data) {
+        if(err) {
+          throw err;
+        } else {
+          content = data;
+        }
+        return;
+      });
+      
+      return content;
+    });
+    
+    ipc.on('delete', function(filename) {
+      fs.unlink(filename, function(err) {
+        if(err) {
+          throw err;
+        }
+      });
+    });
+*/
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {
         // Dereference the window object, usually you would store windows
