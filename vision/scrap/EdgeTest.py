@@ -1,5 +1,6 @@
 import cv2 as cv
-import LearningModule as lMod
+
+from scrap import LearningModule as lMod
 
 #---------------------------------
 #    Testing script, do not import
