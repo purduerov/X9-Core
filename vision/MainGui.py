@@ -1,8 +1,10 @@
 from mainwindow import *
 from PySide.QtGui import *
-import sys
 import numpy as np
 import math
+import networkx as nx
+import itertools as it
+from math import sqrt
 
 class MainGui(QMainWindow, Ui_MainWindow):
 
@@ -29,6 +31,7 @@ class MainGui(QMainWindow, Ui_MainWindow):
         # Set up tab widgets
         self.mainTabWidget.currentChanged.connect(self.mainTabChangedEvent)
         self.operationsTabWidget.currentChanged.connect(self.operationsTabChangeEvent)
+        self.mainTabWidget.setTabEnabled(1,False)
 
         # Class variables
         self.grabMeasClicks = False
@@ -43,30 +46,34 @@ class MainGui(QMainWindow, Ui_MainWindow):
         self.MAP_INDEX = 0
         self.MEAS_INDEX = 1
 
-
-
     def mapGViewMousePress(self, e):
         if not self.grabMapClicks:
             return
 
         pos = QtCore.QPointF(e.scenePos())
-        self.mapClicks.append(pos)
 
-        if len(self.mapClicks) == 1:
+        item = None
+        if len(self.mapClicks) == 0:
             item = QGraphicsTextItem("High Risk")
+            self.mapClicks.append((pos,'H'))
 
-        if len(self.mapClicks) == 2:
+        elif len(self.mapClicks) == 1:
             item = QGraphicsTextItem("A")
-        if len(self.mapClicks) == 3:
-            item = QGraphicsTextItem("B")
+            self.mapClicks.append((pos,'A'))
 
-        if len(self.mapClicks) == 4:
+        elif len(self.mapClicks) == 2:
+            item = QGraphicsTextItem("B")
+            self.mapClicks.append((pos,'B'))
+
+        elif len(self.mapClicks) == 3:
             item = QGraphicsTextItem("C")
+            self.mapClicks.append((pos,'C'))
             self.btnLabelContainers.setText("Label Containers")
             self.grabMapClicks = False
             self.createGraph()
+            self.displayGraph()
 
-        item.setPos(pos.x(), pos.y())
+        item.setPos(pos.x()-10, pos.y()-10)
         item.setFont(QFont(pointSize=60))
         item.setDefaultTextColor(QtCore.Qt.green)
         self.mapGView.scene().addItem(item)
@@ -82,20 +89,31 @@ class MainGui(QMainWindow, Ui_MainWindow):
             self.mapClicks = []
             self.btnLabelContainers.setText("Label Containers")
 
+    def setUpMeasurement(self):
+        self.mainTabWidget.setTabEnabled(1, True)
+
+
     def createGraph(self):
-        # TODO this function is responsible for creating a graph of all of the elements and updating the text
-        # in the measurement tool
-        pass
+        G = nx.Graph()
+        b = [(x[0].x(), x[0].y()) for x in self.mapClicks]
+        G.add_nodes_from(b)
+        combs = list(it.combinations(G.nodes(), 2))
+        weights = [sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2) for p1, p2 in combs]
+        wDict = [{'weight': w} for w in weights]
+        edges = list(map(lambda a: (a[0][0], a[0][1], a[1]), zip(combs, wDict)))
+        G.add_edges_from(edges)
+        edges = nx.minimum_spanning_edges(G)
+
+        for edge in edges:
+            self.mapGView.scene().addLine(edge[0][0], edge[0][1], edge[1][0], edge[1][1], QPen(QtCore.Qt.blue))
 
 
     def capture(self):
         if self.mainTabWidget.currentIndex() == self.MAP_INDEX:
             self.loadMapImage()
-            print("LoadingGView")
 
         if self.mainTabWidget.currentIndex() == self.MEAS_INDEX:
             self.loadMeasImage(self.mainGView)
-            print("LoadingGView1")
 
     def scrollContents(self, *args, **kwargs):
         #Do nothing, this prevents the image from scrolling and messing up measurements

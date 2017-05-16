@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Mon May 15 00:57:30 2017
+# Created: Mon May 15 00:59:12 2017
 #      by: pyside-uic 0.2.15 running on PySide 1.2.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -130,7 +130,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         self.mainTabWidget.setCurrentIndex(0)
-        self.operationsTabWidget.setCurrentIndex(1)
+        self.operationsTabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):

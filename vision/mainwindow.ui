@@ -232,7 +232,7 @@
       <widget class="QPushButton" name="btnFind3">
        <property name="geometry">
         <rect>
-         <x>30</x>
+         <x>50</x>
          <y>110</y>
          <width>51</width>
          <height>41</height>
@@ -245,7 +245,7 @@
       <widget class="QPushButton" name="btnFind1">
        <property name="geometry">
         <rect>
-         <x>30</x>
+         <x>50</x>
          <y>30</y>
          <width>51</width>
          <height>41</height>
@@ -258,7 +258,7 @@
       <widget class="QPushButton" name="btnFind2">
        <property name="geometry">
         <rect>
-         <x>30</x>
+         <x>50</x>
          <y>70</y>
          <width>51</width>
          <height>41</height>
@@ -271,7 +271,7 @@
       <widget class="QLabel" name="lblDist2">
        <property name="geometry">
         <rect>
-         <x>90</x>
+         <x>100</x>
          <y>80</y>
          <width>60</width>
          <height>16</height>
@@ -287,7 +287,7 @@
       <widget class="QLabel" name="lblDist3">
        <property name="geometry">
         <rect>
-         <x>90</x>
+         <x>100</x>
          <y>120</y>
          <width>60</width>
          <height>16</height>
@@ -303,7 +303,7 @@
       <widget class="QLabel" name="lblAngle3">
        <property name="geometry">
         <rect>
-         <x>160</x>
+         <x>170</x>
          <y>120</y>
          <width>60</width>
          <height>16</height>
@@ -319,7 +319,7 @@
       <widget class="QLabel" name="lblAngle2">
        <property name="geometry">
         <rect>
-         <x>160</x>
+         <x>170</x>
          <y>80</y>
          <width>60</width>
          <height>16</height>
@@ -335,7 +335,7 @@
       <widget class="QLabel" name="lblDist1">
        <property name="geometry">
         <rect>
-         <x>90</x>
+         <x>100</x>
          <y>40</y>
          <width>60</width>
          <height>16</height>
@@ -351,7 +351,7 @@
       <widget class="QLabel" name="lblAngle1">
        <property name="geometry">
         <rect>
-         <x>160</x>
+         <x>170</x>
          <y>40</y>
          <width>60</width>
          <height>16</height>
@@ -378,6 +378,45 @@
        </property>
        <property name="wordWrap">
         <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lblMeas1">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>40</y>
+         <width>41</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>A -&gt; B</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lblMeas2">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>80</y>
+         <width>41</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>C -&gt; B</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lblMeas3">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>120</y>
+         <width>41</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>D -&gt; B</string>
        </property>
       </widget>
      </widget>
