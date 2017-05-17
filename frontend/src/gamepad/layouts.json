@@ -1,0 +1,127 @@
+[
+    {
+        "name": "Linux Xbox and Rock Candy Controller",
+        "id": [
+            "Microsoft Controller (Vendor: 045e Product: 02d1)",
+            "Performance Designed Products Rock Candy Gamepad for Xbox 360 (Vendor: 0e6f Product: 011f)"
+        ],
+        "axes": [
+            { "index": 0, "name": "x", "where": "axes", "which": "left" },
+            { "index": 1, "name": "y", "where": "axes", "which": "left" },
+            { "index": 3, "name": "x", "where": "axes", "which": "right" },
+            { "index": 4, "name": "y", "where": "axes", "which": "right" }
+        ],
+        "buttons": [
+            { "index": 0, "base": 0, "max": 1, "name": "a", "where": "buttons" },
+            { "index": 1, "base": 0, "max": 1, "name": "b", "where": "buttons" },
+            { "index": 2, "base": 0, "max": 1, "name": "x", "where": "buttons" },
+            { "index": 3, "base": 0, "max": 1, "name": "y", "where": "buttons" },
+            { "index": 4, "base": 0, "max": 1, "name": "lb", "where": "buttons" },
+            { "index": 5, "base": 0, "max": 1, "name": "rb", "where": "buttons" },
+            { "index": 8, "base": 0, "max": 1, "name": "home", "where": "buttons" },
+            { "index": 2, "base": -1, "max": 1, "name": "lt", "where": "axes" },
+            { "index": 5, "base": -1, "max": 1, "name": "rt", "where": "axes" },
+            { "index": 6, "base": 0, "max": 1, "name": "slct", "where": "buttons" },
+            { "index": 7, "base": 0, "max": 1, "name": "strt", "where": "buttons" },
+            { "index": 9, "base": 0, "max": 1, "name": "lpress", "where": "buttons" },
+            { "index": 10, "base": 0, "max": 1, "name": "rpress", "where": "buttons" },
+            { "index": 7, "base": 0, "max": -1, "name": "up", "where": "axes" },
+            { "index": 7, "base": 0, "max": 1, "name": "down", "where": "axes" },
+            { "index": 6, "base": 0, "max": -1, "name": "left", "where": "axes" },
+            { "index": 6, "base": 0, "max": 1, "name": "right", "where": "axes" }
+        ]
+    },
+    {
+        "name": "Linux Xbox Controller 2",
+        "id": [
+            "Holtek Controller (STANDARD GAMEPAD Vendor: 045e Product: 028e)",
+            "Microsoft Controller (STANDARD GAMEPAD Vendor: 045e Product: 02d1)"
+        ],
+        "axes": [
+            { "index": 0, "name": "x", "where": "axes", "which": "left" },
+            { "index": 1, "name": "y", "where": "axes", "which": "left" },
+            { "index": 2, "name": "x", "where": "axes", "which": "right" },
+            { "index": 3, "name": "y", "where": "axes", "which": "right" }
+        ],
+        "buttons": [
+            { "index": 0, "base": 0, "max": 1, "name": "a", "where": "buttons" },
+            { "index": 1, "base": 0, "max": 1, "name": "b", "where": "buttons" },
+            { "index": 2, "base": 0, "max": 1, "name": "x", "where": "buttons" },
+            { "index": 3, "base": 0, "max": 1, "name": "y", "where": "buttons" },
+            { "index": 4, "base": 0, "max": 1, "name": "lb", "where": "buttons" },
+            { "index": 5, "base": 0, "max": 1, "name": "rb", "where": "buttons" },
+            { "index": 6, "base": 0, "max": 1, "name": "lt", "where": "buttons" },
+            { "index": 7, "base": 0, "max": 1, "name": "rt", "where": "buttons" },
+            { "index": 8, "base": 0, "max": 1, "name": "slct", "where": "buttons" },
+            { "index": 9, "base": 0, "max": 1, "name": "strt", "where": "buttons" },
+            { "index": 10, "base": 0, "max": 1, "name": "lpress", "where": "buttons" },
+            { "index": 11, "base": 0, "max": 1, "name": "rpress", "where": "buttons" },
+            { "index": 12, "base": 0, "max": 1, "name": "up", "where": "buttons" },
+            { "index": 13, "base": 0, "max": 1, "name": "down", "where": "buttons" },
+            { "index": 14, "base": 0, "max": 1, "name": "left", "where": "buttons" },
+            { "index": 15, "base": 0, "max": 1, "name": "right", "where": "buttons" },
+            { "index": 16, "base": 0, "max": 1, "name": "home", "where": "buttons" }
+        ]
+    },
+    {
+        "name": "macOS Rock Candy Controller",
+        "id": [
+            "Rock Candy Gamepad for Xbox 360 (Vendor: 0e6f Product: 011f)"
+        ],
+        "axes": [
+            { "index": 0, "name": "x", "where": "axes", "which": "left" },
+            { "index": 1, "name": "y", "where": "axes", "which": "left" },
+            { "index": 3, "name": "x", "where": "axes", "which": "right" },
+            { "index": 4, "name": "y", "where": "axes", "which": "right" }
+        ],
+        "buttons": [
+            { "index": 0, "base": 0, "max": 1, "name": "a", "where": "buttons" },
+            { "index": 1, "base": 0, "max": 1, "name": "b", "where": "buttons" },
+            { "index": 2, "base": 0, "max": 1, "name": "x", "where": "buttons" },
+            { "index": 3, "base": 0, "max": 1, "name": "y", "where": "buttons" },
+            { "index": 4, "base": 0, "max": 1, "name": "lb", "where": "buttons" },
+            { "index": 5, "base": 0, "max": 1, "name": "rb", "where": "buttons" },
+            { "index": 6, "base": 0, "max": 1, "name": "lpress", "where": "buttons" },
+            { "index": 7, "base": 0, "max": 1, "name": "rpress", "where": "buttons" },
+            { "index": 8, "base": 0, "max": 1, "name": "strt", "where": "buttons" },
+            { "index": 9, "base": 0, "max": 1, "name": "slct", "where": "buttons" },
+            { "index": 10, "base": 0, "max": 1, "name": "home", "where": "buttons" },
+            { "index": 11, "base": 0, "max": 1, "name": "up", "where": "buttons" },
+            { "index": 12, "base": 0, "max": 1, "name": "down", "where": "buttons" },
+            { "index": 13, "base": 0, "max": 1, "name": "left", "where": "buttons" },
+            { "index": 14, "base": 0, "max": 1, "name": "right", "where": "buttons" },
+            { "index": 5, "base": -1, "max": 1, "name": "rt", "where": "axes" },
+            { "index": 2, "base": -1, "max": 1, "name": "lt", "where": "axes" }
+        ]
+    },
+    {
+        "name": "Windows Standard Xbox Controller",
+        "id": [
+            "Xbox 360 Controller (XInput STANDARD GAMEPAD)"
+        ],
+        "buttons": [
+            {"where": "buttons", "name": "a", "index": 0, "base": 0, "max": 1},
+            {"where": "buttons", "name": "b", "index": 1, "base": 0, "max": 1},
+            {"where": "buttons", "name": "x", "index": 2, "base": 0, "max": 1},
+            {"where": "buttons", "name": "y", "index": 3, "base": 0, "max": 1},
+            {"where": "buttons", "name": "lb", "index": 4, "base": 0, "max": 1},
+            {"where": "buttons", "name": "rb", "index": 5, "base": 0, "max": 1},
+            {"where": "buttons", "name": "lt", "index": 6, "base": 0, "max": 1},
+            {"where": "buttons", "name": "rt", "index": 7, "base": 0, "max": 1},
+            {"where": "buttons", "name": "slct", "index": 8, "base": 0, "max": 1},
+            {"where": "buttons", "name": "strt", "index": 9, "base": 0, "max": 1},
+            {"where": "buttons", "name": "lpress", "index": 10, "base": 0, "max": 1},
+            {"where": "buttons", "name": "rpress", "index": 11, "base": 0, "max": 1},
+            {"where": "buttons", "name": "up", "index": 12, "base": 0, "max": 1},
+            {"where": "buttons", "name": "down", "index": 13, "base": 0, "max": 1},
+            {"where": "buttons", "name": "left", "index": 14, "base": 0, "max": 1},
+            {"where": "buttons", "name": "right", "index": 15, "base": 0, "max": 1}
+        ],
+        "axes": [
+            {"where": "axes", "which": "left", "name": "x", "index": 0},
+            {"where": "axes", "which": "left", "name": "y", "index": 1},
+            {"where": "axes", "which": "right", "name": "x", "index": 2},
+            {"where": "axes", "which": "right", "name": "y", "index": 3}
+        ]
+    }
+]
