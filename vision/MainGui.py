@@ -5,6 +5,7 @@ import math
 import networkx as nx
 import itertools as it
 from math import sqrt
+from MeasureUtility import *
 
 class MainGui(QMainWindow, Ui_MainWindow):
 
@@ -14,6 +15,7 @@ class MainGui(QMainWindow, Ui_MainWindow):
 
         self.btnLabelContainers.clicked.connect(self.labelContainers)
         self.btnCapture.clicked.connect(self.capture)
+        self.btnMeasureDone.clicked.connect(self.measureDone)
 
         # Measure toolbox
         self.btnFind1.clicked.connect(lambda : self.findPoints(self.btnFind1, self.lblDist1, self.lblAngle1))
@@ -31,6 +33,7 @@ class MainGui(QMainWindow, Ui_MainWindow):
         # Set up tab widgets
         self.mainTabWidget.currentChanged.connect(self.mainTabChangedEvent)
         self.operationsTabWidget.currentChanged.connect(self.operationsTabChangeEvent)
+        self.operationsTabWidget.setCurrentIndex(0)
         self.mainTabWidget.setTabEnabled(1,False)
 
         # Class variables
@@ -41,10 +44,22 @@ class MainGui(QMainWindow, Ui_MainWindow):
         self.activeDist = None
 
         self.grabMapClicks = False
-        self.mapClicks = []
+
+        self.mapClicks = [] #Ordered array of user's clicks on map
 
         self.MAP_INDEX = 0
         self.MEAS_INDEX = 1
+
+        self.measEdge1 = 0
+        self.measEdge2 = 0
+        self.measEdge3 = 0
+        self.edges = None
+
+    def measureDone(self):
+        coords = getRealCoordinatesOfPoints()
+        # TODO make sure the position areguments are correct
+        # TODO set the distance values and check that the --- is not there
+
 
     def mapGViewMousePress(self, e):
         if not self.grabMapClicks:
@@ -70,8 +85,7 @@ class MainGui(QMainWindow, Ui_MainWindow):
             self.mapClicks.append((pos,'C'))
             self.btnLabelContainers.setText("Label Containers")
             self.grabMapClicks = False
-            self.createGraph()
-            self.displayGraph()
+            self.setUpMeasurement(self.createInitialGraph())
 
         item.setPos(pos.x()-10, pos.y()-10)
         item.setFont(QFont(pointSize=60))
@@ -89,13 +103,18 @@ class MainGui(QMainWindow, Ui_MainWindow):
             self.mapClicks = []
             self.btnLabelContainers.setText("Label Containers")
 
-    def setUpMeasurement(self):
+    def setUpMeasurement(self, edges):
         self.mainTabWidget.setTabEnabled(1, True)
+        lbls = [self.lblMeas1, self.lblMeas2, self.lblMeas3]
+        for i in range(3):
+            edge = edges[i]
+            lbl = lbls[i]
+            lbl.setText("{0} -> {1}".format(edge[0][2],edge[1][2]))
+        self.edges = edges
 
-
-    def createGraph(self):
+    def createInitialGraph(self):
         G = nx.Graph()
-        b = [(x[0].x(), x[0].y()) for x in self.mapClicks]
+        b = [(x[0].x(), x[0].y(), x[1]) for x in self.mapClicks]
         G.add_nodes_from(b)
         combs = list(it.combinations(G.nodes(), 2))
         weights = [sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2) for p1, p2 in combs]
@@ -103,9 +122,12 @@ class MainGui(QMainWindow, Ui_MainWindow):
         edges = list(map(lambda a: (a[0][0], a[0][1], a[1]), zip(combs, wDict)))
         G.add_edges_from(edges)
         edges = nx.minimum_spanning_edges(G)
+        mst = nx.minimum_spanning_tree(G)
+
 
         for edge in edges:
             self.mapGView.scene().addLine(edge[0][0], edge[0][1], edge[1][0], edge[1][1], QPen(QtCore.Qt.blue))
+        return list(nx.bfs_edges(mst, mst.nodes()[0]))
 
 
     def capture(self):
