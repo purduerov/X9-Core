@@ -1,136 +1,164 @@
-from time import time, sleep
+import copy
+import os
 import traceback
-import sys
 
 from threading import Lock
-import copy
-import numpy as np
+from time import time, sleep
 
 
 from sensors import Pressure, IMU
-from thrusters import Thrusters
-from thrusters import ThrustMapper
-from camera.cam import Camera
-from tools import Claw, ValveTurner
+from camera import Cameras
+
+from hardware.motor_control import MotorControl
+
+from thrusters.Control import ThrusterControl
+from thrusters.hardware.PWM_Control import Thrusters
+from thrusters.mapper.Simple import Mapper
+
+from tools import Claw, ValveTurner, FountainTool
 
 
 class ROV(object):
 
     def __init__(self, lock, data):
-
         self._data_lock = lock
+
         self._data = data
-        self.dearclient = {"thrusters": {}, "tools": {}}
+        self._new_data = False
+        self._last_packet = time() - 1
 
         self.last_update = time()
 
-        self.simple_sensors = {
-            "imu": IMU(),
-            "pressure": Pressure()
-        }
-
         self._running = True
 
-        self.mapper = ThrustMapper()
-        self.thrusters = Thrusters()
+        self.dearclient = {}
+        self.dearflask = {}
 
-        self.camera1 = Camera()
-        self.camera1.on()
+        self.debug = (os.environ.get("ROV_DEBUG") == "1")
 
-        self.claw = Claw()
-        self.valve = ValveTurner()
+        self.init_hw()
 
-    @property
-    def data(self):
-        with self._data_lock:
-            #self._data['dearclient']['last_update'] = self.last_update
-            self._data['dearflask']['last_update'] = self.last_update
-            self.dearclient['last_update'] = self.last_update
-            self._data['dearclient'] = self.dearclient
-            ret = copy.deepcopy(self._data)
+    def init_hw(self):
+        #self.cameras = Cameras(
+        #    resolution='640x480',
+        #    framerate=30,
+        #    port_start=8080,
+        #    brightness=16,
+        #    contrast=32
+        #)
 
-            return ret
+        self.motor_control = MotorControl(
+            zero_power=305,
+            neg_max_power=222,
+            pos_max_power=388,
+            frequency=47
+        )
+
+        self.thrusters = Thrusters(
+            self.motor_control,
+            [7, 4, 6, 5, 10, 0, 11, 1]
+        )
+
+        self.thrust_mapper = Mapper()
+
+        self.thruster_control = ThrusterControl(
+            self.thrusters,
+            self.thrust_mapper,
+            num_thrusters=8,
+            ramp=True,
+            max_ramp=0.03
+        )
+
+        self.valve_turner = ValveTurner(
+            self.motor_control,
+            pin=8
+        )
+
+        self.claw_status = False
+        self.claw = Claw(
+            self.motor_control,
+            pin=3
+        )
+
+        self.fountain_tool = FountainTool(
+            self.motor_control,
+            pin=2
+        )
+
+        #""" Disabled until hardware is done and sw is tested
+        # self.IMU = IMU()
+        # self.pressure = Pressure()
+        #"""
 
     def update(self):
         with self._data_lock:
+            self.dearflask = self._data['dearflask']
 
-            #print "Update! last update was: %.5f s ago" % (time() - self.last_update)
+        # if time() - self._last_packet > 0.5:
+            # # print 'Data connection lost'
+            # self.motor_control.kill()
+            # self.thruster_control.stop()
 
-            # Update all simple sensor data and stuff it in data
-            for sensor in self.simple_sensors.keys():
-                self.simple_sensors[sensor].update()
-                #self._data['dearclient'][sensor] = self.simple_sensors[sensor].data
-                self.dearclient[sensor] = self.simple_sensors[sensor].data
-                #print self.simple_sensors[sensor].data
-                #print self._data['dearclient']
-                #print "UPDATE!"
+        try:
+            df = self.dearflask
+            print df
 
-            # Read controller data
-            #
-            # * Control Tools
+            self.thruster_control.update(**df['thrusters'])
 
-            # Update all thrusters and at the end push motors:
-            #
-            try:
-                actives = list()
-                force = list()
+            self.valve_turner.update(df['valve_turner']['power'])
+            self.fountain_tool.update(df['fountain_tool']['power'])
 
-                t = ["t7", "t0", "t4", "t3", "t6", "t1", "t5", "t2"] # The order the Thrust mapping algorithm will see FR -> clockwise
-                f = ["x", "y", "z", "roll", "pitch", "yaw"]
+            # if 'claw' is powered, turn off, else if last status was off but current status is on then let it be on (turn ramping off).
+            # This assumes an on period per button press of about 10ms.
+            if self.claw_status == True and df['claw']['power'] != 0:
+                claw_power = (df['claw']['power'])
+            else:
+                claw_power = 0.0
 
-                #print 'Looping over thrusters for active list'
-                for x in t:
-                    actives.append(self._data['dearflask']['thrusters'][x]['active'])
+            self.claw.update(claw_power)
+            if df['claw']['power'] != 0:
+                self.claw_status = True
+            else:
+                self.claw_status = False
 
-                for m in f:
-                    force.append(self._data['dearflask']['force'][m])
+            #cam = df['cameras']
+            #for cam in df['cameras']:
+            #    if (cam['status'] == 0):
+            #        self.cameras.kill(cam['port'])
+            #    if (cam['status'] == 1):
+            #        self.cameras.start(cam['port'])
 
-                thrust = self.mapper.generate_thrust_map(np.array(actives), np.array(force) * 1.5)
+            """ Disabled until hardware is done and sw is tested
+            self.pressure.update()
+            self.IMU.update()
+            """
+        except Exception as e:
+            print "Failed updating things"
+            print "Exception: %s" % e
+            print traceback.format_exc()
 
-                print "Thrust:"
-                print thrust.tolist()[0]
-                self.thrusters.push_pi_motors(thrust.tolist()[0], actives)
-                #print self._data['dearflask']['thrusters']['t6']
 
-                #self._data['dearclient']["thrusters"]["thrusters"] = self.thrusters.get_data()
-                self.dearclient["thrusters"] = self.thrusters.get_data()
+        # retrieve all sensor data
+        # self.dearclient['sensor'] = sensorThings
 
-                print self._data["dearflask"]["tools"]["claw"]
-                print self._data["dearflask"]["tools"]["valve"]
+        self.last_update = time()
 
-                self.claw.grab(self._data["dearflask"]["tools"]["claw"])
-                self.valve.rotate(self._data["dearflask"]["tools"]["valve"])
+        self.dearclient['last_update'] = self.last_update
+        self.dearclient['thrusters'] = self.thruster_control.data
+        #self.dearclient['cameras'] = self.cameras.status()
 
-                self.dearclient["tools"]["claw"] = self.claw.getPower()
-                self.dearclient["tools"]["valve"] = self.valve.getPower()
-
-            except TypeError as err:
-                print err
-            except:
-                i = sys.exc_info()
-                print i[0]
-                print i[1]
-                traceback.print_tb(i[2], limit=1, file=sys.stdout)
-
-            # Our last update
+        with self._data_lock:
             self._data['dearclient'] = self.dearclient
-            self.last_update = time()
+
 
 def run(lock, data):
     rov = ROV(lock, data)
-    #with lock:
-    #    dearflask = {rov.thrusters.get_data(), "force": {}}
-    #    data["dearflask"] = dearflask
     while True:
         while time() - rov.last_update < 0.01:
             sleep(0.005)
 
-        rov.update()
-
-if __name__ == "__main__":
-    r = ROV()
-    r._data["dearclient"]["thrusters"] = { "actives": [], "force": [], "thrusters": {} }
-    r._data["dearclient"]["thrusters"]["actives"] = [1,1,1,1,1,1,1,1]
-    r._data["dearclient"]["thrusters"]["force"] = [[1],[0],[0],[0],[0],[0]]
-    r.run()
-    # add print statement after self.update() in r.run()
+        try:
+            rov.update()
+        except Exception as e:
+            print "Exception: %s" % e
+            print traceback.format_exc()

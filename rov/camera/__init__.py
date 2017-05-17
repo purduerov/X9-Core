@@ -1,1 +1,1 @@
-from cam import Camera
+from cameras import Cameras

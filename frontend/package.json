@@ -1,5 +1,6 @@
 {
   "name": "battlestation",
+  "main": "electron-setup.js",
   "version": "1.0.0",
   "description": "Purdue ROV 2017",
   "author": "Purdue ROV Software Team",
@@ -7,9 +8,11 @@
   "repository": "https://github.com/purduerov/X9-Core",
   "scripts": {
     "build": "export NODE_ENV=production; node build.js",
-    "dev": "export NODE_ENV=development; nodemon --ext js,vue,html,css,json build.js"
+    "dev": "export NODE_ENV=development; nodemon --ext js,vue,html,css,json build.js",
+    "start": "electron ."
   },
   "dependencies": {
+    "jquery": "^3.2.1",
     "vue": "^2.0.1"
   },
   "devDependencies": {
@@ -17,7 +20,9 @@
     "babel-plugin-transform-runtime": "^6.15.0",
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-stage-2": "^6.18.0",
+    "babel-runtime": "^6.23.0",
     "browserify": "^14.0.0",
+    "electron": "~1.6.2",
     "envify": "^4.0.0",
     "errorify": "^0.3.1",
     "nodemon": "^1.11.0",

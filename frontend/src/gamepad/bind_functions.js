@@ -37,137 +37,66 @@
       },
     },
 */
+let gp = require('./gp_library.js')
 
-bind = {
+var bind = {
   btn: {
     a: {
-      press: {
-        func: function() {
-          controls.tools.claw = gp.buttons.a.val;
-        }
-      },
       change: {
         func: function() {
           vue_app.gpinfo.buttons.a = gp.buttons.a.val;
         }
       },
-      release: {
-        func: function() {
-          if(controls.tools.claw > 0) {
-            controls.tools.claw = 0;
-          }
-        },
-      },
     },
     b: {
-      press: {
-        func: function() {
-          controls.tools.claw = -gp.buttons.b.val;
-        }
-      },
       change: {
         func: function() {
           vue_app.gpinfo.buttons.b = gp.buttons.b.val;
         }
       },
-      release: {
-        func: function() {
-          if(controls.force.claw < 0) {
-            controls.tools.claw = 0;
-          }
-        },
-      },
     },
     x: {
-      press: {
-        func: function() {
-          controls.tools.valve = gp.buttons.x.val;
-        }
-      },
       change: {
         func: function() {
           vue_app.gpinfo.buttons.x = gp.buttons.x.val;
         }
       },
-      release: {
-        func: function() {
-          if(controls.tools.valve > 0) {
-            controls.tools.valve = 0;
-          }
-        },
-      },
     },
     y: {
-      press: {
-        func: function() {
-          controls.tools.valve = -gp.buttons.y.val;
-        }
-      },
       change: {
         func: function() {
           vue_app.gpinfo.buttons.y = gp.buttons.y.val;
         }
       },
-      release: {
-        func: function() {
-          if(controls.tools.valve < 0) {
-            controls.tools.valve = 0;
-          }
-        },
-      },
     },
-    rb: {
+    up: {
       press: {
         func: function() {
-          controls.force.roll = gp.buttons.rb.val;
-          vue_app.packet.IMU.roll = controls.force.roll;
+          controls.force.z = gp.buttons.up.val / 2;
         },
       },
       release: {
         func: function() {
-          if(controls.force.roll > 0) {
-            controls.force.roll = 0;
-            vue_app.packet.IMU.roll = controls.force.roll;
+          if(controls.force.z > 0) {
+            controls.force.z = 0;
           }
         },
       },
     },
-    lb: {
+    down: {
       press: {
         func: function() {
-          controls.force.roll = -gp.buttons.lb.val;
-          vue_app.packet.IMU.roll = controls.force.roll;
+          controls.force.z = -gp.buttons.down.val / 2;
         },
       },
       release: {
         func: function() {
-          if(controls.force.roll < 0) {
-            controls.force.roll = 0;
-            vue_app.packet.IMU.roll = controls.force.roll;
+          if(controls.force.z < 0) {
+            controls.force.z = 0;
           }
         },
       },
-    },
-    rt: {
-      change: {
-        func: function() {
-          if(controls.force.z >= 0) {
-            controls.force.z = gp.buttons.rt.val;
-            vue_app.packet.IMU.z = controls.force.z;
-          }
-        },
-      },
-    },
-    lt: {
-      change: {
-        func: function() {
-          if(controls.force.z <= 0) {
-            controls.force.z = -gp.buttons.lt.val;
-            vue_app.packet.IMU.z = controls.force.z;
-          }
-        },
-      },
-    },
+    }
   },
   ax: {
     left: {
@@ -175,8 +104,6 @@ bind = {
         func: function() {
           controls.force.y = gp.axes.left.x;
           controls.force.x = gp.axes.left.y;
-          vue_app.packet.IMU.x = controls.force.x;
-          vue_app.packet.IMU.y = controls.force.y;
           vue_app.gpinfo.axes.left.x = gp.axes.left.x;
           vue_app.gpinfo.axes.left.y = gp.axes.left.y;
         },
@@ -185,10 +112,8 @@ bind = {
     right: {
       cartesian: {
         func: function() {
-          controls.force.pitch = -gp.axes.right.y;
-          controls.force.yaw = gp.axes.right.x;
-          vue_app.packet.IMU.pitch = controls.force.pitch;
-          vue_app.packet.IMU.yaw = controls.force.yaw;
+          controls.force.pitch = gp.axes.right.y;
+          controls.force.roll = gp.axes.right.x;
           vue_app.gpinfo.axes.right.x = gp.axes.right.x;
           vue_app.gpinfo.axes.right.y = gp.axes.right.y;
         },
@@ -207,4 +132,5 @@ bind = {
       }
     });
   }
-}
+};
+module.exports = bind;

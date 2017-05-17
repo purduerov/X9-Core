@@ -3,26 +3,20 @@
         <h1>Thrusters:</h1>
         <hr>
         <div class="trst">
-            <div  class="left">
-                <ul v-for="n in 4">
-                    <li>t{{n}}: </br>
-                        <p class="thruster_data">
-                            Active: {{data["t"+(n-1)].active}}</br>
-                            Current: {{data["t"+(n-1)].current}}
-                        </p>
-                    </li>
-                    <hr>
+            <div class="left">
+                <ul>
+                    <li>t1: {{Math.round(data[0] * 100)}}% <hr /></li>
+                    <li>t5: {{Math.round(data[4] * 100)}}% <hr /></li>
+                    <li>t7: {{Math.round(data[6] * 100)}}% <hr /></li>
+                    <li>t3: {{Math.round(data[2] * 100)}}% <hr /></li>
                 </ul>
             </div>
-            <div  class="right">
-                <ul v-for="n in 4">
-                    <li>t{{n+4}}: </br>
-                        <p class="thruster_data">
-                            Active: {{data["t"+(n+3)].active}}</br>
-                            Current: {{data["t"+(n+3)].current}}
-                        </p>
-                    </li>
-                    <hr>
+            <div class="right">
+                <ul>
+                    <li>t2: {{Math.round(data[1] * 100)}}% <hr /></li>
+                    <li>t6: {{Math.round(data[5] * 100)}}% <hr /></li>
+                    <li>t8: {{Math.round(data[7] * 100)}}% <hr /></li>
+                    <li>t4: {{Math.round(data[3] * 100)}}% <hr /></li>
                 </ul>
             </div>
         </div>
@@ -31,10 +25,8 @@
 
 <script>
     export default {
-        props: ['data'],
-        mounted: function() {
-            console.log(Object.keys(this.data));
-        }
+        name: 'thrusters',
+        props: ['data']
     }
 </script>
 
