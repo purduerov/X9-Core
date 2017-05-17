@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Tue May 16 17:47:00 2017
+# Created: Wed May 17 00:53:32 2017
 #      by: pyside-uic 0.2.15 running on PySide 1.2.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -173,6 +173,6 @@ class Ui_MainWindow(object):
         self.lblMeas1.setText(QtGui.QApplication.translate("MainWindow", "A -> B", None, QtGui.QApplication.UnicodeUTF8))
         self.lblMeas2.setText(QtGui.QApplication.translate("MainWindow", "C -> B", None, QtGui.QApplication.UnicodeUTF8))
         self.lblMeas3.setText(QtGui.QApplication.translate("MainWindow", "D -> B", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnMeasureDone.setText(QtGui.QApplication.translate("MainWindow", "Done", None, QtGui.QApplication.UnicodeUTF8))
+        self.btnMeasureDone.setText(QtGui.QApplication.translate("MainWindow", "Update Map", None, QtGui.QApplication.UnicodeUTF8))
         self.operationsTabWidget.setTabText(self.operationsTabWidget.indexOf(self.tab_4), QtGui.QApplication.translate("MainWindow", "Measure", None, QtGui.QApplication.UnicodeUTF8))
 

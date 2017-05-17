@@ -429,7 +429,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Done</string>
+        <string>Update Map</string>
        </property>
       </widget>
      </widget>

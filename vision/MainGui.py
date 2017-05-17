@@ -2,10 +2,10 @@ from mainwindow import *
 from PySide.QtGui import *
 import numpy as np
 import math
-import networkx as nx
 import itertools as it
-from math import sqrt
 from MeasureUtility import *
+from math import sqrt
+import networkx as nx
 
 class MainGui(QMainWindow, Ui_MainWindow):
 
@@ -18,9 +18,9 @@ class MainGui(QMainWindow, Ui_MainWindow):
         self.btnMeasureDone.clicked.connect(self.measureDone)
 
         # Measure toolbox
-        self.btnFind1.clicked.connect(lambda : self.findPoints(self.btnFind1, self.lblDist1, self.lblAngle1))
-        self.btnFind2.clicked.connect(lambda : self.findPoints(self.btnFind2, self.lblDist2, self.lblAngle2))
-        self.btnFind3.clicked.connect(lambda : self.findPoints(self.btnFind3, self.lblDist3, self.lblAngle3))
+        self.btnFind1.clicked.connect(lambda : self.findPoints(self.btnFind1, self.lblDist1, self.lblAngle1, 0))
+        self.btnFind2.clicked.connect(lambda : self.findPoints(self.btnFind2, self.lblDist2, self.lblAngle2, 1))
+        self.btnFind3.clicked.connect(lambda : self.findPoints(self.btnFind3, self.lblDist3, self.lblAngle3, 2))
 
         # Customize graphics views
         self.mainGView.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
@@ -50,16 +50,28 @@ class MainGui(QMainWindow, Ui_MainWindow):
         self.MAP_INDEX = 0
         self.MEAS_INDEX = 1
 
-        self.measEdge1 = 0
-        self.measEdge2 = 0
-        self.measEdge3 = 0
+        self.measEdges = [0,0,0]
+        self.activeEdge = 0
         self.edges = None
 
     def measureDone(self):
-        coords = getRealCoordinatesOfPoints()
-        # TODO make sure the position areguments are correct
-        # TODO set the distance values and check that the --- is not there
+        if self.lblDist1.text == "":
+            return
+        if self.lblDist2.text == "":
+            return
+        if self.lblDist3.text == "":
+            return
 
+        self.cleanMapGraphics()
+        print(self.mapClicks)
+
+        #Specified as float so np doesn't freak
+        hCoord =  (float(self.mapClicks[0][0].x()), float(self.mapClicks[0][0].y()))
+        print(hCoord)
+        coords = getRealCoordinatesOfPoints(self.edges, self.measEdges, hCoord)
+        for c in coords:
+            self.mapGView.scene().addEllipse(c[0]-2,c[1]-2, 4,4, QPen(QtCore.Qt.green))
+            self.mapGView.scene().addLine(hCoord[0], hCoord[1], c[0],c[1], QPen(QtCore.Qt.blue))
 
     def mapGViewMousePress(self, e):
         if not self.grabMapClicks:
@@ -111,6 +123,7 @@ class MainGui(QMainWindow, Ui_MainWindow):
             lbl = lbls[i]
             lbl.setText("{0} -> {1}".format(edge[0][2],edge[1][2]))
         self.edges = edges
+        print(edges)
 
     def createInitialGraph(self):
         G = nx.Graph()
@@ -155,7 +168,7 @@ class MainGui(QMainWindow, Ui_MainWindow):
         self.operationsTabWidget.setCurrentIndex(self.mainTabWidget.currentIndex())
 
     """Initiates a sequence to obtain points to measure distance"""
-    def findPoints(self, btn, angle, dist):
+    def findPoints(self, btn, angle, dist, activeEdgeIndex):
         [x.setDisabled(True) for x in [self.btnFind1, self.btnFind2, self.btnFind3]]
         btn.setEnabled(True)
 
@@ -167,6 +180,7 @@ class MainGui(QMainWindow, Ui_MainWindow):
 
         if btn.text() == "O":
             self.grabMeasClicks = True
+            self.activeEdge = activeEdgeIndex
             btn.setText("X")
             angle.setText("---")
             dist.setText("---")
@@ -207,7 +221,9 @@ class MainGui(QMainWindow, Ui_MainWindow):
         self.activeFind.setText("O")
         self.grabMeasClicks = False
 
-        self.activeDist.setText("{:.2f}px".format(math.sqrt((centerX1-centerX)**2 + (centerY-centerY1)**2)))
+        dist = math.sqrt((centerX1-centerX)**2 + (centerY-centerY1)**2)
+        self.measEdges[self.activeEdge] = dist
+        self.activeDist.setText("{:.2f}px".format(dist))
 
         coords = sorted([(centerX, centerY), (centerX1, centerY1)], key = lambda x: x[0])
         self.activeAngle.setText("{:.2f}deg".format(
