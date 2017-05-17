@@ -1,6 +1,5 @@
 from mainwindow import *
 from PySide.QtGui import *
-import numpy as np
 import math
 import itertools as it
 from MeasureUtility import *
@@ -55,19 +54,17 @@ class MainGui(QMainWindow, Ui_MainWindow):
         self.edges = None
 
     def measureDone(self):
-        if self.lblDist1.text == "":
+        if self.lblDist1.text == "---":
             return
-        if self.lblDist2.text == "":
+        if self.lblDist2.text == "---":
             return
-        if self.lblDist3.text == "":
+        if self.lblDist3.text == "---":
             return
 
         self.cleanMapGraphics()
-        print(self.mapClicks)
 
         #Specified as float so np doesn't freak
         hCoord =  (float(self.mapClicks[0][0].x()), float(self.mapClicks[0][0].y()))
-        print(hCoord)
         coords = getRealCoordinatesOfPoints(self.edges, self.measEdges, hCoord)
         for c in coords:
             self.mapGView.scene().addEllipse(c[0]-2,c[1]-2, 4,4, QPen(QtCore.Qt.green))
@@ -123,7 +120,6 @@ class MainGui(QMainWindow, Ui_MainWindow):
             lbl = lbls[i]
             lbl.setText("{0} -> {1}".format(edge[0][2],edge[1][2]))
         self.edges = edges
-        print(edges)
 
     def createInitialGraph(self):
         G = nx.Graph()
@@ -136,7 +132,6 @@ class MainGui(QMainWindow, Ui_MainWindow):
         G.add_edges_from(edges)
         edges = nx.minimum_spanning_edges(G)
         mst = nx.minimum_spanning_tree(G)
-
 
         for edge in edges:
             self.mapGView.scene().addLine(edge[0][0], edge[0][1], edge[1][0], edge[1][1], QPen(QtCore.Qt.blue))
@@ -243,7 +238,7 @@ class MainGui(QMainWindow, Ui_MainWindow):
     def loadMapImage(self):
         #TODO connect this to a dummy class that can be hooked up to web server
         self.mapGView.setScene(QGraphicsScene())
-        graphItem = QGraphicsPixmapItem(QPixmap("ProcessedImages/GOPR0034"))
+        graphItem = QGraphicsPixmapItem(QPixmap("ProcessedImages/IMG_0471.jpg"))
         self.mapGView.scene().addItem(graphItem)
         self.mapGView.fitInView(graphItem, QtCore.Qt.KeepAspectRatio)
         self.mapGView.show()
@@ -252,7 +247,7 @@ class MainGui(QMainWindow, Ui_MainWindow):
     def loadMeasImage(self, gView):
         #TODO this function will eventually be responsible for streaming a video
         gView.setScene(QGraphicsScene())
-        graphItem = QGraphicsPixmapItem(QPixmap("ProcessedImages/GOPR0034"))
+        graphItem = QGraphicsPixmapItem(QPixmap("ProcessedImages/IMG_0471.jpg"))
         gView.scene().addItem(graphItem)
         gView.fitInView(graphItem, QtCore.Qt.KeepAspectRatioByExpanding)
         gView.show()
