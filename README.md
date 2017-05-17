@@ -1,5 +1,5 @@
 # X9-Core
-All of X9's core software for the 2016-2017 Purdue ROV team.
+This branch contains the codebase for the ROV team before the mmolo-fixall branch became the utilized code.
 
 ## Scotty:
 scotty is our favorite [cheif engineer](http://www.ex-astris-scientia.org/inconsistencies/movies/underwater-scotty-stid.jpg) that install the dependencies, runs the software, and runs tests.
