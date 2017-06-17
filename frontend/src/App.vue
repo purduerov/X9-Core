@@ -1,4 +1,4 @@
-\<template>
+<template>
     <div id="app">
         <div id="navbar">
             <Navbar title="Purdue ROV - BattleStation"></Navbar>
@@ -21,10 +21,15 @@
                 <Card class="half-width half-height">
                     <Thruster :data="packets.dearclient.thrusters"></Thruster>
                     <br>
-		    <ToolInfo :data="packets.dearflask"></ToolInfo>
+		                <ToolInfo :data="packets.dearflask"></ToolInfo>
                 </Card>
                 <Card class="half-width half-height">
-                   <Timer></Timer>
+                  <Card class="half-height full-width">
+                    <Timer></Timer>
+                  </Card>
+                  <Card class="half-height full-width">
+                    <PrintTest></PrintTest>
+                  </Card>
                 </Card>
                 <Card class="half-width half-height">
                     <ThrusterControl :data="other.thrust_scales"></ThrusterControl>
@@ -50,6 +55,7 @@ var ThrusterControl = require("./components/ThrusterControl.vue")
 var ToolControl = require("./components/ToolControl.vue")
 var ToolInfo = require("./components/ToolInfo.vue")
 var Timer = require("./components/Timer.vue")
+var PrintTest = require("./components/PrintTest.vue")
 
 var packets = require("./packets.js")
 var main = require("./main.js")
@@ -67,7 +73,8 @@ export default {
         ThrusterControl,
         ToolControl,
         ToolInfo,
-	      Timer
+	      Timer,
+        PrintTest
     },
     data: function() {
         return {
@@ -133,6 +140,11 @@ export default {
 .half-height {
     height: 50%;
     float: left;
+}
+
+.full-width {
+  width: 100%;
+  float: left;
 }
 
 .full-height {
