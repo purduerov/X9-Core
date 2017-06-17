@@ -131,7 +131,6 @@ h1 {
     width: 400px;
     height: 50px;
     display: flex;
-    justify-content: space-between;
     color: black;
 }
 

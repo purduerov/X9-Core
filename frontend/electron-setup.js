@@ -7,8 +7,8 @@ const BrowserWindow = electron.BrowserWindow
 const path = require('path')
 const url = require('url')
 
-//const fs = require('fs')
-//const ipc = require('ipc')
+const fs = require('fs')
+const ipc = electron.ipcMain
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -30,6 +30,15 @@ function createWindow () {
         protocol: 'file:',
         slashes: true
     }))
+
+    ipc.on('PRINTMENOW', function(evnt, save) {
+      //console.log(save);
+      fs.writeFile('./iwroteit.wut', save, function(err) {
+        if(err) {
+          throw err;
+        }
+      });
+    });
 /*
     fs.access("./settings/", function(err) {
       if(err && err.code == 'ENOENT') {
@@ -37,7 +46,7 @@ function createWindow () {
       }
       return;
     });
-    
+
     ipc.on('listings', function () {
       var names = Array;
       fs.readdir('./settings/', function(err, files) {
@@ -48,10 +57,10 @@ function createWindow () {
         }
         return;
       });
-      
+
       return names;
     });
-    
+
     ipc.on('write', function(filename, save) {
       fs.writeFile('./settings/'+filename, save, function(err) {
         if(err) {
@@ -59,7 +68,7 @@ function createWindow () {
         }
       });
     });
-    
+
     ipc.on('read', function(filename, copy) {
       var content = String;
       fs.readFile(filename, function(err, data) {
@@ -70,10 +79,10 @@ function createWindow () {
         }
         return;
       });
-      
+
       return content;
     });
-    
+
     ipc.on('delete', function(filename) {
       fs.unlink(filename, function(err) {
         if(err) {
