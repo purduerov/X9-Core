@@ -4,10 +4,10 @@
             <img :src="source">
         </div>
         <div class="buttons">
-            <button @click="port = 8082">Camera 1</button>
-            <button @click="port = 8084">Camera 2</button>
-            <button @click="port = 8080">Camera 3</button>
-            <button @click="port = 8085">Camera 4</button>
+            <button @click="port = 8083" v-on:click="temp_reset_rotate()">Main Camera</button>
+            <button @click="port = 8080" v-on:click="temp_rotate()">PCT Camera</button>
+            <button @click="port = 8081" v-on:click="temp_reset_rotate()">Fount Camera</button>
+            <!--<button @click="port = 8085">Camera 4</button>-->
             <!--<button @click="port = 8081">Camera 5</button>-->
             <!--<button @click="port = 8083">Camera 6</button>-->
         </div>
@@ -26,6 +26,16 @@ export default {
         source: function() {
             return `http://10.42.0.130:${this.port}/?action=stream`
         }
+    }
+
+    temp_rotate: function() {
+        getElementsByClass("image")[0].style.transform = "rotate(270deg)";
+        getElementsByClass("image")[0].style.-webkit-transform = "rotate(270deg)";
+    }
+
+    temp_reset_rotate: function() {
+        getElementsByClass("image")[0].style.transform = "rotate(0deg)";
+        getElementsByClass("image")[0].style.transform = "rotate(0deg)";
     }
 }
 </script>
