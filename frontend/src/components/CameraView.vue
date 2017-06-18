@@ -26,16 +26,16 @@ export default {
         source: function() {
             return `http://10.42.0.130:${this.port}/?action=stream`
         }
-    }
+    },
 
     temp_rotate: function() {
         getElementsByClass("image")[0].style.transform = "rotate(270deg)";
-        getElementsByClass("image")[0].style.-webkit-transform = "rotate(270deg)";
-    }
+        //getElementsByClass("image")[0].style.webkit-transform = "rotate(270deg)";
+    },
 
     temp_reset_rotate: function() {
         getElementsByClass("image")[0].style.transform = "rotate(0deg)";
-        getElementsByClass("image")[0].style.transform = "rotate(0deg)";
+        //getElementsByClass("image")[0].style.transform = "rotate(0deg)";
     }
 }
 </script>
