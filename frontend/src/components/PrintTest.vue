@@ -1,15 +1,15 @@
 <template>
-<div>
-	<div class="wrapper">
-		<h1>Timer</h1>
-		<br>
-		<br>Save me to file:<br>
-    <input id="savin" type="text"></input>
-		<div class="buttons">
-			<button v-on:click="print()">Print me away! A secret place! A sweet escape!</button>
+	<div>
+		<div class="wrapper">
+			<h1>Timer</h1>
+			<br>
+			<br>Save me to file:<br>
+	    <input id="savin" type="text"></input>
+			<div class="buttons">
+				<button v-on:click="print()">Print me away! A secret place! A sweet escape!</button>
+			</div>
 		</div>
-</div>
-</div>
+	</div>
 </template>
 
 <script>

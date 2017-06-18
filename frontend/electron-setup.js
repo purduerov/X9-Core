@@ -31,36 +31,57 @@ function createWindow () {
         slashes: true
     }))
 
-    ipc.on('PRINTMENOW', function(evnt, save) {
-      //console.log(save);
-      fs.writeFile('./iwroteit.wut', save, function(err) {
-        if(err) {
-          throw err;
-        }
-      });
-    });
+
+/***************
+    This is for saving and retrieving settings
+    Here, all communication should be in string form;
+    The webpage handles the Object-to-String conversion,
+    for uniformity.
+**************/
+
 /*
+//this was a test, writes a file with content typed in the window
+ipc.on('PRINTMENOW', function(event, save) {
+  //console.log(save);
+  fs.writeFile('./settings/iwroteit.wut', save, function(err) {
+    if(err) {
+      throw err;
+    }
+  });
+});
+*/
+
+//makes the settings file if it doesn't already exist
+//GitHub should make this mute, but helps operations occur error-free.
     fs.access("./settings/", function(err) {
       if(err && err.code == 'ENOENT') {
         fs.mkdir("./settings/");
+        console.log("Settings file created.");
+      } else {
+        console.log("Settings file exists.");
       }
       return;
     });
-    ipc.on('listings', function () {
+
+    ipc.on('listings', function(event) {
+
       var names = Array;
       fs.readdir('./settings/', function(err, files) {
         if(err) {
           throw err;
         } else {
           names = files;
-        }
-        return;
-      });
 
-      return names;
+          console.log(files);
+
+          console.log(names[0]);
+
+          event.sender.send('list-reply', names);
+        }
+      });
     });
 
-    ipc.on('write', function(filename, save) {
+    ipc.on('write', function(event, filename, save) {
       fs.writeFile('./settings/'+filename, save, function(err) {
         if(err) {
           throw err;
@@ -68,7 +89,7 @@ function createWindow () {
       });
     });
 
-    ipc.on('read', function(filename, copy) {
+    ipc.on('read', function(event, filename) {
       var content = String;
       fs.readFile(filename, function(err, data) {
         if(err) {
@@ -78,18 +99,18 @@ function createWindow () {
         }
         return;
       });
-      
-      return content;
+
+      event.sender.send('read-reply', content);
     });
 
-    ipc.on('delete', function(filename) {
+    ipc.on('delete', function(event, filename) {
       fs.unlink(filename, function(err) {
         if(err) {
           throw err;
         }
       });
     });
-*/
+
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {
         // Dereference the window object, usually you would store windows

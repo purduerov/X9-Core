@@ -127,10 +127,11 @@ h1 {
 }
 
 .buttons{
-    position: absolute;
+    position: static;
     width: 400px;
     height: 50px;
     display: flex;
+		padding: 5px;
     color: black;
 }
 

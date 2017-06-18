@@ -24,11 +24,11 @@
 		                <ToolInfo :data="packets.dearflask"></ToolInfo>
                 </Card>
                 <Card class="half-width half-height">
-                  <Card class="half-height full-width">
+                  <Card class="full-width">
                     <Timer></Timer>
                   </Card>
-                  <Card class="half-height full-width">
-                    <PrintTest></PrintTest>
+                  <Card class="full-width">
+                    <SaveSettings :data="other"></SaveSettings>
                   </Card>
                 </Card>
                 <Card class="half-width half-height">
@@ -55,7 +55,7 @@ var ThrusterControl = require("./components/ThrusterControl.vue")
 var ToolControl = require("./components/ToolControl.vue")
 var ToolInfo = require("./components/ToolInfo.vue")
 var Timer = require("./components/Timer.vue")
-var PrintTest = require("./components/PrintTest.vue")
+var SaveSettings = require("./components/SaveSettings.vue")
 
 var packets = require("./packets.js")
 var main = require("./main.js")
@@ -74,7 +74,7 @@ export default {
         ToolControl,
         ToolInfo,
 	      Timer,
-        PrintTest
+        SaveSettings
     },
     data: function() {
         return {
