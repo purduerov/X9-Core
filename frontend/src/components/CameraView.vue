@@ -7,9 +7,9 @@
             <button @click="port = 8083" v-on:click="temp_reset_rotate()">Main Camera</button>
             <button @click="port = 8080" v-on:click="temp_rotate()">PCT Camera</button>
             <button @click="port = 8081" v-on:click="temp_reset_rotate()">Fount Camera</button>
-            <!--<button @click="port = 8085">Camera 4</button>-->
-            <!--<button @click="port = 8081">Camera 5</button>-->
-            <!--<button @click="port = 8083">Camera 6</button>-->
+            <button @click="port = 8085">C4</button>
+            <button @click="port = 8081">C5</button>
+            <button @click="port = 8083">C6</button>
         </div>
     </div>
 </template>

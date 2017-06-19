@@ -16,7 +16,8 @@ function main(packets, other) {
 
             packets.dearflask.thrusters.desired_thrust = [
                 //VelX - forwards and backwards
-                gp.axes.left.y * (ts.master/100.0) * (ts.velX/100.0) * -1,
+                //gp.axes.left.y * (ts.master/100.0) * (ts.velX/100.0) * -1,
+		-gp.axes.right.x * (ts.master/100.0)  * (ts.yaw/100.0),
 
                 //VelY - strafe left and right
                 gp.axes.left.x * (ts.master/100.0)  * (ts.velY/100.0) * -1,
@@ -31,7 +32,8 @@ function main(packets, other) {
                 -gp.axes.right.y * (ts.master/100.0)  * (ts.pitchRoll/100.0),
 
                 //Yaw
-                gp.axes.right.x * (ts.master/100.0)  * (ts.yaw/100.0)
+                //gp.axes.right.x * (ts.master/100.0)  * (ts.yaw/100.0)
+		-gp.axes.left.y * (ts.master/100.0) * (ts.velX/100.0) * -1
             ]
 
             let tl = other.tool_scales;
