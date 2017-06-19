@@ -1,9 +1,9 @@
-seconds<template>
+<template>
 <div>
 	<div class="wrapper">
 		<h1>Timer</h1>
 		<br>
-		<h1><span id="min">00</span>:<span id="seconds">00</span></h1>
+		<h1 id="timer"><span id="min">00</span>:<span id="seconds">00</span></h1>
 		<br> <br>
 		<div class="buttons">
 			<button v-on:click="start()">Start</button>
@@ -27,11 +27,14 @@ export default {
 		var that = this;
 
 		console.log(that);
-
+        
+        /*
+         *  Throws an extra zero in front of single digits.
+         */
 		this.time_string = function(num) {
 			if(num < 10) {
 				return "0"+num.toString();
-			} else {
+            } else {
 				return num.toString();
 			}
 		}
@@ -61,6 +64,15 @@ export default {
 
 					sec_span.textContent = that.time_string(sec);
 					min_span.textContent = that.time_string(min);
+                    if (min == 14 && sec == 58)
+                        setInterval(function() {
+                                var timer = document.getElementById("timer");
+                                if (timer.style.color == "red") 
+                                    timer.style.color = "white";
+                                else
+                                    timer.style.color = "red";
+                        }, 2000);
+
 				}, 10);
 			}
 		}
