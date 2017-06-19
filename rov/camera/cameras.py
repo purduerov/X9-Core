@@ -15,7 +15,7 @@ class Cameras(object):
         self.brightness = brightness
         self.contrast = contrast
 
-        self.video_devices = [dev for dev in os.listdir('/dev') if dev.startswith('video')]
+        self.video_devices = sorted([dev for dev in os.listdir('/dev') if dev.startswith('video')])
 
         for i in range(len(self.video_devices)):
             cam = Camera(
@@ -26,31 +26,22 @@ class Cameras(object):
                 brightness=self.brightness,
                 contrast=self.contrast
             )
-
             self.cameras.append(cam)
 
         # clear previous open ones
         self.system_kill()
 
 
-    def start(self, port):
-        #for cam in self.cameras:
-        #    time.sleep(0.2)
-        #    cam.start()
-
+    def start(self):
         for cam in self.cameras:
-            if cam.status == "killed" and cam.port == port:
-                cam.start()
+            time.sleep(0.2)
+            cam.start()
 
     def kill(self, port):
-        #for cam in self.cameras:
-        #    cam.kill()
-
         for cam in self.cameras:
-            if cam.port == port and cam.status == "active":
-                cam.kill()
+            cam.kill()
 
-        #self.system_kill()
+        self.system_kill()
 
     def system_kill(self):
         os.system("pgrep 'mjpg' | xargs kill -9")
