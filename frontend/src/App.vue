@@ -5,7 +5,7 @@
         </div>
         <div id="main-container">
             <Card class="camera-width full-height">
-                <CameraView></CameraView>
+                <CameraView :data="packets.dearclient.cameras" :status.sync="packets.dearflask.cameras"></CameraView>
             </Card>
             <div class="data-width full-height">
                 <!--
@@ -21,7 +21,7 @@
                 <Card class="half-width half-height">
                     <Thruster :data="packets.dearclient.thrusters"></Thruster>
                     <br>
-		    <ToolInfo :data="packets.dearflask"></ToolInfo>
+                    <ToolInfo :data="packets.dearflask"></ToolInfo>
                 </Card>
                 <Card class="half-width half-height">
                    <Timer></Timer>
@@ -67,7 +67,7 @@ export default {
         ThrusterControl,
         ToolControl,
         ToolInfo,
-	      Timer
+        Timer
     },
     data: function() {
         return {
@@ -98,6 +98,7 @@ export default {
         }
     },
     mounted: function() {
+        window.vue = this
         main(this.packets, this.other);
     }
 }

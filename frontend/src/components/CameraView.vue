@@ -1,15 +1,16 @@
 <template>
     <div id="camera-view">
         <div class="image">
-            <img :src="source">
+            <img :src="source" :style="transform(flipped[port])">
         </div>
+        <button id="flip" @click="flip">Flip</button>
         <div class="buttons">
-            <button @click="port = 8083" v-on:click="temp_reset_rotate()">Main Camera</button>
-            <button @click="port = 8080" v-on:click="temp_rotate()">PCT Camera</button>
-            <button @click="port = 8081" v-on:click="temp_reset_rotate()">Fount Camera</button>
-            <!--<button @click="port = 8085">Camera 4</button>-->
-            <!--<button @click="port = 8081">Camera 5</button>-->
-            <!--<button @click="port = 8083">Camera 6</button>-->
+            <button v-for="(cam,name) in data" 
+                :key="name" 
+                @click="changePort(cam.port)" 
+                :class="cam.status">
+                    {{name}}
+            </button>
         </div>
     </div>
 </template>
@@ -17,31 +18,48 @@
 <script>
 export default {
     name: 'camera-view',
+    props: ['data', 'status'],
     data: function() {
         return {
-            port: 8082
+            port: 8080,
+            flipped: {}
+        }
+    },
+    methods: {
+        changePort: function(newPort) {
+            this.port = newPort
+
+            let newStatus = {}
+            for (let [name, cam] of Object.entries(this.data)) {
+                // temporarily lets keep all cameras active. Suspending and restarting
+                // needs to be a little better handled on the rov side.
+                // newStatus[cam.port] = this.port == cam.port ? 'active' : 'suspended'
+
+                newStatus[cam.port] = 'active'
+            }
+            this.$emit('update:status', newStatus)
+        },
+        flip: function() {
+            if (this.port in this.flipped) {
+                this.flipped[this.port] = (this.flipped[this.port] + 1) % 4
+            } else {
+                this.flipped[this.port] = 1
+            }
+        },
+        transform: function(num) {
+            num = num || 0
+            return {'transform': `rotate(${num*90}deg)`}
         }
     },
     computed: {
         source: function() {
-            return `http://10.42.0.130:${this.port}/?action=stream`
+            return `http://raspberrypi.local:${this.port}/?action=stream`
         }
-    },
-
-    temp_rotate: function() {
-        getElementsByClass("image")[0].style.transform = "rotate(270deg)";
-        //getElementsByClass("image")[0].style.webkit-transform = "rotate(270deg)";
-    },
-
-    temp_reset_rotate: function() {
-        getElementsByClass("image")[0].style.transform = "rotate(0deg)";
-        //getElementsByClass("image")[0].style.transform = "rotate(0deg)";
     }
 }
 </script>
 
 <style scoped>
-
 .buttons {
     position: absolute;
     bottom: 0;
@@ -58,10 +76,34 @@ button {
     background-color: #555555;
 }
 
+button.killed {
+    background-color: red;
+}
+
+button.active {
+    background-color: green;
+}
+
+button.suspended {
+    background-color: orange;
+}
+
 #camera-view {
     position: relative;
     height: 100%;
     width: 100%;
+}
+
+#flip {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 100px;
+    z-index: 999;
+}
+
+.flipped {
+    transform: rotate(180deg);
 }
 
 .image {
