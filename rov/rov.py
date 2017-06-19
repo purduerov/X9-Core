@@ -39,13 +39,14 @@ class ROV(object):
         self.init_hw()
 
     def init_hw(self):
-        #self.cameras = Cameras(
-        #    resolution='640x480',
-        #    framerate=30,
-        #    port_start=8080,
-        #    brightness=16,
-        #    contrast=32
-        #)
+        self.cameras = Cameras(
+            resolution='640x480',
+            framerate=30,
+            port_start=8080,
+            brightness=16,
+            contrast=32
+        )
+        self.cameras.start()
 
         self.motor_control = MotorControl(
             zero_power=305,
@@ -121,12 +122,12 @@ class ROV(object):
             else:
                 self.claw_status = False
 
-            #cam = df['cameras']
-            #for cam in df['cameras']:
-            #    if (cam['status'] == 0):
-            #        self.cameras.kill(cam['port'])
-            #    if (cam['status'] == 1):
-            #        self.cameras.start(cam['port'])
+            # cam = df['cameras']
+            # for cam in df['cameras']:
+               # if (cam['status'] == 0):
+                   # self.cameras.kill(cam['port'])
+               # if (cam['status'] == 1):
+                   # self.cameras.start(cam['port'])
 
             """ Disabled until hardware is done and sw is tested
             self.pressure.update()
