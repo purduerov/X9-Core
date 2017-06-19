@@ -21,14 +21,7 @@ module.exports = {
         fountain_tool: {
             power: 0.0
         },
-        cameras: [
-            { port: 8080, status: 1 },
-            { port: 8081, status: 0 },
-            { port: 8082, status: 1 },
-            { port: 8083, status: 0 },
-            { port: 8084, status: 1 },
-            { port: 8085, status: 1 },
-        ],
+        cameras: [],
     },
     dearclient: {
         IMU: {
@@ -40,6 +33,11 @@ module.exports = {
             temperature: 4
         },
         thrusters: [0, 0, 0, 0, 0, 0, 0, 0],
-        cameras: {}
+        cameras: {
+            Cam_0: {'port': '8080', status: "killed"},
+            Cam_1: {'port': '8081', status: "killed"},
+            Cam_2: {'port': '8082', status: "killed"},
+            Cam_3: {'port': '8083', status: "killed"}
+        }
     }
 };
