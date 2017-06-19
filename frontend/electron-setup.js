@@ -65,16 +65,15 @@ ipc.on('PRINTMENOW', function(event, save) {
 
     ipc.on('listings', function(event) {
 
-      var names = Array;
+      var names = Object;
       fs.readdir('./settings/', function(err, files) {
         if(err) {
           throw err;
         } else {
-          names = files;
-
-          console.log(files);
-
-          console.log(names[0]);
+          names = files.reduce(function(acc, cur, i) {
+            acc[i] = cur;
+            return acc;
+          }, {});
 
           event.sender.send('list-reply', names);
         }

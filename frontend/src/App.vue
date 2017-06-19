@@ -28,7 +28,7 @@
                     <Timer></Timer>
                   </Card>
                   <Card class="full-width">
-                    <SaveSettings :data="other"></SaveSettings>
+                    <SaveSettings :data="{other, list}"></SaveSettings>
                   </Card>
                 </Card>
                 <Card class="half-width half-height">
@@ -101,7 +101,10 @@ export default {
                         main: 25,
                     }
                 }
-            }
+            },
+            list: {
+                0: "Default",
+            },
         }
     },
     mounted: function() {

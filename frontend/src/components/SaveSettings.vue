@@ -12,8 +12,8 @@
 
       <h1>Settings:</h1>
       <hr>
-      <ul v-for="value in list">
-          <li class="set">{{value}}</li>
+      <ul v-for="(item, key) in data.list">
+          <li>{{item}}</li>
           <hr>
       </ul>
 
@@ -31,8 +31,9 @@
 			var that = this;
 			var sel;
 
-			var list = Array;
 			var cont = String;
+
+console.log(this.data.list);
 
 /**********
 		Here, the buttons make their calls to electron to work with files.
@@ -77,11 +78,9 @@
 ********/
 
 			ipcRenderer.on('list-reply', function(event, files) {
-				list = files;
+				that.data.list = files;
 
-				Object.keys(temp).forEach(function(key, i) {
-					that.data[key] = temp[key];
-				});
+				console.log(that.data.list);
 			});
 
 			ipcRenderer.on('read-reply', function(event, scaling) {
