@@ -3,11 +3,12 @@ import wiringpi
 class Servo(object):
     """ Look here for more of how this works:
         https://learn.adafruit.com/adafruits-raspberry-pi-lesson-8-using-a-servo-motor/software """
-    def __init__(self, pin=12):
+    def __init__(self, pin=18, setupWiringPi=True):
         self.pin = pin
 
         # sets up wiring pi gpio
-        wiringpi.wiringPiSetupGpio()
+        if setupWiringPi:
+            wiringpi.wiringPiSetupGpio()
 
         # set the pin to pwm output
         wiringpi.pinMode(self.pin, wiringpi.GPIO.PWM_OUTPUT)
