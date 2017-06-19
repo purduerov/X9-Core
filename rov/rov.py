@@ -141,12 +141,7 @@ class ROV(object):
             # self.bluetooth_light.off()
             # self.bluetooth_light.toggle()
 
-            #cam = df['cameras']
-            #for cam in df['cameras']:
-            #    if (cam['status'] == 0):
-            #        self.cameras.kill(cam['port'])
-            #    if (cam['status'] == 1):
-            #        self.cameras.start(cam['port'])
+            self.cameras.set_status(df['cameras'])
 
             """ Disabled until hardware is done and sw is tested
             self.pressure.update()
@@ -165,7 +160,7 @@ class ROV(object):
 
         self.dearclient['last_update'] = self.last_update
         self.dearclient['thrusters'] = self.thruster_control.data
-        #self.dearclient['cameras'] = self.cameras.status()
+        self.dearclient['cameras'] = self.cameras.status()
 
         with self._data_lock:
             self._data['dearclient'] = self.dearclient
