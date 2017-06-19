@@ -5,11 +5,13 @@ import traceback
 from threading import Lock
 from time import time, sleep
 
+import wiringpi
 
 from sensors import Pressure, IMU
 from camera import Cameras
 
 from hardware.motor_control import MotorControl
+from hardware.digital_pin import DigitalPin
 
 from thrusters.Control import ThrusterControl
 from thrusters.hardware.PWM_Control import Thrusters
@@ -46,6 +48,8 @@ class ROV(object):
         #    brightness=16,
         #    contrast=32
         #)
+
+        wiringpi.wiringPiSetupGpio()
 
         self.motor_control = MotorControl(
             zero_power=305,
@@ -85,6 +89,16 @@ class ROV(object):
             pin=2
         )
 
+        self.camera_lights = DigitalPin(
+            pin=6,
+            setupWiringPi=False
+        )
+
+        self.bluetooth_light = DigitalPin(
+            pin=16,
+            setupWiringPi=False
+        )
+
         #""" Disabled until hardware is done and sw is tested
         # self.IMU = IMU()
         # self.pressure = Pressure()
@@ -120,6 +134,11 @@ class ROV(object):
                 self.claw_status = True
             else:
                 self.claw_status = False
+
+            # control bluetooth led
+            # self.bluetooth_light.on()
+            # self.bluetooth_light.off()
+            # self.bluetooth_light.toggle()
 
             #cam = df['cameras']
             #for cam in df['cameras']:
