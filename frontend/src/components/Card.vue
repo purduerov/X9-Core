@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="container">
         <div id="card">
             <div id="main-container" :style="{backgroundColor: color}">
                 <div id="padding">
@@ -17,11 +17,16 @@
 </script>
 
 <style scoped>
+#container {
+    width: 100%;
+}
+
 #card {
     font-family: 'Roboto', Helvetica, Arial, sans-serif;
     width: 100%;
     height: 100%;
     position: relative;
+    box-sizing: border-box;
     padding: 10px;
     color: white;
     overflow: hidden;
@@ -38,6 +43,7 @@
 }
 
 #padding {
+    box-sizing: border-box;
     padding: 10px;
     width: 100%;
     height: 100%;

@@ -12,6 +12,9 @@
                     {{name}}
             </button>
         </div>
+        <div class="flip-button">
+            <button @click="flip" id="flip">↷</button>
+        </div>
     </div>
 </template>
 
@@ -63,17 +66,28 @@ export default {
 .buttons {
     position: absolute;
     bottom: 0;
-    width: 100%;
+    width: calc(100% - 50px);
     height: 50px;
     display: flex;
     justify-content: space-between;
 }
 
-button {
+.buttons > button {
     width: 20%;
     font-size: 30px;
     flex: 1;
-    background-color: #555555;
+}
+
+.buttons > button.killed {
+    background-color: red;
+}
+
+.buttons > button.active {
+    background-color: green;
+}
+
+.buttons > button.suspended {
+    background-color: orange;
 }
 
 button.killed {
@@ -94,12 +108,19 @@ button.suspended {
     width: 100%;
 }
 
-#flip {
+.flip-button {
     position: absolute;
+    bottom: 0;
     right: 0;
-    top: 0;
-    width: 100px;
-    z-index: 999;
+    height: 50px;
+    width: 50px;
+    display: flex;
+    justify-content: space-between;
+}
+#flip {
+    width: 100%;
+    flex: 1;
+    font-size: 40px;
 }
 
 .flipped {

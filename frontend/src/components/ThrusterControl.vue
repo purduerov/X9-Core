@@ -2,60 +2,32 @@
     <div>
         <h1>Thruster Scaling:</h1>
         <hr>
-        <div class="trst">
-	  <div class="info">
-                <div>
-                    <span>Master: {{data.master}}%</span>
-                    <input type="range" min="0" max="70" v-model="data.master">
-		</div>
-                <div>
-                    <span>Forward/Backward: {{data.velX}}%</span>
-                    <input type="range" min="0" max="100" v-model="data.velX">
-                </div>
-                <div>
-                    <span>Strafe: {{data.velY}}%</span>
-                    <input type="range" min="0" max="100" v-model="data.velY">
-                </div>
-                <div>
-                    <span>Ascend/Descend: {{data.velZ}}%</span>
-                    <input type="range" min="0" max="100" v-model="data.velZ">
-                </div>
-                <div>
-                    <span>Pitch/Roll: {{data.pitchRoll}}%</span>
-                    <input type="range" min="0" max="100" v-model="data.pitchRoll">
-                </div>
-                <div>
-                    <span>Yaw: {{data.yaw}}%</span>
-                    <input type="range" min="0" max="100" v-model="data.yaw">
-                </div>
-            </div>
+        <SliderControl name="Master" 
+            :model.sync="scales.master" min="0" max="70" />
+        <SliderControl name="Forward/Back"
+            :model.sync="scales.velX" :invert.sync="invert.velX" min="0" max="100" />
+        <SliderControl name="Strafe"
+            :model.sync="scales.velY" :invert.sync="invert.velY" min="0" max="100" />
+        <SliderControl name="Ascend/Descend"
+            :model.sync="scales.velZ" :invert.sync="invert.velZ" min="0" max="100" />
+        <SliderControl name="Pitch"
+            :model.sync="scales.pitch" :invert.sync="invert.pitch" min="0" max="100" />
+        <SliderControl name="Roll"
+            :model.sync="scales.roll" :invert.sync="invert.roll" min="0" max="100" />
+        <SliderControl name="Yaw"
+            :model.sync="scales.yaw" :invert.sync="invert.yaw" min="0" max="100" />
         </div>
     </div>
 </template>
 
 <script>
+    var SliderControl = require('./SliderControl.vue')
+
     export default {
         name: 'ThrusterControl',
-        props: ['data']
+        components: {
+            SliderControl
+        },
+        props: ['scales', 'invert']
     }
 </script>
-
-<style scoped>
-h1 {
-    font-weight: 400;
-}
-
-.thruster_data {
-    padding-left: 8px;
-}
-
-.info {
-    width: 100%;
-    height: 100%;
-}
-
-.trst {
-    display: flex;
-    flex-direction: row;
-}
-</style>
