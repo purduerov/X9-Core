@@ -17,19 +17,17 @@
                         <ToolInfo :data="packets.dearflask"></ToolInfo>
                     </Card>
                 </div>
-
+                <div class="data-column">
+                    <Card>
+                        <ThrusterControl :scales="other.thrust_scales" :invert="other.thrust_invert"></ThrusterControl>
+                    </Card>
+                    <Card>
+                        <ToolControl :data="other.tool_scales"></ToolControl>
+                    </Card>
+                </div>
                 <div class="data-column">
                     <Card>
                         <Timer></Timer>
-                    </Card>
-                    <Card>
-                        <ThrusterControl :data="other.thrust_scales"></ThrusterControl>
-                    </Card>
-                </div>
-
-                <div class="data-column">
-                    <Card>
-                        <ToolControl :data="other.tool_scales"></ToolControl>
                     </Card>
                 </div>
             </div>
@@ -70,20 +68,33 @@ export default {
                     velX: 60,
                     velY: 50,
                     velZ: 60,
-                    pitchRoll: 35,
+                    pitch: 35,
+                    roll: 35,
                     yaw: 25,
+                },
+                thrust_invert: {
+                    master: false,
+                    velX: false,
+                    velY: false,
+                    velZ: false,
+                    pitch: false,
+                    roll: false,
+                    yaw: false,
                 },
                 tool_scales: {
                     claw: {
                         master: 50,
                         open: 50,
-                        close: 50
+                        close: 50,
+                        invert: false
                     },
-                    vlv_turn: {
-                        main: 30,
+                    valve_turner: {
+                        power: 30,
+                        invert: false
                     },
-                    fountain: {
-                        main: 25,
+                    fountain_tool: {
+                        power: 30,
+                        invert: false
                     }
                 }
             }
@@ -119,7 +130,7 @@ export default {
 }
 
 .data-column {
-    width: 33%;
+    width: 33.333333%;
     height: 100%;
     float: left;
 }
