@@ -2,7 +2,7 @@
     <div>
       <div :class="[
           'c100', 'p'+absValue, 'thruster-off',
-          {'thruster-green': absValue > 0, 'thruster-orange': absValue > 70, 'thruster-red': absValue > 85}]">
+          {'thruster-green': absValue > 0, 'thruster-orange': absValue > 55, 'thruster-red': absValue > 70}]">
           <span>{{value}}%</span>
           <div class="slice">
               <div class="bar"></div>
