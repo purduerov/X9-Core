@@ -48,14 +48,27 @@ class Cameras(object):
 
     def status(self):
         return {
-            cam.device: {'port': cam.port, 'status': cam.get_status()}
+            'Cam_' + str(cam.port-self.port_start): {'port': cam.port, 'status': cam.get_status()}
             for cam in self.cameras
         }
 
     def set_status(self, status):
         for cam in self.cameras:
-            if cam.device in status:
-                cam.set_status(status[cam.device])
+            port = str(cam.port)
+            if port in status:
+                cam_status = cam.get_status()
+                if status[port] == 'active':
+                    if cam_status == 'suspended':
+                        cam.unsuspend()
+                elif status[port] == 'suspended':
+                    if cam_status == 'active':
+                        cam.suspend()
+                elif status[port] == 'killed':
+                    if cam.is_alive():
+                        cam.kill()
+                elif status[port] == 'start':
+                    if not cam.is_alive():
+                        cam.start()
 
 
 if __name__ == "__main__":
