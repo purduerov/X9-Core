@@ -86,13 +86,6 @@ export default {
 
 .buttons > button {
     width: 150px;
-    background-color: grey;
     height: 30px;
 }
-
-.buttons > button:disabled {
-    background-color: darkgrey;
-    color: grey;
-}
-
 </style>
