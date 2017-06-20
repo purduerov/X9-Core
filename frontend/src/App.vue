@@ -4,34 +4,34 @@
             <Navbar title="Purdue ROV - BattleStation"></Navbar>
         </div>
         <div id="main-container">
-            <Card class="camera-width full-height">
-                <CameraView :data="packets.dearclient.cameras" :status.sync="packets.dearflask.cameras"></CameraView>
-            </Card>
+            <div class="camera-width full-height">
+                <Card class="full-height">
+                    <CameraView :data="packets.dearclient.cameras" :status.sync="packets.dearflask.cameras"></CameraView>
+                </Card>
+            </div>
             <div class="data-width full-height">
-                <!--
-                <Card class="half-width half-height">
-                    <IMU :data="packets.dearclient.IMU"></IMU>
-                </Card>
-                <Card class="half-width half-height">
-                    <Press_Temp :data="packets.dearclient.pressure"></Press_Temp>
-                </Card>
-                <Card class="half-width half-height">
-                    <GpInfo :data="gpinfo"></GpInfo>
-                </Card> -->
-                <Card class="half-width half-height">
-                    <Thruster :data="packets.dearclient.thrusters"></Thruster>
-                    <br>
-                    <ToolInfo :data="packets.dearflask"></ToolInfo>
-                </Card>
-                <Card class="half-width half-height">
-                   <Timer></Timer>
-                </Card>
-                <Card class="half-width half-height">
-                    <ThrusterControl :data="other.thrust_scales"></ThrusterControl>
-                </Card>
-                <Card class="half-width half-height">
-                    <ToolControl :data="other.tool_scales"></ToolControl>
-                </Card>
+                <div class="data-column">
+                    <Card>
+                        <Thruster :data="packets.dearclient.thrusters"></Thruster>
+                        <br>
+                        <ToolInfo :data="packets.dearflask"></ToolInfo>
+                    </Card>
+                </div>
+
+                <div class="data-column">
+                    <Card>
+                        <Timer></Timer>
+                    </Card>
+                    <Card>
+                        <ThrusterControl :data="other.thrust_scales"></ThrusterControl>
+                    </Card>
+                </div>
+
+                <div class="data-column">
+                    <Card>
+                        <ToolControl :data="other.tool_scales"></ToolControl>
+                    </Card>
+                </div>
             </div>
         </div>
     </div>
@@ -40,11 +40,7 @@
 <script>
 var Navbar = require("./components/Navbar.vue")
 var CameraView = require("./components/CameraView.vue")
-var IMU = require("./components/IMU.vue")
-var DataView = require("./components/DataView.vue")
 var Card = require("./components/Card.vue")
-var Press_Temp = require("./components/Pressure.vue")
-var GpInfo = require("./components/GpInfo.vue")
 var Thruster = require("./components/Thrusters.vue")
 var ThrusterControl = require("./components/ThrusterControl.vue")
 var ToolControl = require("./components/ToolControl.vue")
@@ -58,11 +54,7 @@ export default {
     components: {
         Navbar,
         CameraView,
-        IMU,
         Card,
-        DataView,
-        Press_Temp,
-        GpInfo,
         Thruster,
         ThrusterControl,
         ToolControl,
@@ -126,18 +118,19 @@ export default {
     margin: 0;
 }
 
-.half-width {
-    width: 50%;
+.data-column {
+    width: 33%;
+    height: 100%;
     float: left;
 }
 
 .half-height {
-    height: 50%;
+    height: 50% !important;
     float: left;
 }
 
 .full-height {
-    height: 100%;
+    height: 100% !important;
     float: left;
 }
 

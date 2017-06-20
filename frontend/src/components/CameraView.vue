@@ -3,7 +3,6 @@
         <div class="image">
             <img :src="source" :style="transform(flipped[port])">
         </div>
-        <button id="flip" @click="flip">Flip</button>
         <div class="buttons">
             <button v-for="(cam,name) in data" 
                 :key="name" 
@@ -12,6 +11,7 @@
                     {{name}}
             </button>
         </div>
+        <button id="flip" @click="flip">↷</button>
     </div>
 </template>
 
@@ -63,7 +63,7 @@ export default {
 .buttons {
     position: absolute;
     bottom: 0;
-    width: 100%;
+    width: calc(100% - 50px);
     height: 50px;
     display: flex;
     justify-content: space-between;
@@ -96,10 +96,10 @@ button.suspended {
 
 #flip {
     position: absolute;
+    bottom: 0;
     right: 0;
-    top: 0;
-    width: 100px;
-    z-index: 999;
+    height: 50px;
+    width: 50px;
 }
 
 .flipped {
