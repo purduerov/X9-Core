@@ -3,11 +3,11 @@
         <h1>Thruster Scaling:</h1>
         <hr>
         <div class="trst">
-	  <div class="info">
+      <div class="info">
                 <div>
                     <span>Master: {{data.master}}%</span>
                     <input type="range" min="0" max="70" v-model="data.master">
-		</div>
+                </div>
                 <div>
                     <span>Forward/Backward: {{data.velX}}%</span>
                     <input type="range" min="0" max="100" v-model="data.velX">
