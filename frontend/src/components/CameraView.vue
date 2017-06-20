@@ -11,7 +11,9 @@
                     {{name}}
             </button>
         </div>
-        <button id="flip" @click="flip">↷</button>
+        <div class="flip-button">
+            <button @click="flip" id="flip">↷</button>
+        </div>
     </div>
 </template>
 
@@ -69,22 +71,21 @@ export default {
     justify-content: space-between;
 }
 
-button {
+.buttons > button {
     width: 20%;
     font-size: 30px;
     flex: 1;
-    background-color: #555555;
 }
 
-button.killed {
+.buttons > button.killed {
     background-color: red;
 }
 
-button.active {
+.buttons > button.active {
     background-color: green;
 }
 
-button.suspended {
+.buttons > button.suspended {
     background-color: orange;
 }
 
@@ -94,12 +95,19 @@ button.suspended {
     width: 100%;
 }
 
-#flip {
+.flip-button {
     position: absolute;
     bottom: 0;
     right: 0;
     height: 50px;
     width: 50px;
+    display: flex;
+    justify-content: space-between;
+}
+#flip {
+    width: 100%;
+    flex: 1;
+    font-size: 40px;
 }
 
 .flipped {
