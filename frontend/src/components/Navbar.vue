@@ -1,7 +1,7 @@
 <template>
     <nav id="navbar">
         <div class="nav-wrapper">
-            <a href="#" id="title">{{title}}</a>
+            <span id="title">{{title}}</span>
         </div>
     </nav>
 </template>
@@ -16,6 +16,7 @@ export default {
 <style scoped>
 #navbar {
     position: fixed;
+    width: 100%;
 }
 
 .nav-wrapper {
@@ -27,6 +28,8 @@ export default {
     font-family: 'Roboto', Helvetica, Arial, sans-serif;
     padding-left: 28px;
     line-height: 50px;
+    font-size: 20px;
+    color: white;
 }
 
 </style>

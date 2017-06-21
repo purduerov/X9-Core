@@ -1,7 +1,5 @@
 <template>
 <div>
-    <h1>Timer</h1>
-    <hr>
     <h1 id="timer" :class="{orangeText: minutes >= 13, redText: minutes >= 15}">
         <span>{{minutes}}</span>:<span>{{seconds}}</span>
     </h1>
@@ -68,7 +66,6 @@ export default {
     width: 100%;
     text-align: center;
     font-size: 70px;
-    font-weight: bold;
 }
 
 .orangeText {
@@ -86,13 +83,6 @@ export default {
 
 .buttons > button {
     width: 150px;
-    background-color: grey;
     height: 30px;
 }
-
-.buttons > button:disabled {
-    background-color: darkgrey;
-    color: grey;
-}
-
 </style>
