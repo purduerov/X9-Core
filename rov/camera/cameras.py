@@ -37,7 +37,7 @@ class Cameras(object):
             time.sleep(0.2)
             cam.start()
 
-    def kill(self, port):
+    def kill(self):
         for cam in self.cameras:
             cam.kill()
 
@@ -69,18 +69,3 @@ class Cameras(object):
                 elif status[port] == 'start':
                     if not cam.is_alive():
                         cam.start()
-
-
-if __name__ == "__main__":
-    cameras = Cameras()
-    cameras.start()
-
-    while True:
-        c_status = cameras.status()
-        for c in c_status:
-            print ""
-            print "Name:   %s" % c
-            print "Status: %s" % c_status[c]['status']
-            print "Port:   %s" % c_status[c]['port']
-
-        time.sleep(2)

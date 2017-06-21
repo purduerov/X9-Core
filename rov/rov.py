@@ -152,10 +152,6 @@ class ROV(object):
             print "Exception: %s" % e
             print traceback.format_exc()
 
-
-        # retrieve all sensor data
-        # self.dearclient['sensor'] = sensorThings
-
         self.last_update = time()
 
         self.dearclient['last_update'] = self.last_update
