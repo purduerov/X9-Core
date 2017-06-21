@@ -15,12 +15,21 @@
 <script>
 export default {
     data: function() {
-        return {
-            timer_interval: -1,
-            start_time: 0,
-            delta: 0,
-            running: false,
-            paused_at: 0
+        try {
+            let data = JSON.parse(localStorage.getItem('timer'))
+            if (data.running) {
+                data.timer_interval = setInterval(this.update.bind(this), 0.1)
+            }
+
+            return data
+        } catch (e) {
+            return {
+                timer_interval: -1,
+                start_time: 0,
+                delta: 0,
+                running: false,
+                paused_at: 0
+            }
         }
     },
     methods: {
@@ -29,12 +38,16 @@ export default {
             this.delta = this.paused_at
             this.timer_interval = setInterval(this.update.bind(this), 0.1)
             this.running = true
+
+            localStorage.setItem('timer', JSON.stringify(this.$data))
         },
         pause: function() {
             this.paused_at = this.delta
             this.running = false
 
             clearInterval(this.timer_interval)
+
+            localStorage.setItem('timer', JSON.stringify(this.$data))
         },
         reset: function() {
             this.paused_at = 0
@@ -42,6 +55,8 @@ export default {
             this.running = false
 
             clearInterval(this.timer_interval)
+
+            localStorage.setItem('timer', JSON.stringify(this.$data))
         },
         update: function() {
             this.delta = Date.now() - this.start_time
