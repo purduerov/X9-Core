@@ -6,7 +6,7 @@
         <div id="main-container">
             <div class="camera-width full-height">
                 <Card class="full-height">
-                    <CameraView :data="packets.dearclient.cameras" :status.sync="packets.dearflask.cameras"></CameraView>
+                    <CameraView :data="packets.dearclient.cameras" :packet="packets.dearflask"></CameraView>
                 </Card>
             </div>
             <div class="data-width full-height">
@@ -16,6 +16,12 @@
                     </Card>
                     <Card title="Tool Info">
                         <ToolInfo :data="packets.dearflask"></ToolInfo>
+                    </Card>
+                    <Card title="Camera Info">
+                        <CameraInfo :data="packets.dearclient.cameras"></CameraInfo>
+                    </Card>
+                    <Card title="Presets">
+                        <ThrusterPresets :config="config"></ThrusterPresets>
                     </Card>
                 </div>
                 <div class="data-column">
@@ -44,11 +50,13 @@
 <script>
 var Navbar = require("./components/Navbar.vue")
 var CameraView = require("./components/CameraView.vue")
+var CameraInfo = require("./components/CameraInfo.vue")
 var Card = require("./components/Card.vue")
 var CardTabs = require("./components/CardTabs.vue")
 var Tab = require("./components/Tab.vue")
 var Thruster = require("./components/Thrusters.vue")
 var ThrusterControl = require("./components/ThrusterControl.vue")
+var ThrusterPresets = require("./components/ThrusterPresets.vue")
 var IndThrusterControl = require("./components/IndThrusterControl.vue")
 var ToolControl = require("./components/ToolControl.vue")
 var ToolInfo = require("./components/ToolInfo.vue")
@@ -61,11 +69,13 @@ export default {
     components: {
         Navbar,
         CameraView,
+        CameraInfo,
         Card,
         CardTabs,
         Tab,
         Thruster,
         ThrusterControl,
+        ThrusterPresets,
         IndThrusterControl,
         ToolControl,
         ToolInfo,

@@ -34,10 +34,10 @@ module.exports = {
         },
         thrusters: [0, 0, 0, 0, 0, 0, 0, 0],
         cameras: {
-            Cam_0: {'port': '8080', status: "killed"},
-            Cam_1: {'port': '8081', status: "killed"},
-            Cam_2: {'port': '8082', status: "killed"},
-            Cam_3: {'port': '8083', status: "killed"}
+            Cam_0: {'port': '8080', status: "active"},
+            Cam_1: {'port': '8081', status: "active"},
+            Cam_2: {'port': '8082', status: "active"},
+            Cam_3: {'port': '8083', status: "active"}
         }
     }
 };

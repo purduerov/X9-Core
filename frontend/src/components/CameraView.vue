@@ -4,15 +4,12 @@
             <img :src="source" :style="transform(flipped[port])">
         </div>
         <div class="buttons">
-            <button v-for="(cam,name) in data" 
-                :key="name" 
-                @click="changePort(cam.port)" 
-                :class="cam.status">
-                    {{name}}
-            </button>
+            <button v-for="(cam,name) in data" :key="name" v-show="cam.status !== 'killed'"
+                @click="changePort(cam.port)" :class="cam.status"> {{name}} </button>
         </div>
-        <div class="flip-button">
-            <button @click="flip" id="flip">↷</button>
+        <div class="control-buttons">
+            <button @click="flip" class="control-button" id="flip">⤽</button>
+            <button @click="refresh" class="control-button" :disabled="refreshing">⟳</button>
         </div>
     </div>
 </template>
@@ -20,11 +17,12 @@
 <script>
 export default {
     name: 'camera-view',
-    props: ['data', 'status'],
+    props: ['data', 'packet'],
     data: function() {
         return {
             port: 8080,
-            flipped: {}
+            flipped: {},
+            refreshing: false,
         }
     },
     methods: {
@@ -33,13 +31,9 @@ export default {
 
             let newStatus = {}
             for (let [name, cam] of Object.entries(this.data)) {
-                // temporarily lets keep all cameras active. Suspending and restarting
-                // needs to be a little better handled on the rov side.
-                // newStatus[cam.port] = this.port == cam.port ? 'active' : 'suspended'
-
-                newStatus[cam.port] = 'active'
+                newStatus[cam.port] = this.port == cam.port ? 'active' : 'suspended'
             }
-            this.$emit('update:status', newStatus)
+            this.packet.cameras = newStatus
         },
         flip: function() {
             if (this.port in this.flipped) {
@@ -51,6 +45,16 @@ export default {
         transform: function(num) {
             num = num || 0
             return {'transform': `rotate(${num*90}deg)`}
+        },
+        refresh: function() {
+            this.refreshing = true
+            let prev_port = this.port
+            this.port = 0
+
+            setTimeout(() => {
+                this.port = prev_port
+                this.refreshing = false
+            }, 300)
         }
     },
     computed: {
@@ -65,7 +69,7 @@ export default {
 .buttons {
     position: absolute;
     bottom: 0;
-    width: calc(100% - 50px);
+    width: calc(100% - 120px);
     height: 50px;
     display: flex;
     justify-content: space-between;
@@ -82,22 +86,10 @@ export default {
 }
 
 .buttons > button.active {
-    background-color: green;
+    /*background-color: green;*/
 }
 
 .buttons > button.suspended {
-    background-color: orange;
-}
-
-button.killed {
-    background-color: red;
-}
-
-button.active {
-    background-color: green;
-}
-
-button.suspended {
     background-color: orange;
 }
 
@@ -107,16 +99,16 @@ button.suspended {
     width: 100%;
 }
 
-.flip-button {
+.control-buttons {
     position: absolute;
     bottom: 0;
     right: 0;
     height: 50px;
-    width: 50px;
+    width: 120px;
     display: flex;
     justify-content: space-between;
 }
-#flip {
+.control-button {
     width: 100%;
     flex: 1;
     font-size: 40px;
@@ -126,11 +118,16 @@ button.suspended {
     transform: rotate(180deg);
 }
 
+#flip {
+    transform: scaleX(-1);
+}
+
 .image {
     height: calc(100% - 50px);
     width: 100%;
     display: flex;
     align-items: center;
+    overflow: hidden;
 }
 
 .image > img {
