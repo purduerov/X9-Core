@@ -15,7 +15,7 @@ class Cameras(object):
         self.brightness = brightness
         self.contrast = contrast
 
-        self.video_devices = [dev for dev in os.listdir('/dev') if dev.startswith('video')]
+        self.video_devices = sorted([dev for dev in os.listdir('/dev') if dev.startswith('video')])
 
         for i in range(len(self.video_devices)):
             cam = Camera(
@@ -26,57 +26,46 @@ class Cameras(object):
                 brightness=self.brightness,
                 contrast=self.contrast
             )
-
             self.cameras.append(cam)
 
         # clear previous open ones
         self.system_kill()
 
 
-    def start(self, port):
-        #for cam in self.cameras:
-        #    time.sleep(0.2)
-        #    cam.start()
-
+    def start(self):
         for cam in self.cameras:
-            if cam.status == "killed" and cam.port == port:
-                cam.start()
+            time.sleep(0.2)
+            cam.start()
 
-    def kill(self, port):
-        #for cam in self.cameras:
-        #    cam.kill()
-
+    def kill(self):
         for cam in self.cameras:
-            if cam.port == port and cam.status == "active":
-                cam.kill()
+            cam.kill()
 
-        #self.system_kill()
+        self.system_kill()
 
     def system_kill(self):
         os.system("pgrep 'mjpg' | xargs kill -9")
 
     def status(self):
         return {
-            cam.device: {'port': cam.port, 'status': cam.get_status()}
+            'Cam_' + str(cam.port-self.port_start): {'port': cam.port, 'status': cam.get_status()}
             for cam in self.cameras
         }
 
     def set_status(self, status):
         for cam in self.cameras:
-            if cam.device in status:
-                cam.set_status(status[cam.device])
-
-
-if __name__ == "__main__":
-    cameras = Cameras()
-    cameras.start()
-
-    while True:
-        c_status = cameras.status()
-        for c in c_status:
-            print ""
-            print "Name:   %s" % c
-            print "Status: %s" % c_status[c]['status']
-            print "Port:   %s" % c_status[c]['port']
-
-        time.sleep(2)
+            port = str(cam.port)
+            if port in status:
+                cam_status = cam.get_status()
+                if status[port] == 'active':
+                    if cam_status == 'suspended':
+                        cam.unsuspend()
+                elif status[port] == 'suspended':
+                    if cam_status == 'active':
+                        cam.suspend()
+                elif status[port] == 'killed':
+                    if cam.is_alive():
+                        cam.kill()
+                elif status[port] == 'start':
+                    if not cam.is_alive():
+                        cam.start()

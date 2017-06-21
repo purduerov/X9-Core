@@ -1,150 +1,103 @@
 <template>
 <div>
-	<div class="wrapper">
-		<h1>Timer</h1>
-		<br>
-		<h1 id="timer"><span id="min">00</span>:<span id="seconds">00</span></h1>
-		<br> <br>
-		<div class="buttons">
-			<button v-on:click="start()">Start</button>
-			<button v-on:click="stop()">Stop</button>
-			<button v-on:click="reset()">Reset</button>
-		</div>
-</div>
+    <h1 id="timer" :class="{orangeText: minutes >= 13, redText: minutes >= 15}">
+        <span>{{minutes}}</span>:<span>{{seconds}}</span>
+    </h1>
+    <br>
+    <div class="buttons">
+        <button v-if="!running"     @click="start()">Start</button>
+        <button v-if="running"      @click="pause()">Pause</button>
+        <button :disabled="running" @click="reset()">Reset</button>
+    </div>
 </div>
 </template>
 
 <script>
-
 export default {
-	mounted: function() {
-		var tmr_ref = -1;
-		var comp;
+    data: function() {
+        try {
+            let data = JSON.parse(localStorage.getItem('timer'))
+            if (data.running) {
+                data.timer_interval = setInterval(this.update.bind(this), 0.1)
+            }
 
-		var min_span = document.getElementById("min");
-		var sec_span = document.getElementById("seconds");
+            return data
+        } catch (e) {
+            return {
+                timer_interval: -1,
+                start_time: 0,
+                delta: 0,
+                running: false,
+                paused_at: 0
+            }
+        }
+    },
+    methods: {
+        start: function() {
+            this.start_time = Date.now() - this.paused_at
+            this.delta = this.paused_at
+            this.timer_interval = setInterval(this.update.bind(this), 0.1)
+            this.running = true
 
-		var that = this;
+            localStorage.setItem('timer', JSON.stringify(this.$data))
+        },
+        pause: function() {
+            this.paused_at = this.delta
+            this.running = false
 
-		console.log(that);
-        
-        /*
-         *  Throws an extra zero in front of single digits.
-         */
-		this.time_string = function(num) {
-			if(num < 10) {
-				return "0"+num.toString();
-            } else {
-				return num.toString();
-			}
-		}
+            clearInterval(this.timer_interval)
 
-		this.start = function() {
-			if(tmr_ref == -1) {
-				if(sec_span == null) {		//initial initialization returning null...
-					min_span = document.getElementById("min");
-					sec_span = document.getElementById("seconds");
-				}
-				console.log(document.getElementById("min"));
+            localStorage.setItem('timer', JSON.stringify(this.$data))
+        },
+        reset: function() {
+            this.paused_at = 0
+            this.delta = 0
+            this.running = false
 
-				var s_cur = parseInt( sec_span.textContent );
-				var m_cur = parseInt( min_span.textContent );
-				comp = Date.now() - ((m_cur*60)+s_cur)*1000;		//this is in milliseconds
-				var blip;
+            clearInterval(this.timer_interval)
 
-				var sec;
-				var min;
-
-				tmr_ref = setInterval(function() {
-					blip = parseInt((Date.now() - comp)/1000);		//this is in seconds
-
-					min = parseInt(blip / 60);
-					console.log(blip+"\n"+(blip / 60)+"\n"+min);
-					sec = blip % 60;
-
-					sec_span.textContent = that.time_string(sec);
-					min_span.textContent = that.time_string(min);
-                    if (min == 14 && sec == 58)
-                        setInterval(function() {
-                                var timer = document.getElementById("timer");
-                                if (timer.style.color == "red") 
-                                    timer.style.color = "white";
-                                else
-                                    timer.style.color = "red";
-                        }, 2000);
-
-				}, 10);
-			}
-		}
-
-		this.stop = function() {
-			if(sec_span == null) {		//initial initialization returning null...
-				sec_span = document.getElementById("min");
-				ten_span = document.getElementById("seconds");
-			}
-			console.log(document.getElementById("min"));
-			if(tmr_ref != -1) {
-				clearInterval(tmr_ref);
-				tmr_ref = -1;
-				comp = -5;
-			} else {
-				console.log("Extra stop press.");
-			}
-		}
-
-		this.reset = function() {
-			if(sec_span == null) {		//initial initialization returning null...
-				sec_span = document.getElementById("min");
-				ten_span = document.getElementById("seconds");
-			}
-			if(tmr_ref != -1) {
-				clearInterval(tmr_ref);
-				tmr_ref = -1;
-				comp = -5;
-			}
-
-			sec_span.textContent = "00";
-			min_span.textContent = "00";
-		}
-
-		this.reset();
-	}
+            localStorage.setItem('timer', JSON.stringify(this.$data))
+        },
+        update: function() {
+            this.delta = Date.now() - this.start_time
+        }
+    },
+    computed: {
+        minutes: function() {
+            let minutes = Math.floor(this.delta / 1000 / 60)
+            return (minutes < 10) ? "0" + minutes : minutes
+        },
+        seconds: function() {
+            let seconds = Math.floor(this.delta / 1000 % 60)
+            return (seconds < 10) ? "0" + seconds : seconds
+        }
+    }
 }
-
 </script>
 
 <style scoped>
-h1 {
-    font-weight: 400;
+#timer {
+    font-family: monospace;
+    width: 100%;
+    text-align: center;
+    font-size: 70px;
 }
 
-
-.left {
-    display: flex;
-    width: 50%;
-    height: 100%;
-    flex-direction: column;
+.orangeText {
+    color: orange;
 }
 
-.right {
-    display: flex;
-    width: 50%;
-    height: 100%;
-    flex-direction: column;
+.redText {
+    color: red;
 }
 
-.trst {
-    display: flex;
-    flex-direction: row;
+.buttons {
+    text-align: center;
+    width: 100%;
 }
 
-.buttons{
-    position: static;
-    width: 400px;
-    height: 50px;
-    display: flex;
-		padding: 5px;
-    color: black;
+.buttons > button {
+    width: 150px;
+    height: 30px;
 }
-
 </style>
