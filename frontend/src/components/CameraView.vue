@@ -3,7 +3,6 @@
         <div class="image">
             <img :src="source" :style="transform(flipped[port])">
         </div>
-        <button id="flip" @click="flip">Flip</button>
         <div class="buttons">
             <button v-for="(cam,name) in data" 
                 :key="name" 

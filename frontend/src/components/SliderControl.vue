@@ -1,5 +1,5 @@
 <template>
-    <div> 
+    <div id="container"> 
         <div>
             <span>{{name}}: {{model}}%</span>
             <span v-if="invert !== undefined" style="float: right">
@@ -19,4 +19,7 @@
 </script>
 
 <style scoped>
+#container {
+    padding: 5px;
+}
 </style>

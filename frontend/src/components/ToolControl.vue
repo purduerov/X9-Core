@@ -1,7 +1,5 @@
 <template>
     <div>
-        <h1>Tool Control Scaling:</h1>
-        <hr>
         <SliderControl name="Claw Master" :model.sync="data.claw.master" :invert.sync="data.claw.invert" min="0" max="100" />
         <SliderControl name="Claw Open" :model.sync="data.claw.open" min="0" max="100" />
         <SliderControl name="Claw Close" :model.sync="data.claw.close" min="0" max="100" />

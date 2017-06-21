@@ -1,7 +1,5 @@
 <template>
     <div>
-        <h1>Thruster Scaling:</h1>
-        <hr>
         <SliderControl name="Master" 
             :model.sync="scales.master" min="0" max="70" />
         <SliderControl name="Forward/Back"
