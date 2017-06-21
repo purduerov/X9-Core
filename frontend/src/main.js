@@ -1,7 +1,7 @@
 var gp = require("./gamepad")
 var kb = require("./keyboard")
 
-function main(packets, other) {
+function main(packets, config) {
 
     //let socketHost = `http://${document.domain}:${location.port}`
     let socketHost = `ws://raspberrypi.local:5000`
@@ -13,8 +13,8 @@ function main(packets, other) {
         if (gp.ready) {
             gp.get_current()
 
-            let ts = other.thrust_scales
-            let ti = other.thrust_invert
+            let ts = config.thrust_scales
+            let ti = config.thrust_invert
 
             packets.dearflask.thrusters.desired_thrust = [
                 //VelX - forwards and backwards
@@ -38,7 +38,12 @@ function main(packets, other) {
                 gp.axes.left.y * (ts.master/100.0) * (ts.velX/100.0) * (ti.velX ? -1 : 1)
             ]
 
-            let tl = other.tool_scales
+            //Compute individual thruster scalings
+            packets.dearflask.thrusters.thruster_scales = config.thruster_control.map(
+                t => t.power/100.0 * (t.invert ? -1 : 1)
+            )
+
+            let tl = config.tool_scales
 
             packets.dearflask.valve_turner.power = (kb.isPressed('right') - kb.isPressed('left')) * (tl.valve_turner.power/100) * (tl.valve_turner.invert ? -1 : 1)
             packets.dearflask.fountain_tool.power = (gp.buttons.left.val - gp.buttons.right.val) * (tl.fountain_tool.power/100) * (tl.fountain_tool.invert ? -1 : 1)
@@ -63,6 +68,10 @@ function main(packets, other) {
     setInterval(() => {
         socket.emit("dearclient")
     }, 50)
+
+    setInterval(() => {
+        localStorage.setItem('configuration', JSON.stringify(config))
+    }, 10*1000)
 }
 
 module.exports = main

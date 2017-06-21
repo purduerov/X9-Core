@@ -1,7 +1,5 @@
 <template>
     <div>
-        <h1>Thrusters:</h1>
-        <hr>
         <div class="container">
             <div class="horizontal">
                 <ThrusterCircle class="top-left" :value="Math.round(data[0] * 100)"/>
@@ -32,9 +30,6 @@
 </script>
 
 <style scoped>
-h1 {
-    font-weight: 400;
-}
 .container {
     position: relative;
     width: 100%;
