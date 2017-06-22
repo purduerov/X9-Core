@@ -83,14 +83,18 @@ ipc.on('PRINTMENOW', function(event, save) {
     });
 
     ipc.on('write', function(event, filename, save) {
+      var bad = Boolean;
       fs.writeFile('./settings/'+filename, save, function(err) {
-        if(err) {
-          throw err;
-        }
-        console.log("Saving");
-      });
+          if(err) {
+            bad = true;
+            throw err;
+          } else {
+            bad = false;
+          }
+        });
 
-      event.sender.send('write-reply', err);
+        console.log(bad==true);
+        event.sender.send('write-reply', bad);
     });
 
     ipc.on('read', function(event, filename) {
@@ -108,13 +112,17 @@ ipc.on('PRINTMENOW', function(event, save) {
     });
 
     ipc.on('delete', function(event, filename) {
+      var bad = Boolean;
       fs.unlink(filename, function(err) {
         if(err) {
+          bad = true;
           throw err;
+        } else {
+          bad = false;
         }
       });
 
-      event.sender.send('delete-reply', err);
+      event.sender.send('delete-reply', bad);
     });
 
     // Emitted when the window is closed.

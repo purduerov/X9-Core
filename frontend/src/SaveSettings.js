@@ -9,11 +9,21 @@ function settings() {
     var setlist = $("#set_list");
 
     var settingUpdate = function(newlist) {
-        newlist.forEach(function(curVal, i) {
-            if(-1 == $.inArray(curVal, vue.config.list) ) {
-                setlist.append("<li class=\"asetting\">"+curVal+"<li>");
-            }
-        });
+
+        if(newlist.length > vue.config.list.length) {
+            newlist.forEach(function(curVal, i) {
+                if(-1 == $.inArray(curVal, vue.config.list) ) {
+                    setlist.append("<li class=\"asetting\" id=\""+curVal+"\">"+curVal+"<li>");
+                }
+            });
+        } else if(newlist.length < vue.config.list.length) {
+            vue.config.list.forEach(function(curVal, i) {
+                if(-1 == $.inArray(curVal, newlist) ) {
+                    vue.config.list.splice(i, 1);
+                    $("#"+curVal).remove();
+                }
+            });
+        }
 
         vue.config.list = newlist;
     }
@@ -28,9 +38,9 @@ function settings() {
         console.log("Saving");
         var name = title.val();
 
-        if(name == "" || "Name already used") {
+        if(name === "" || name === "Name already used") {
             title.val("Please name your file");
-        } else if($.inArray(name, vue.list)) {
+        } else if(($.inArray(name, vue.config.list) + 1)) {
             title.val("Name already used");
         } else if(name != "Please name your file") {
             ipcRenderer.send('write', name, JSON.stringify(vue.config) );
@@ -52,6 +62,7 @@ function settings() {
         console.log("Deleting");
         if(selected != undefined) {
             ipcRenderer.send('delete', selected.text() );
+            setlist.remove(selected);
         } else {
           console.log("Selected is undefined.");
         }
@@ -71,18 +82,21 @@ function settings() {
         This is where the webpage listens for Electron to respond to a call.
     **********/
 
-    ipcRenderer.on('write-reply', function(err) {
-        if(err) {
+    ipcRenderer.on('write-reply', function(bad) {
+        console.log(bad == true);
+        if(bad === true) {
             message.text("Failed to save properly");
         } else {
+            console.log("Refreshing");
             ipcRenderer.send('listings');
         }
     });
 
-    ipcRenderer.on('delete-reply', function(err) {
-        if(err) {
+    ipcRenderer.on('delete-reply', function(bad) {
+        if(bad === true) {
             message.text("Failed to delete properly");
         } else {
+            console.log("Refreshing");
             ipcRenderer.send('listings');
         }
     });
