@@ -98,22 +98,19 @@ ipc.on('PRINTMENOW', function(event, save) {
     });
 
     ipc.on('read', function(event, filename) {
-      var content = String;
-      fs.readFile(filename, function(err, data) {
+      fs.readFile("./settings/"+filename, 'utf8', function(err, data) {
         if(err) {
           throw err;
         } else {
-          content = data;
+          event.sender.send('read-reply', data);
         }
-        return;
       });
 
-      event.sender.send('read-reply', content);
     });
 
     ipc.on('delete', function(event, filename) {
       var bad = Boolean;
-      fs.unlink(filename, function(err) {
+      fs.unlink("./settings/"+filename, function(err) {
         if(err) {
           bad = true;
           throw err;

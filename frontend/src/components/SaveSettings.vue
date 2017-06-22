@@ -44,11 +44,7 @@ h1 {
 		width: 100%;
 }
 
-.asetting:hover {
-		color: blue;
-}
-
-.asetting:active {
-		color: green;
+input {
+		border-radius: 5px;
 }
 </style>

@@ -1,4 +1,3 @@
-
 function settings() {
     const {shell, app, ipcRenderer} = window.require('electron');
     const el = document.getElementById("save_new");
@@ -6,24 +5,37 @@ function settings() {
     var selected = undefined;
     var title = $("#save_new");
     var message = $("#set_mess");
+    var asets = $(".asetting");
     var setlist = $("#set_list");
 
+
+    /*********
+        Updates the list to reflect what's in the filesystem.
+        Assumes newlist is accurate against the filesystem, and an Array.
+    *********/
     var settingUpdate = function(newlist) {
 
-        if(newlist.length > vue.config.list.length) {
-            newlist.forEach(function(curVal, i) {
-                if(-1 == $.inArray(curVal, vue.config.list) ) {
-                    setlist.append("<li class=\"asetting\" id=\""+curVal+"\">"+curVal+"<li>");
-                }
-            });
-        } else if(newlist.length < vue.config.list.length) {
-            vue.config.list.forEach(function(curVal, i) {
-                if(-1 == $.inArray(curVal, newlist) ) {
-                    vue.config.list.splice(i, 1);
-                    $("#"+curVal).remove();
-                }
-            });
-        }
+        vue.config.list.forEach(function(curVal, i) {
+            if(-1 == $.inArray(curVal, newlist) ) {
+                $("#"+curVal).remove();   //splicing with this makes this function miss multiple
+            }                             //user-deleted files
+        });
+
+        newlist.forEach(function(curVal, i) {
+            if(-1 == $.inArray(curVal, vue.config.list) ) {
+                setlist.append("<li class=\"asetting\" id=\""+curVal+"\">"+curVal+"<li>");
+
+                let item = $("#"+curVal);
+                item.click(function() {
+                    selected = item;
+                    console.log(selected);
+                    asets.css("color", "white");
+                    item.css("color", "cyan");
+                });
+            }
+        });
+
+        asets = $(".asetting");   //gotta refresh the list, so new elements are effected
 
         vue.config.list = newlist;
     }
@@ -43,7 +55,15 @@ function settings() {
         } else if(($.inArray(name, vue.config.list) + 1)) {
             title.val("Name already used");
         } else if(name != "Please name your file") {
-            ipcRenderer.send('write', name, JSON.stringify(vue.config) );
+            let data = {};
+
+            Object.keys(vue.config).forEach(function(cur, i) {
+                if(cur != "list") {
+                    data[cur] = vue.config[cur];
+                }
+            });
+
+            ipcRenderer.send('write', name, JSON.stringify(data) );
         } else {
           console.log("Failed\n"+name);
         }
@@ -55,6 +75,7 @@ function settings() {
             ipcRenderer.send('read', selected.text() );
         } else {
           console.log("Selected is undefined.");
+          selected.css("color", "white");
         }
     });
 
@@ -62,7 +83,9 @@ function settings() {
         console.log("Deleting");
         if(selected != undefined) {
             ipcRenderer.send('delete', selected.text() );
-            setlist.remove(selected);
+            console.log("Here");
+            selected.remove();   //this is throwing an error, 'b.replace is not a function'
+            console.log("No, here");
         } else {
           console.log("Selected is undefined.");
         }
@@ -71,11 +94,6 @@ function settings() {
     $("#refresh").click(function() {
         console.log("Refreshing");
         ipcRenderer.send('listings');
-    });
-
-    $(".asetting").click(function() {
-        selected = this;
-        console.log(selected.val() );
     });
 
     /**********
@@ -106,6 +124,8 @@ function settings() {
     });
 
     ipcRenderer.on('read-reply', function(event, scaling) {
+      console.log(scaling);
+        window.play = scaling;
         var scales = JSON.parse(scaling);
 
         Object.keys(scales).forEach(function(key, i) {
