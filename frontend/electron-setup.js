@@ -70,12 +70,14 @@ ipc.on('PRINTMENOW', function(event, save) {
         if(err) {
           throw err;
         } else {
-          names = files.reduce(function(acc, cur, i) {
+/*          names = files.reduce(function(acc, cur, i) {
             acc[i] = cur;
             return acc;
           }, {});
 
-          event.sender.send('list-reply', names);
+*/
+          console.log(files);
+          event.sender.send('list-reply', files);
         }
       });
     });
@@ -85,7 +87,10 @@ ipc.on('PRINTMENOW', function(event, save) {
         if(err) {
           throw err;
         }
+        console.log("Saving");
       });
+
+      event.sender.send('write-reply', err);
     });
 
     ipc.on('read', function(event, filename) {
@@ -108,6 +113,8 @@ ipc.on('PRINTMENOW', function(event, save) {
           throw err;
         }
       });
+
+      event.sender.send('delete-reply', err);
     });
 
     // Emitted when the window is closed.

@@ -36,10 +36,14 @@
                     <Card title="Tool Control">
                         <ToolControl :data="config.tool_scales"></ToolControl>
                     </Card>
+
                 </div>
                 <div class="data-column">
                     <Card title="Timer">
                         <Timer></Timer>
+                    </Card>
+                    <Card title="SaveSettings">
+                        <SaveSettings></SaveSettings>
                     </Card>
                 </div>
             </div>
@@ -65,6 +69,7 @@ var SaveSettings = require("./components/SaveSettings.vue")
 
 var packets = require("./packets.js")
 var main = require("./main.js")
+var settings = require("./SaveSettings.js")
 
 export default {
     components: {
@@ -82,11 +87,10 @@ export default {
         ToolInfo,
 	      Timer,
         SaveSettings
-        Timer
     },
     data: function() {
         let config = {
-            version: 1.0, //INCREMENT IF YOU CHANGE THIS DATA STRUCTURE!
+            version: 1.01, //INCREMENT IF YOU CHANGE THIS DATA STRUCTURE!
             thrust_scales: {
                 master: 50, velX: 60, velY: 50,
                 velZ: 60, pitch: 35,
@@ -119,9 +123,9 @@ export default {
                     invert: false
                 }
             },
-            list: {
-                0: "Default",
-            },
+            list: [
+                "Default",
+            ],
         }
         let savedConfig = {}
         try {
@@ -137,8 +141,9 @@ export default {
         }
     },
     mounted: function() {
-        window.vue = this
+        window.vue = this;
         main(this.packets, this.config);
+        settings();
     }
 }
 </script>
