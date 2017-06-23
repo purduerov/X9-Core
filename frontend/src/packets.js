@@ -21,7 +21,7 @@ module.exports = {
         fountain_tool: {
             power: 0.0
         },
-        cameras: [],
+        cameras: {},
         leds: {
             bluetooth_led: false,
             camera_leds: false
