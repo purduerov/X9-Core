@@ -15,3 +15,9 @@ class Bluetooth(object):
             i += 1
         res += "\n"
         return res
+
+
+if __name__ == "__main__":
+    bluetooth = Bluetooth()
+    while True:
+        print bluetooth.read()
