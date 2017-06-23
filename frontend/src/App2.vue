@@ -37,7 +37,7 @@ export default {
         window.vue2 = this;
 
         var update2 = setInterval(function() {
-            ipcRenderer.send("cam2-send", );
+            ipcRenderer.send("cam2-send", packets.dearflask.cameras);
         }, 100);
     }
 }
