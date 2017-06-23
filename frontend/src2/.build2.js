@@ -8045,10 +8045,6 @@ exports.default = {
     },
     mounted: function mounted() {
         window.vue2 = this;
-
-        var update2 = setInterval(function () {
-            ipcRenderer.send("cam2-send");
-        }, 100);
     }
 };
 })()
