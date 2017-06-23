@@ -1,0 +1,187 @@
+<!-- need to add button on screen that opens a new window
+line that goes from first click to cursor after first click
+take input in inches that represents the length of the first line, to calculate
+the length of the second line in inches. Also, find a way to just delete single
+lines? Not sure how that's going to work. I also don't really know how many
+lines they want, that'd require creating canvases in a looping structure.-->
+<html>
+    <head>
+    <head/>
+    <body>
+        <div id="container" style="position:relative; width: 100%; height:100%">
+            <canvas id="layer0" style="position:absolute; left: 0; top: 0; width: 100%; height: 100%"></canvas>
+            <canvas id="write_c" style="position:absolute; left: 0; top: 0; width: 116px; height: 0px; background: white;"> </canvas>
+        </div>
+    </body>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.27/vue.js"></script>-->
+    <script>
+var clicks = 0;
+var lastClick = [0, 0];
+var length = 12;
+var mouseX = 0;
+var mouseY = 0;
+var f_dist;
+var n_dist;
+var id_num = 0;
+var vert = 20;
+var flag = 0;
+var half_click = 0;
+var i = new Image();
+i.src = "http://haasg040-cam.cs.purdue.edu/mjpg/video.mjpg"; //PUT STREAMER URL HERE, SOMETHING LIKE
+var canvid = document.getElementById("layer" + id_num);
+var canvasd = document.getElementById("layer" + 0);
+var write_c = document.getElementById("write_c");
+write_c.height = 0 + "px";
+contextI = document.getElementById("layer" + 0).getContext('2d');
+document.getElementById("layer" + id_num).addEventListener('click', drawLine, false);
+document.getElementById("layer" + id_num).addEventListener('mousemove', setMousePosition, false);
+document.addEventListener('keypress', clear, false);
+document.addEventListener('keypress', drawImg, false);
+
+
+function drawImg(e) {
+    var k = String.fromCharCode(e.keyCode || e.charCode);
+    if(k == 'd') {
+        contextI.drawImage(i, 0, 0, i.width,    i.height, 0, 0, canvasd.width, canvasd.height);
+    }
+}
+
+function clear(e) {
+    var k = String.fromCharCode(e.keyCode || e.charCode);
+    if (k == 'c') {
+        if (id_num != 0) {
+            if(half_click == 1) {
+                context1 = document.getElementById("layer" + id_num).getContext('2d'); context1.clearRect(0, 0, canvid.width, canvid.height);
+                clicks -= 2;
+                vert -= 20;
+                id_num--;
+                write_c.style.height =  vert - 15 + "px";
+            }
+        }
+    }
+}
+
+function setMousePosition(e) {
+
+    var canvasPos = getPosition(canvid);
+    mouseX = e.clientX - canvid.getBoundingClientRect().left;
+    mouseY = e.clientY - canvid.getBoundingClientRect().top;
+    context1 = canvid.getContext('2d');
+    if(clicks % 2 != 0) {
+        context1.clearRect(0, 0, canvid.width, canvid.height);
+        context1.beginPath();
+        context1.moveTo(lastClick[0], lastClick[1]);
+        context1.lineTo(mouseX, mouseY, 6);
+        context1.strokeStyle = '#000000';
+        context1.strokeStyle = 'red';
+        context1.lineWidth = 2;
+        context1.stroke();
+    }
+}
+
+function getPosition(el) {
+    var xPos = 0;
+    var yPos = 0;
+
+    while (el) {
+        xPos += (el.offsetLeft - canvid.getBoundingClientRect().left);
+        yPos += (el.offsetTop - canvid.getBoundingClientRect().top);
+        el = el.offsetParent;
+    }
+    return {
+        x: xPos,
+        y: yPos
+    };
+}
+
+function getCursorPosition(e) {
+    var x;
+    var y;
+
+    if (e.pageX != undefined && e.pageY != undefined) {
+        x = e.pageX;
+        y = e.pageY;
+    }
+    else {
+        x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+        y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+    }
+
+    return [x, y];
+}
+
+function drawLine(e) {
+
+    x = getCursorPosition(e)[0] - canvid.getBoundingClientRect().left;
+    y = getCursorPosition(e)[1] - canvid.getBoundingClientRect().top;
+    half_click++;
+
+    if (clicks % 2 == 0) {
+        id_num++;
+        clicks = clicks + 1;
+        half_click = 0;
+
+        if(document.getElementById("layer" + id_num) == null) {
+            canvas = document.createElement('canvas');
+            canvas.id = "layer" + id_num;
+            canvas.style.position = "absolute";
+            canvas.setAttribute('left', '0px');
+            canvas.setAttribute('top', '0px');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            document.getElementById("container").appendChild(canvas);
+            document.getElementById(canvas.id).addEventListener('click', drawLine, false);
+            document.getElementById(canvas.id).addEventListener('mousemove', setMousePosition, false);
+        }
+        else {
+            canvas = document.getElementById("layer" + id_num);
+        }
+        context1 = canvas.getContext('2d');
+        context1.fillStyle = 'red';
+        context1.font = '12px Arial';
+        canvid = canvas;
+    }
+    else if (clicks == 1) {
+
+        clicks = clicks + 1;
+        var len_x = x - lastClick[0];
+        var len_y = y - lastClick[1];
+        f_dist = (len_x * len_x + len_y * len_y) ** (1 / 2);
+        context1.fillText("Line 1 Inches: " + length.toString(), 0, vert);
+        vert += 20;
+        if(len_x < 0) {
+            context1.fillText("" + "1", x - 10, y + 4);
+        }
+        else {
+            context1.fillText("" + "1", lastClick[0] - 10, lastClick[1] + 4);
+        }
+        write_c.style.height =  vert - 15 + "px";
+    }
+    else if (clicks % 2 == 1) {
+        clicks = clicks + 1;
+        var len_x = x - lastClick[0];
+        var len_y = y - lastClick[1];
+        n_dist = (len_x * len_x + len_y * len_y) ** (1 / 2);
+        var ratio = n_dist / f_dist;
+        var inch_conv = ratio * 12;
+        context1 = canvid.getContext("2d");
+        context1.fillStyle = 'red';
+        context1.font = '12px Arial';
+        context1.fillText("Line " + id_num + " Inches: " + (Math.round(inch_conv * 100) / 100).toString(), 0, vert);
+        vert += 20;
+        write_c.setAttribute('height', vert + "px");
+        if(len_x < 0) {
+            context1.fillText("" + id_num, x - 10, y + 4);
+        }
+        else {
+            context1.fillText("" + id_num, lastClick[0] - 10, lastClick[1] + 4);
+        }
+        write_c.style.height =  vert - 15 + "px";
+    }
+
+
+    lastClick = [x, y];
+};
+
+    </script>
+</html>
