@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="wrapper">
-			<br>Save current settings:<br>
+			<h1>Save current settings:</h1>
 	    <input id="save_new"></input>
 			<div class="buttons">
 				<button id="save">Save</button>
@@ -27,7 +27,7 @@
 
 <style scoped>
 h1 {
-    font-weight: 400;
+    font-weight: 50;
 }
 
 .buttons{
@@ -44,7 +44,19 @@ h1 {
 		width: 100%;
 }
 
+
 input {
-		border-radius: 5px;
+    margin: 2px;
+    box-sizing: border-box;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    min-height: 30px;
+		width: 75%;
+}
+
+ul {
+		font-size: 16px;
 }
 </style>

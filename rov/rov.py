@@ -8,7 +8,7 @@ from time import time, sleep
 import wiringpi
 
 from sensors import Pressure, IMU
-from camera import Cameras
+from cameras import Cameras
 
 from hardware.motor_control import MotorControl
 from hardware.digital_pin import DigitalPin
