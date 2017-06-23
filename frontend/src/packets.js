@@ -22,6 +22,10 @@ module.exports = {
             power: 0.0
         },
         cameras: [],
+        leds: {
+            bluetooth_led: false,
+            camera_leds: false
+        }
     },
     dearclient: {
         IMU: {
