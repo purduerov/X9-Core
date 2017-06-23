@@ -27,13 +27,13 @@
         components: {
             SliderControl
         },
-        props: ['data'],
+        props: ['data', 'packleds'],
         methods: {
             toggleBluetoothLed: function() {
-                this.data.leds.bluetooth_led = !this.data.leds.bluetooth_led 
+                this.packleds.bluetooth_led = !this.packleds.bluetooth_led
             },
             toggleCameraLeds: function() {
-                this.data.leds.camera_leds = !this.data.leds.camera_leds
+                this.packleds.camera_leds = !this.packleds.camera_leds
             }
         }
 
