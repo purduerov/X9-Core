@@ -42,6 +42,7 @@ module.exports = {
             Cam_1: {'port': '8081', status: "active"},
             Cam_2: {'port': '8082', status: "active"},
             Cam_3: {'port': '8083', status: "active"}
-        }
+        },
+        cam_cur: 8080,
     }
 };

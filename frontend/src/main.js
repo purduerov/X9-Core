@@ -54,7 +54,9 @@ function main(packets, config) {
             let claw = (gp.buttons.a.val - gp.buttons.b.val) * (tl.claw.master/100) * (tl.claw.invert ? -1 : 1)
             packets.dearflask.claw.power = claw * ((claw > 0 ? tl.claw.open : tl.claw.close)/100)
 
-            packets.dearflask.cameras[cam2port] = "active";
+            packets.dearflask.cameras[cam2port.port] = "active";
+
+            packets.dearflask.cameras[cam2port.last] = ( (cam2port != packets.dearflask.cam_cur) ? "suspend" : "active");
 
             socket.emit("dearflask", packets.dearflask)
         }

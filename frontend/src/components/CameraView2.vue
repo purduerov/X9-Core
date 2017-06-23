@@ -24,6 +24,7 @@ export default {
     data: function() {
         return {
             port: 8080,
+            last: 8080,
             flipped: {},
             refreshing: false,
         }
@@ -32,7 +33,7 @@ export default {
         changePort: function(newPort) {
             this.port = newPort;
 
-            ipcRenderer.send('cam2port-send', this.port);
+            ipcRenderer.send('cam2port-send', {"port": this.port, "last": this.last});
         },
         window: function() {
             const {BrowserWindow} = window.require('electron').remote

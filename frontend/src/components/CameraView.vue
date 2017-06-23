@@ -29,6 +29,7 @@ export default {
     methods: {
         changePort: function(newPort) {
             this.port = newPort
+            this.packet.cam_cur = newPort
 
             let newStatus = {}
             for (let [name, cam] of Object.entries(this.data)) {
@@ -79,7 +80,7 @@ export default {
 .buttons {
     position: absolute;
     bottom: 0;
-    width: calc(100% - 120px);
+    width: calc(100% - 240px);
     height: 50px;
     display: flex;
     justify-content: space-between;
@@ -114,7 +115,7 @@ export default {
     bottom: 0;
     right: 0;
     height: 50px;
-    width: 120px;
+    width: 240px;
     display: flex;
     justify-content: space-between;
 }
