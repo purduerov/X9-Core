@@ -11,6 +11,7 @@ class Led(object):
 
         # set the pin to pwm output
         wiringpi.pinMode(self.pin, wiringpi.OUTPUT)
+        self.off()
 
     def write(self, value):
         if value != 0:
