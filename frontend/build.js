@@ -23,3 +23,21 @@ browserify('src/index.js')
     })
     .bundle()
     .pipe(fs.createWriteStream('src/.build.js'));
+
+    browserify('src/index2.js')
+        .plugin(errorify)
+        .transform(vueify)
+        .transform(
+            envify({
+                _: 'purge',
+                NODE_ENV: node_env
+            }),
+            {
+                global: true
+            }
+        )
+        .plugin('vueify/plugins/extract-css', {
+            out: 'src/.build2.css'
+        })
+        .bundle()
+        .pipe(fs.createWriteStream('src/.build2.js'));

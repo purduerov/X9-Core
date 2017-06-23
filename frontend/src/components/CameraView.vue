@@ -79,10 +79,10 @@ export default {
 .buttons {
     position: absolute;
     bottom: 0;
-    width: calc(100% - 120px);
+    width: calc(100% - 240px);
     height: 50px;
     display: flex;
-    justify-content: space-between;
+    //justify-content: space-between;
 }
 
 .buttons > button {
@@ -114,7 +114,7 @@ export default {
     bottom: 0;
     right: 0;
     height: 50px;
-    width: 120px;
+    width: 240px;
     display: flex;
     justify-content: space-between;
 }

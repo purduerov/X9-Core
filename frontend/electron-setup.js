@@ -13,6 +13,7 @@ const url = require('url')
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
+let viewWindow
 
 function createWindow () {
     // Create the browser window.
@@ -30,6 +31,19 @@ function createWindow () {
         protocol: 'file:',
         slashes: true
     }))
+
+    viewWindow = new BrowserWindow({
+        //this window is meant to be used with the large monitor
+        //change these values to 2576 & 1119 once it's hooked up
+        width: 1000,
+        height: 800
+    })
+
+    viewWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'src/index2.html'),
+        protocol: 'file:',
+        slashes: true
+    }))
 /*
     fs.access("./settings/", function(err) {
       if(err && err.code == 'ENOENT') {
@@ -37,7 +51,7 @@ function createWindow () {
       }
       return;
     });
-    
+
     ipc.on('listings', function () {
       var names = Array;
       fs.readdir('./settings/', function(err, files) {
@@ -48,10 +62,10 @@ function createWindow () {
         }
         return;
       });
-      
+
       return names;
     });
-    
+
     ipc.on('write', function(filename, save) {
       fs.writeFile('./settings/'+filename, save, function(err) {
         if(err) {
@@ -59,7 +73,7 @@ function createWindow () {
         }
       });
     });
-    
+
     ipc.on('read', function(filename, copy) {
       var content = String;
       fs.readFile(filename, function(err, data) {
@@ -70,10 +84,10 @@ function createWindow () {
         }
         return;
       });
-      
+
       return content;
     });
-    
+
     ipc.on('delete', function(filename) {
       fs.unlink(filename, function(err) {
         if(err) {
@@ -88,6 +102,10 @@ function createWindow () {
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
         mainWindow = null
+    })
+
+    viewWindow.on('closed', function () {
+      viewWindow = null
     })
 
     // Maximize first, so that when coming out of full screen the window

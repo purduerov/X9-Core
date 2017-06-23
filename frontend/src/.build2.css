@@ -1,0 +1,155 @@
+#app2[data-v-8916279a] {
+    font-family: 'Roboto', Helvetica, Arial, sans-serif;
+    width: 100%;
+    height: 100%;
+    background-color: #1a1a1a;
+    font-weight: 100;
+}
+
+#navbar[data-v-8916279a] {
+    height: 50px;
+}
+
+#main-container[data-v-8916279a] {
+    position: fixed;
+    top: 70px;
+    left: 6px;
+    right: 6px;
+    bottom: 6px;
+    margin: 0;
+}
+
+.full-height[data-v-8916279a] {
+    height: 100% !important;
+    float: left;
+}
+
+.full-width[data-v-8916279a] {
+    width: 100% !important;
+    float: left;
+}
+#navbar[data-v-11e39852] {
+    position: fixed;
+    width: 100%;
+}
+
+.nav-wrapper[data-v-11e39852] {
+    background-color: #37474f;
+}
+
+#title[data-v-11e39852] {
+    font-weight: 100;
+    font-family: 'Roboto', Helvetica, Arial, sans-serif;
+    padding-left: 28px;
+    line-height: 50px;
+    font-size: 20px;
+    color: white;
+}
+.buttons[data-v-311402b1] {
+    position: absolute;
+    bottom: 0;
+    width: calc(100% - 240px);
+    height: 50px;
+    display: flex;
+    //justify-content: space-between;
+}
+
+.buttons > button[data-v-311402b1] {
+    width: 20%;
+    font-size: 30px;
+    flex: 1;
+}
+
+.buttons > button.killed[data-v-311402b1] {
+    background-color: red;
+}
+
+.buttons > button.active[data-v-311402b1] {
+    /*background-color: green;*/
+}
+
+.buttons > button.suspended[data-v-311402b1] {
+    background-color: orange;
+}
+
+#camera-view[data-v-311402b1] {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+.control-buttons[data-v-311402b1] {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 50px;
+    width: 240px;
+    display: flex;
+    justify-content: space-between;
+}
+.control-button[data-v-311402b1] {
+    width: 100%;
+    flex: 1;
+    font-size: 40px;
+}
+
+.flipped[data-v-311402b1] {
+    transform: rotate(180deg);
+}
+
+#flip[data-v-311402b1] {
+    transform: scaleX(-1);
+}
+
+.image[data-v-311402b1] {
+    height: calc(100% - 50px);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.image > img[data-v-311402b1] {
+    max-height: 100%;
+    max-width: 100%;
+    width: 100%;
+}
+#container[data-v-6b999297] {
+    width: 100%;
+}
+
+#card[data-v-6b999297] {
+    font-family: 'Roboto', Helvetica, Arial, sans-serif;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    box-sizing: border-box;
+    padding: 10px;
+    color: white;
+    overflow: hidden;
+}
+
+#main-container[data-v-6b999297] {
+    width: 100%;
+    height: 100%;
+    min-height: 100px;
+    background-color: #2e2e2e;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+#padding[data-v-6b999297] {
+    box-sizing: border-box;
+    padding: 10px;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+#title[data-v-6b999297] {
+    height: 35px;
+    line-height: 35px;
+    font-size: 24px;
+    color: white;
+    background-color: rgba(0,0,0,0.2);
+    padding: 0 10px;
+}
