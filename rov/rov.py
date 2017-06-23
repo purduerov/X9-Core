@@ -11,13 +11,12 @@ from sensors import Pressure, IMU
 from camera import Cameras
 
 from hardware.motor_control import MotorControl
-from hardware.digital_pin import DigitalPin
 
 from thrusters.Control import ThrusterControl
 from thrusters.hardware.PWM_Control import Thrusters
 from thrusters.mapper.Simple import Mapper
 
-from tools import Claw, ValveTurner, FountainTool
+from tools import Claw, ValveTurner, FountainTool, Led
 
 
 class ROV(object):
@@ -90,12 +89,12 @@ class ROV(object):
             pin=2
         )
 
-        self.camera_lights = DigitalPin(
+        self.camera_lights = Led(
             pin=6,
             setupWiringPi=False
         )
 
-        self.bluetooth_light = DigitalPin(
+        self.bluetooth_light = Led(
             pin=16,
             setupWiringPi=False
         )

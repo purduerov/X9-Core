@@ -1,13 +1,25 @@
-import digital_pin
+import wiringpi
 
-class Led(DigitalPin):
+class Led(object):
 
     def __init__(self, pin=16, setupWiringPi=True):
-        super(self, pin, setupWiringPi)
-        off()
+        self.pin = pin
 
-    def on():
+        # sets up wiring pi gpio
+        if setupWiringPi:
+            wiringpi.wiringPiSetupGpio()
+
+        # set the pin to pwm output
+        wiringpi.pinMode(self.pin, wiringpi.OUTPUT)
+
+    def write(self, value):
+        if value != 0:
+            value = 1
+
+        wiringpi.digitalWrite(self.pin, value)
+
+    def on(self):
         super.write(0)
 
-    def off():
+    def off(self):
         super.write(1)
