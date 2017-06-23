@@ -36,7 +36,11 @@ data["dearflask"] = {
     "fountain_tool": {
         "power": 0.0
     },
-    "cameras": []
+    "cameras": {},
+    "leds": {
+        "bluetooth_led": False,
+        "camera_leds": False
+    }
 }
 """
 try:

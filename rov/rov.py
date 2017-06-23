@@ -136,11 +136,11 @@ class ROV(object):
                 self.claw_status = False
 
             # control bluetooth led
-            if (df['leds']['bluetooth_light'] == True):
+            if (df['leds']['bluetooth_led'] == True):
                 self.bluetooth_light.on()
             else:
                 self.bluetooth_light.off()
-            if (df['leds']['camera_lights'] == True):
+            if (df['leds']['camera_leds'] == True):
                 self.camera_lights.on()
             else:
                 self.camera_lights.off()
