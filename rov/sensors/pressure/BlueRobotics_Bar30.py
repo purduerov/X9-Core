@@ -1,7 +1,13 @@
 from smbus import SMBus
 import time
 
+
 class Pressure(object):
+
+    # Used for determining approximate depth
+    GRAVITY = 9.8  # m/s^2
+    DENSITY = 1000  # kg/m^3
+    PRESSURE_CONVERSION_RATE = 100  # Pa/mBar
 
     def __init__(self):
         self.bus = SMBus(1)
@@ -9,6 +15,7 @@ class Pressure(object):
         self._data = {
             "pressure": 0,
             "temperature": 0,
+            "depth": 0
         }
 
     @property
@@ -96,5 +103,9 @@ class Pressure(object):
         self._data['pressure'] = pressure
 
         # Temp in celsius
-        temp = TEMP / 100.0
+        temperature = TEMP / 100.0
         self._data['temperature'] = temperature
+
+        # approximated depth in meters
+        depth = (pressure * self.PRESSURE_CONVERSION_RATE) / (self.DENSITY * self.GRAVITY)
+        self._data['depth'] = depth
