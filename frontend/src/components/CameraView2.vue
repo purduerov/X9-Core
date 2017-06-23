@@ -31,7 +31,6 @@ export default {
     methods: {
         changePort: function(newPort) {
             this.port = newPort;
-            console.log(this.port);
 
             ipcRenderer.send('cam2port-send', this.port);
         },

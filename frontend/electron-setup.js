@@ -7,15 +7,13 @@ const BrowserWindow = electron.BrowserWindow
 const path = require('path')
 const url = require('url')
 
-//const fs = require('fs')
-//const ipc = require('ipc')
+const fs = require('fs')
+const ipc = electron.ipcMain
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 let viewWindow
-
-global.cam2port = 8080;
 
 function createWindow () {
     // Create the browser window.
@@ -48,8 +46,7 @@ function createWindow () {
     }))
 
     ipc.on('cam2port-send', function(event, port) {
-        console.log(port);
-        event.sender.send('cam2port-include', port);
+        mainWindow.webContents.send('cam2port-include', port);
     });
 
 /*

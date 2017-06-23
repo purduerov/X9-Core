@@ -63,9 +63,9 @@ function main(packets, config) {
     }
     update()
 
-    ipcRenderer.on('cam2port-include', function(port) {
+    ipcRenderer.on('cam2port-include', function(event, port) {
         cam2port = port;
-        console.log(port+" vs "+cam2port);
+        console.log(port);
     });
 
     function updateDC(data) {
