@@ -14,7 +14,7 @@
                 <span>Leds:</span>
             </div>
             <button @click="toggleBluetoothLed" class="active">Bluetooth</button>
-            <button @click="toggleCameraLeds>Camera</button>
+            <button @click="toggleCameraLeds">Camera</button>
         </div>
     </div>
 </template>
@@ -30,11 +30,10 @@
         props: ['data'],
         methods: {
             toggleBluetoothLed: function() {
-                data.leds.bluetooth_led = !data.leds.bluetooth_led 
+                this.data.leds.bluetooth_led = !this.data.leds.bluetooth_led 
             },
             toggleCameraLeds: function() {
-                data.leds.camera_leds = !data.leds.camera_leds
-                
+                this.data.leds.camera_leds = !this.data.leds.camera_leds
             }
         }
 
