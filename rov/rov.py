@@ -101,8 +101,8 @@ class ROV(object):
         )
 
         #""" Disabled until hardware is done and sw is tested
-        # self.IMU = IMU()
-        # self.pressure = Pressure()
+        self.IMU = IMU()
+        self.pressure = Pressure()
         #"""
 
     def update(self):
@@ -143,10 +143,10 @@ class ROV(object):
 
             self.cameras.set_status(df['cameras'])
 
-            """ Disabled until hardware is done and sw is tested
+            #""" Disabled until hardware is done and sw is tested
             self.pressure.update()
             self.IMU.update()
-            """
+            #"""
         except Exception as e:
             print "Failed updating things"
             print "Exception: %s" % e
@@ -157,6 +157,11 @@ class ROV(object):
         self.dearclient['last_update'] = self.last_update
         self.dearclient['thrusters'] = self.thruster_control.data
         self.dearclient['cameras'] = self.cameras.status()
+
+        # """ Disabled until hardware is done and sw is tested
+        self.dearclient['IMU'] = self.IMU.data
+        self.dearclient['pressure'] = self.pressure.data
+        # """
 
         with self._data_lock:
             self._data['dearclient'] = self.dearclient
