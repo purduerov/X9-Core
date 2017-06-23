@@ -9,6 +9,12 @@
         <hr />
 
         <SliderControl name="Fountain Tool" :model.sync="data.fountain_tool.power" :invert.sync="data.fountain_tool.invert" min="0" max="50" />
+        <div id="container">
+            <div>
+                <span>Leds:</span>
+            </div>
+            <button @click="toggleBluetoothLed" class="active">Bluetooth</button>
+            <button @click="toggleCameraLeds>Camera</button>
         </div>
     </div>
 </template>
@@ -21,6 +27,20 @@
         components: {
             SliderControl
         },
-        props: ['data']
+        props: ['data'],
+        methods: {
+            toggleBluetoothLed: function() {
+                data.leds.bluetooth_led = !data.leds.bluetooth_led 
+            },
+            toggleCameraLeds: function() {
+                data.leds.camera_leds = !data.leds.camera_leds
+                
+            }
+        }
+
     }
 </script>
+
+<style scoped>
+
+</style>
