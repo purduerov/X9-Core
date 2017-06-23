@@ -34,7 +34,7 @@
                         </Tab>
                     </CardTabs>
                     <Card title="Tool Control">
-                        <ToolControl :data="config.tool_scales"></ToolControl>
+                        <ToolControl :data="config.tool_scales" :packleds="packets.dearflask.leds"></ToolControl>
                     </Card>
 
                 </div>
