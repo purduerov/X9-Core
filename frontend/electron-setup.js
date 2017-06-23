@@ -39,17 +39,6 @@ function createWindow () {
     for uniformity.
 **************/
 
-/*
-//this was a test, writes a file with content typed in the window
-ipc.on('PRINTMENOW', function(event, save) {
-  //console.log(save);
-  fs.writeFile('./settings/iwroteit.wut', save, function(err) {
-    if(err) {
-      throw err;
-    }
-  });
-});
-*/
 
 //makes the settings file if it doesn't already exist
 //GitHub should make this mute, but helps operations occur error-free.
@@ -70,13 +59,7 @@ ipc.on('PRINTMENOW', function(event, save) {
         if(err) {
           throw err;
         } else {
-/*          names = files.reduce(function(acc, cur, i) {
-            acc[i] = cur;
-            return acc;
-          }, {});
-
-*/
-          console.log(files);
+          //console.log(files);
           event.sender.send('list-reply', files);
         }
       });
@@ -93,7 +76,7 @@ ipc.on('PRINTMENOW', function(event, save) {
           }
         });
 
-        console.log(bad==true);
+        //console.log(bad==true);
         event.sender.send('write-reply', bad);
     });
 
