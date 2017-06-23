@@ -1,4 +1,4 @@
-import Adafruit_BNO055
+from Adafruit_BNO055.BNO055 import BNO055
 
 
 class IMU(object):
