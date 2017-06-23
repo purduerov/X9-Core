@@ -1,0 +1,27 @@
+canvas {
+  id="layer0"
+  border: 1px dashed rgb(200, 200, 200);
+  style=z-index2;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+}
+canvas {
+  id="layer2"
+  border: 1px dashed rgb(200, 200, 200);
+  style=z-index:1;
+  position:absolute;
+  left: 0px;
+  top: 0px;
+}
+
+canvas {
+  id="buttonLayer"
+  border: 1px dashed rgb(200, 200, 200);
+  style=z-index:1;
+  position:absolute;
+  left: 0px;
+  top: 0px;
+}
