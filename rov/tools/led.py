@@ -20,7 +20,7 @@ class Led(object):
         wiringpi.digitalWrite(self.pin, value)
 
     def on(self):
-        super.write(0)
+        self.write(0)
 
     def off(self):
-        super.write(1)
+        self.write(1)
