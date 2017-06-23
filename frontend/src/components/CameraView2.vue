@@ -16,9 +16,11 @@
 </template>
 
 <script>
+let {shell, app, ipcRenderer} = window.require('electron');
+
 export default {
     name: 'camera-view',
-    props: ['data', 'packet'],
+    props: ['data'],
     data: function() {
         return {
             port: 8080,
@@ -28,13 +30,10 @@ export default {
     },
     methods: {
         changePort: function(newPort) {
-            this.port = newPort
+            this.port = newPort;
+            console.log(this.port);
 
-            let newStatus = {}
-            for (let [name, cam] of Object.entries(this.data)) {
-                newStatus[cam.port] = this.port == cam.port ? 'active' : 'suspended'
-            }
-            this.packet.cameras = newStatus
+            ipcRenderer.send('cam2port-send', this.port);
         },
         window: function() {
             const {BrowserWindow} = window.require('electron').remote
@@ -79,10 +78,10 @@ export default {
 .buttons {
     position: absolute;
     bottom: 0;
-    width: calc(100% - 120px);
+    width: calc(100% - 240px);
     height: 50px;
     display: flex;
-    justify-content: space-between;
+    //justify-content: space-between;
 }
 
 .buttons > button {
@@ -114,7 +113,7 @@ export default {
     bottom: 0;
     right: 0;
     height: 50px;
-    width: 120px;
+    width: 240px;
     display: flex;
     justify-content: space-between;
 }

@@ -14,13 +14,11 @@
 </template>
 
 <script>
-var Navbar = require("./components/Navbar.vue")
-var CameraView = require("./components/CameraView.vue")
-var Card = require("./components/Card.vue")
+var Navbar = require("../components/Navbar.vue")
+var CameraView = require("../components/CameraView2.vue")
+var Card = require("../components/Card.vue")
 
-var packets = require("./packets.js")
-var main = require("./main.js")
-const {shell, app, ipcRenderer} = window.require('electron');
+var packets = require("../packets.js")
 
 export default {
     components: {
@@ -35,8 +33,6 @@ export default {
     },
     mounted: function() {
         window.vue2 = this;
-
-        
     }
 }
 </script>

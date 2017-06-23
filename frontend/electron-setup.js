@@ -15,6 +15,8 @@ const url = require('url')
 let mainWindow
 let viewWindow
 
+global.cam2port = 8080;
+
 function createWindow () {
     // Create the browser window.
     mainWindow = new BrowserWindow({
@@ -40,10 +42,16 @@ function createWindow () {
     })
 
     viewWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'src2/index2.html'),
+        pathname: path.join(__dirname, 'src/src2/index2.html'),
         protocol: 'file:',
         slashes: true
     }))
+
+    ipc.on('cam2port-send', function(event, port) {
+        console.log(port);
+        event.sender.send('cam2port-include', port);
+    });
+
 /*
     fs.access("./settings/", function(err) {
       if(err && err.code == 'ENOENT') {

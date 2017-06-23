@@ -24,7 +24,7 @@ browserify('src/index.js')
     .bundle()
     .pipe(fs.createWriteStream('src/.build.js'));
 
-    browserify('src2/index2.js')
+    browserify('src/src2/index2.js')
         .plugin(errorify)
         .transform(vueify)
         .transform(
@@ -37,7 +37,7 @@ browserify('src/index.js')
             }
         )
         .plugin('vueify/plugins/extract-css', {
-            out: 'src2/.build2.css'
+            out: 'src/src2/.build2.css'
         })
         .bundle()
-        .pipe(fs.createWriteStream('src2/.build2.js'));
+        .pipe(fs.createWriteStream('src/src2/.build2.js'));
