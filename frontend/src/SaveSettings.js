@@ -100,9 +100,9 @@ function settings() {
         This is where the webpage listens for Electron to respond to a call.
     **********/
 
-    ipcRenderer.on('write-reply', function(bad) {
+    ipcRenderer.on('write-reply', function(event, bad) {
         console.log(bad == true);
-        if(bad === true) {
+        if(bad) {
             message.text("Failed to save properly");
         } else {
             console.log("Refreshing");
@@ -110,8 +110,8 @@ function settings() {
         }
     });
 
-    ipcRenderer.on('delete-reply', function(bad) {
-        if(bad === true) {
+    ipcRenderer.on('delete-reply', function(event, bad) {
+        if(bad) {
             message.text("Failed to delete properly");
         } else {
             console.log("Refreshing");
