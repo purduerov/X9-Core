@@ -22,15 +22,12 @@ class Camera(object):
         self.brightness = brightness
         self.contrast = contrast
 
-        self.input = 'input_uvc.so -r {resolution} -f {framerate} -d {device} -br {brightness} -co {contrast}'.format(
-            resolution=self.resolution,
-            framerate=self.framerate,
+        self.input = 'input_uvc.so -d {device}'.format(
             device=self.device,
-            brightness=self.brightness,
-            contrast=self.contrast
         )
-        self.output = 'output_http.so -p {port}'.format(
-            port=self.port
+        self.output = 'output_http.so -p {port} {web}'.format(
+            port=self.port,
+            web='-w /usr/local/www'
         )
 
         self.status = "killed"
