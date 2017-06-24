@@ -7,8 +7,8 @@ const BrowserWindow = electron.BrowserWindow
 const path = require('path')
 const url = require('url')
 
-//const fs = require('fs')
-//const ipc = require('ipc')
+const fs = require('fs')
+const ipc = electron.ipcMain
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -30,58 +30,81 @@ function createWindow () {
         protocol: 'file:',
         slashes: true
     }))
-/*
+
+
+/***************
+    This is for saving and retrieving settings
+    Here, all communication should be in string form;
+    The webpage handles the Object-to-String conversion,
+    for uniformity.
+**************/
+
+
+//makes the settings file if it doesn't already exist
+//GitHub should make this mute, but helps operations occur error-free.
     fs.access("./settings/", function(err) {
       if(err && err.code == 'ENOENT') {
         fs.mkdir("./settings/");
+        console.log("Settings file created.");
+      } else {
+        console.log("Settings file exists.");
       }
       return;
     });
-    
-    ipc.on('listings', function () {
-      var names = Array;
+
+    ipc.on('listings', function(event) {
+
+      var names = Object;
       fs.readdir('./settings/', function(err, files) {
         if(err) {
           throw err;
         } else {
-          names = files;
+          //console.log(files);
+          event.sender.send('list-reply', files);
         }
-        return;
       });
-      
-      return names;
     });
-    
-    ipc.on('write', function(filename, save) {
+
+    ipc.on('write', function(event, filename, save) {
+      var bad = Boolean;
       fs.writeFile('./settings/'+filename, save, function(err) {
-        if(err) {
-          throw err;
-        }
-      });
+          if(err) {
+            bad = true;
+            throw err;
+          } else {
+            bad = false;
+          }
+        });
+
+        //console.log(bad==true);
+        event.sender.send('write-reply', bad);
     });
-    
-    ipc.on('read', function(filename, copy) {
-      var content = String;
-      fs.readFile(filename, function(err, data) {
+
+    ipc.on('read', function(event, filename) {
+      fs.readFile("./settings/"+filename, 'utf8', function(err, data) {
         if(err) {
           throw err;
         } else {
-          content = data;
+          event.sender.send('read-reply', data);
         }
-        return;
       });
-      
-      return content;
+
     });
-    
-    ipc.on('delete', function(filename) {
-      fs.unlink(filename, function(err) {
+
+    ipc.on('delete', function(event, filename) {
+      var bad = Boolean;
+      fs.unlink("./settings/"+filename, function(err) {
         if(err) {
+          bad = true;
           throw err;
+        } else {
+          bad = false;
         }
       });
+
+      event.sender.send('delete-reply', bad);
     });
-*/
+
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {
         // Dereference the window object, usually you would store windows

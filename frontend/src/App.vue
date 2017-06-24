@@ -36,10 +36,14 @@
                     <Card title="Tool Control">
                         <ToolControl :data="config.tool_scales" :packleds="packets.dearflask.leds"></ToolControl>
                     </Card>
+
                 </div>
                 <div class="data-column">
                     <Card title="Timer">
                         <Timer></Timer>
+                    </Card>
+                    <Card title="SaveSettings">
+                        <SaveSettings></SaveSettings>
                     </Card>
                 </div>
             </div>
@@ -61,9 +65,11 @@ var IndThrusterControl = require("./components/IndThrusterControl.vue")
 var ToolControl = require("./components/ToolControl.vue")
 var ToolInfo = require("./components/ToolInfo.vue")
 var Timer = require("./components/Timer.vue")
+var SaveSettings = require("./components/SaveSettings.vue")
 
 var packets = require("./packets.js")
 var main = require("./main.js")
+var settings = require("./SaveSettings.js")
 
 export default {
     components: {
@@ -79,11 +85,12 @@ export default {
         IndThrusterControl,
         ToolControl,
         ToolInfo,
-        Timer
+	      Timer,
+        SaveSettings
     },
     data: function() {
         let config = {
-            version: 1.0, //INCREMENT IF YOU CHANGE THIS DATA STRUCTURE!
+            version: 1.01, //INCREMENT IF YOU CHANGE THIS DATA STRUCTURE!
             thrust_scales: {
                 master: 50, velX: 60, velY: 50,
                 velZ: 60, pitch: 35,
@@ -115,7 +122,10 @@ export default {
                     power: 30,
                     invert: false
                 }
-            }
+            },
+            list: [
+                "Default",
+            ],
         }
         let savedConfig = {}
         try {
@@ -131,8 +141,9 @@ export default {
         }
     },
     mounted: function() {
-        window.vue = this
+        window.vue = this;
         main(this.packets, this.config);
+        settings();
     }
 }
 </script>
@@ -168,6 +179,11 @@ export default {
 .half-height {
     height: 50% !important;
     float: left;
+}
+
+.full-width {
+  width: 100%;
+  float: left;
 }
 
 .full-height {
