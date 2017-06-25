@@ -8,7 +8,6 @@
                 @click="changePort(cam.port)" :class="cam.status"> {{name}} </button>
         </div>
         <div class="control-buttons">
-            <button @click="window" class="control-button">draw</button>
             <button @click="flip" class="control-button" id="flip">⤽</button>
             <button @click="refresh" class="control-button" :disabled="refreshing">⟳</button>
         </div>
@@ -36,15 +35,6 @@ export default {
                 newStatus[cam.port] = this.port == cam.port ? 'active' : 'suspended'
             }
             this.packet.cameras = newStatus
-        },
-        window: function() {
-            const {BrowserWindow} = window.require('electron').remote
-
-            let win = new BrowserWindow({width: 1000, height: 800})
-            win.on('closed', () => {
-                win = null
-            })
-            win.loadURL(`file:///home/bmaxfie/ROV/X9-Core/frontend/src/line_draw/line_length.html`)
         },
         flip: function() {
             if (this.port in this.flipped) {
@@ -80,7 +70,7 @@ export default {
 .buttons {
     position: absolute;
     bottom: 0;
-    width: calc(100% - 240px);
+    width: calc(100% - 120px);
     height: 50px;
     display: flex;
     justify-content: space-between;
@@ -115,7 +105,7 @@ export default {
     bottom: 0;
     right: 0;
     height: 50px;
-    width: 240px;
+    width: 120px;
     display: flex;
     justify-content: space-between;
 }

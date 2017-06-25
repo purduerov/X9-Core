@@ -7,7 +7,7 @@ function main(packets, config) {
     let socketHost = `ws://raspberrypi.local:5000`
     let socket = io.connect(socketHost, {transports: ['websocket']})
     let {shell, app, ipcRenderer} = window.require('electron');
-    let cam2port = 8080;
+    let cam2port = {port: undefined, last: undefined};
 
     gp.set()
 
@@ -54,9 +54,15 @@ function main(packets, config) {
             let claw = (gp.buttons.a.val - gp.buttons.b.val) * (tl.claw.master/100) * (tl.claw.invert ? -1 : 1)
             packets.dearflask.claw.power = claw * ((claw > 0 ? tl.claw.open : tl.claw.close)/100)
 
-            packets.dearflask.cameras[cam2port.port] = "active";
 
-            packets.dearflask.cameras[cam2port.last] = ( (cam2port != packets.dearflask.cam_cur) ? "suspend" : "active");
+            if (cam2port.last !== undefined) {
+                packets.dearflask.cameras[String(cam2port.last)] = "suspended";
+                packets.dearflask.cameras[String(packets.dearflask.cam_cur)] = "active";
+            }
+
+            if (cam2port.port !== undefined) {
+                packets.dearflask.cameras[cam2port.port] = "active";
+            }
 
             socket.emit("dearflask", packets.dearflask)
         }
@@ -67,7 +73,6 @@ function main(packets, config) {
 
     ipcRenderer.on('cam2port-include', function(event, port) {
         cam2port = port;
-        console.log(port);
     });
 
     function updateDC(data) {

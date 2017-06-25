@@ -33,6 +33,20 @@ export default {
     },
     mounted: function() {
         window.vue2 = this;
+
+        let socketHost = `ws://raspberrypi.local:5000`
+        let socket = io.connect(socketHost, {transports: ['websocket']})
+
+        function updateDC(data) {
+            packets.dearclient = data
+        }
+
+        socket.on("dearclient", updateDC)
+
+        // request new data
+        setInterval(() => {
+            socket.emit("dearclient")
+        }, 50)
     }
 }
 </script>

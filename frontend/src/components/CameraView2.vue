@@ -1,14 +1,13 @@
 <template>
     <div id="camera-view">
         <div class="image">
-            <img :src="source" :style="transform(flipped[port])">
+            <img :src="source" :style="transform">
         </div>
         <div class="buttons">
             <button v-for="(cam,name) in data" :key="name" v-show="cam.status !== 'killed'"
-                @click="changePort(cam.port)" :class="cam.status"> {{name}} </button>
+              @click="changePort(cam.port)" :class="cam.status">{{name}}</button>
         </div>
         <div class="control-buttons">
-            <button @click="window" class="control-button">draw</button>
             <button @click="flip" class="control-button" id="flip">⤽</button>
             <button @click="refresh" class="control-button" :disabled="refreshing">⟳</button>
         </div>
@@ -25,15 +24,20 @@ export default {
         return {
             port: 8080,
             last: 8080,
+            transform: {},
             flipped: {},
             refreshing: false,
         }
     },
     methods: {
         changePort: function(newPort) {
+            this.last = this.port
             this.port = newPort;
 
             ipcRenderer.send('cam2port-send', {"port": this.port, "last": this.last});
+
+            let num = this.flipped[this.port] || 0
+            this.transform = {'transform': `rotate(${num*90}deg)`}
         },
         window: function() {
             const {BrowserWindow} = window.require('electron').remote
@@ -50,10 +54,9 @@ export default {
             } else {
                 this.flipped[this.port] = 1
             }
-        },
-        transform: function(num) {
-            num = num || 0
-            return {'transform': `rotate(${num*90}deg)`}
+
+            let num = this.flipped[this.port] || 0
+            this.transform = {'transform': `rotate(${num*90}deg)`}
         },
         refresh: function() {
             this.refreshing = true
@@ -78,7 +81,7 @@ export default {
 .buttons {
     position: absolute;
     bottom: 0;
-    width: calc(100% - 240px);
+    width: calc(100% - 120px);
     height: 50px;
     display: flex;
     //justify-content: space-between;
@@ -95,7 +98,7 @@ export default {
 }
 
 .buttons > button.active {
-    /*background-color: green;*/
+     /* background-color: green; */
 }
 
 .buttons > button.suspended {
@@ -113,7 +116,7 @@ export default {
     bottom: 0;
     right: 0;
     height: 50px;
-    width: 240px;
+    width: 120px;
     display: flex;
     justify-content: space-between;
 }
