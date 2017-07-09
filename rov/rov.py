@@ -70,7 +70,7 @@ class ROV(object):
             self.thrust_mapper,
             num_thrusters=8,
             ramp=True,
-            max_ramp=0.03
+            max_ramp=0.02
         )
 
         self.valve_turner = ValveTurner(

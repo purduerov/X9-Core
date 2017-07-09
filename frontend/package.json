@@ -9,7 +9,7 @@
   "scripts": {
     "build": "cross-env NODE_ENV=production; node build.js",
     "dev": "cross-env NODE_ENV=development; nodemon --ext js,vue,html,css,json build.js",
-    "start": "electron ."
+    "start": "npm run build; electron ."
   },
   "dependencies": {
     "jquery": "^3.2.1",

@@ -1,11 +1,11 @@
 <template>
     <div id="camera-view">
         <div class="image">
-            <img :src="source" :style="transform(flipped[port])">
+            <img :src="source" :style="transform">
         </div>
         <div class="buttons">
             <button v-for="(cam,name) in data" :key="name" v-show="cam.status !== 'killed'"
-                @click="changePort(cam.port)" :class="cam.status"> {{name}} </button>
+              @click="changePort(cam.port)" :class="cam.status">{{name}}</button>
         </div>
         <div class="control-buttons">
             <button @click="flip" class="control-button" id="flip">⤽</button>
@@ -15,26 +15,38 @@
 </template>
 
 <script>
+let {shell, app, ipcRenderer} = window.require('electron');
+
 export default {
     name: 'camera-view',
-    props: ['data', 'packet'],
+    props: ['data'],
     data: function() {
         return {
             port: 8080,
+            last: 8080,
+            transform: {},
             flipped: {},
             refreshing: false,
         }
     },
     methods: {
         changePort: function(newPort) {
-            this.port = newPort
-            this.packet.cam_cur = newPort
+            this.last = this.port
+            this.port = newPort;
 
-            let newStatus = {}
-            for (let [name, cam] of Object.entries(this.data)) {
-                newStatus[cam.port] = this.port == cam.port ? 'active' : 'suspended'
-            }
-            this.packet.cameras = newStatus
+            ipcRenderer.send('cam2port-send', {"port": this.port, "last": this.last});
+
+            let num = this.flipped[this.port] || 0
+            this.transform = {'transform': `rotate(${num*90}deg)`}
+        },
+        window: function() {
+            const {BrowserWindow} = window.require('electron').remote
+
+            let win = new BrowserWindow({width: 1000, height: 800})
+            win.on('closed', () => {
+                win = null
+            })
+            win.loadURL(`file:///home/bmaxfie/ROV/X9-Core/frontend/src/line_draw/line_length.html`)
         },
         flip: function() {
             if (this.port in this.flipped) {
@@ -42,10 +54,9 @@ export default {
             } else {
                 this.flipped[this.port] = 1
             }
-        },
-        transform: function(num) {
-            num = num || 0
-            return {'transform': `rotate(${num*90}deg)`}
+
+            let num = this.flipped[this.port] || 0
+            this.transform = {'transform': `rotate(${num*90}deg)`}
         },
         refresh: function() {
             this.refreshing = true
@@ -73,7 +84,7 @@ export default {
     width: calc(100% - 120px);
     height: 50px;
     display: flex;
-    justify-content: space-between;
+    //justify-content: space-between;
 }
 
 .buttons > button {
@@ -87,7 +98,7 @@ export default {
 }
 
 .buttons > button.active {
-    /*background-color: green;*/
+     /* background-color: green; */
 }
 
 .buttons > button.suspended {
@@ -134,6 +145,6 @@ export default {
 .image > img {
     max-height: 100%;
     max-width: 100%;
-    width: 100%;
+    height: 100%;
 }
 </style>

@@ -36,11 +36,20 @@ class ThrusterControl(object):
                         elif values[i] < self._prev_values[i]:
                             values[i] = self._prev_values[i] - self.max_ramp
 
-            self.thrusters.set(values)
+                max_thrusting = max(values)
+                scale_factor = 1
+                if (max_thrusting > .60):
+                    scale_factor = .60 / max_thrusting
 
-            self._prev_values = values
+                if(scale_factor != 1):
+                    for i in range(self.num_thrusters):
+                        values[i] = values[i] * scale_factor
+
+                self.thrusters.set(values)
+
+                self._prev_values = values
         else:
-            self.thrusters.stop()
+                self.thrusters.stop()
 
     def start(self):
         self._set_zero_vals()

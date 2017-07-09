@@ -34,16 +34,27 @@
                             roll: false, yaw: false,
                         })
                     },
-                    'Health Task': () => {
+                    'Slow': () => {
                         Object.assign(config.thrust_scales, {
-                            velX: 20,
-                            pitch: 25
+                            master: 20
+                        })
+                    },
+                    'Medium': () => {
+                        Object.assign(config.thrust_scales, {
+                            master: 40
+                        })
+                    },
+                    'Fast': () => {
+                        Object.assign(config.thrust_scales, {
+                            master: 60
                         })
                     },
                     'Invert': function() {
                         Object.assign(config.thrust_invert, {
                             velX: !config.thrust_invert.velX,
                             velY: !config.thrust_invert.velY,
+                            pitch: !config.thrust_invert.pitch,
+                            roll: !config.thrust_invert.roll,
                             yaw: !config.thrust_invert.yaw
                         })
                     },
@@ -55,6 +66,13 @@
                     'Double': function() {
                         Object.assign(config.thrust_scales, {
                             master: Math.min(config.thrust_scales.master*2, 70),
+                        })
+                    },
+                    'Fountain': function() {
+                        Object.assign(config.thrust_scales, {
+                            velX: 35,
+                            velY: 35,
+                            yaw: 15
                         })
                     },
                 }
