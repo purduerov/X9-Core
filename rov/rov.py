@@ -15,6 +15,7 @@ from hardware.motor_control import MotorControl
 from thrusters.Control import ThrusterControl
 from thrusters.hardware.PWM_Control import Thrusters
 from thrusters.mapper.Simple import Mapper
+from thrusters.mapper.Complex_1 import Complex
 
 from tools import Claw, ValveTurner, FountainTool, Led
 
@@ -63,7 +64,8 @@ class ROV(object):
             [7, 4, 6, 5, 10, 0, 11, 1]
         )
 
-        self.thrust_mapper = Mapper()
+        #self.thrust_mapper = Mapper()
+        self.thrust_mapper = Complex()
 
         self.thruster_control = ThrusterControl(
             self.thrusters,
